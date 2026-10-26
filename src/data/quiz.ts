@@ -13,10 +13,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     morphological_note: 'Coastal communal vocative "Marre" combined with existential auxiliary "unta" (preserved from Halegannada/Tulu).',
     culturalTrivia: 'Coastal fish curry in Karavali is traditionally cooked with coconut milk and Kudampuli (Malabar tamarind).',
     source: {
-      title: 'Coastal Conversational Address & Existential Auxiliary (Marre)',
-      authorOrInstitution: 'Coastal oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',
@@ -34,10 +33,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     morphological_note: 'Phonological contraction of "Haudu Alva" (Is it not so?) + cohortative imperative verb ending "-oonu".',
     culturalTrivia: 'Dharwad is globally celebrated for its GI-tagged Dharwad Peda, hand-crafted through slow-caramelized milk khowa.',
     source: {
-      title: 'Northern Conversational Particle Corpus (Haudla)',
-      authorOrInstitution: 'Dharwad / Belagavi oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',
@@ -53,12 +51,11 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     options: ['mysuru-mandya', 'karavali', 'bengaluru-urban', 'uttara-karnataka'],
     explanation: '"ಸ್ವಾಮಿ" (Swamy) honorific coupled with "ಬೇಡ ಬಿಡಿ" (Beda Bidi) is the hallmark of Old Mysuru courtly manners and peaceful demeanor.',
     morphological_note: 'Polite dismissive imperative "Beda bidi" + respectful masculine vocative "Swamy".',
-    culturalTrivia: 'The Kingdom of Mysore under Nalwadi Krishraj Wadiyar was known as "Rajarshi" for pioneering democratic representation and education.',
+    culturalTrivia: 'The Kingdom of Mysore under Nalwadi Krishnaraja Wadiyar was known as "Rajarshi" for pioneering democratic representation and education.',
     source: {
-      title: 'Southern Polite Register & Conversational Tag (Beda Bidi)',
-      authorOrInstitution: 'Old Mysuru oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',
@@ -76,10 +73,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     morphological_note: 'Kinship honorific "Bavaji" (brother-figure) derived from medieval Deccani social discourse.',
     culturalTrivia: 'Kalaburagi Red Gram (Toor Dal) holds a registered Geographical Indication (GI) tag due to its unique lime-rich soil composition.',
     source: {
-      title: 'Kalyana Karnataka Kinship Address (Bavaji)',
-      authorOrInstitution: 'Kalaburagi / Bidar oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',
@@ -97,10 +93,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     morphological_note: 'Kundagannada sub-dialect vocative "Boliya" paired with cohortative "-ona".',
     culturalTrivia: 'Kundapura Kannada retains several grammatical verb endings that trace back to 10th century Halegannada (Old Kannada).',
     source: {
-      title: 'Kundagannada Sub-variety Banter Corpus (Boliya)',
-      authorOrInstitution: 'Kundapura oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',
@@ -118,10 +113,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     morphological_note: 'Bilingual code-switching (English "scene" + Kannada cohortative verb "set madona").',
     culturalTrivia: 'Bengaluru\'s "By-two coffee" culture originated in iconic Brahmin tiffin rooms of Malleswaram and Basavanagudi.',
     source: {
-      title: 'Metropolitan Youth Slang & Code-Mixing Corpus (Macha)',
-      authorOrInstitution: 'Bengaluru urban oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',
@@ -139,10 +133,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     morphological_note: 'Malenadu hill vocative "Maraayre" with agrarian conversational setting.',
     culturalTrivia: 'The Malenadu region receives some of India\'s highest rainfall, with Agumbe known as the "Cherrapunji of the South".',
     source: {
-      title: 'Malnad Western Ghats Colloquial Address (Maraayre)',
-      authorOrInstitution: 'Western Ghats oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',
@@ -160,10 +153,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     morphological_note: 'Mandya rural emphatic tag "Kanayya" (contracted from "Kano Ayya" - see here, sir/friend).',
     culturalTrivia: 'Mandya is widely hailed as "Sakkareya Nadu" (The Land of Sugar) due to the extensive sugarcane cultivation powered by the Visvesvaraya Canal.',
     source: {
-      title: 'Mandya Rural Conversational Tag (Kanayya)',
-      authorOrInstitution: 'Mandya agrarian oral usage documentation',
-      year: null as any,
-      sourceLocation: 'Oral field collection pending archival verification'
+      title: 'Provisional colloquial candidate (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     },
     status: 'provisional',
     evidence_status: 'provisional',

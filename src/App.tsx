@@ -28,8 +28,8 @@ const INITIAL_LOCAL_DRAFTS: CommunityContribution[] = [
     timestamp: '2 hours ago',
     status: 'contributor_pending',
     evidence_status: 'contributor_pending',
-    evidence_level: 'E3',
-    localNotes: 'Documented Hubli colloquialism',
+    evidence_level: 'E4',
+    localNotes: 'Unreviewed local observation draft',
   },
   {
     id: 'c2',
@@ -46,8 +46,8 @@ const INITIAL_LOCAL_DRAFTS: CommunityContribution[] = [
     timestamp: 'Yesterday',
     status: 'contributor_pending',
     evidence_status: 'contributor_pending',
-    evidence_level: 'E3',
-    localNotes: 'Documented Kundapura domestic usage',
+    evidence_level: 'E4',
+    localNotes: 'Unreviewed local observation draft',
   },
   {
     id: 'c3',
@@ -64,8 +64,8 @@ const INITIAL_LOCAL_DRAFTS: CommunityContribution[] = [
     timestamp: '3 days ago',
     status: 'contributor_pending',
     evidence_status: 'contributor_pending',
-    evidence_level: 'E3',
-    localNotes: 'Documented Mandya street discourse',
+    evidence_level: 'E4',
+    localNotes: 'Unreviewed local observation draft',
   },
 ];
 

@@ -30,10 +30,6 @@ export const APPROVED_BIBLIOGRAPHY_REGISTRY: Record<string, { title: string; aut
     title: 'Kannada Sahitya Parishat Nighantu (Vols 1–8)',
     author: 'Kannada Sahitya Parishat, Bangalore',
   },
-  'SRC-BHAT-1967': {
-    title: 'Kannada Verb Forms',
-    author: 'D. N. Shankara Bhat / Deccan College Postgraduate and Research Institute, Pune',
-  },
 };
 
 export const FORBIDDEN_SYNTHETIC_TITLES = [

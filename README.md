@@ -94,7 +94,7 @@ All 13 candidate seed entries hold **provisional (`E4` phrase / `E2` pattern)** 
 
 The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Semantic Validation Rules**:
 
-1. **Rule 1 (Bibliographic Verification):** Validates `citation.source_id` against the approved Bibliography Registry (`SRC-UPADHYAYA-1976`, `SRC-VENKATASUBBIAH-IGO`, `SRC-KITTEL-1894`, `SRC-KSP-NIGHANTU`, `SRC-BHAT-1967`), verifies publication years (`1800–2026`), and actively rejects forbidden synthetic titles.
+1. **Rule 1 (Bibliographic Verification):** Validates `citation.source_id` against the approved Bibliography Registry (`SRC-UPADHYAYA-1976`, `SRC-VENKATASUBBIAH-IGO`, `SRC-KITTEL-1894`, `SRC-KSP-NIGHANTU`), verifies publication years (`1800–2026`), and actively rejects forbidden synthetic titles. (Note: `SRC-BHAT-1967` was audited and removed because *Kannada Verb Forms (1967)* is not a cataloged work by D. N. S. Bhat).
 2. **Rule 2 (Lexical Attestation):** Enforces that `source_attested` entries require non-empty physical locators (`citation.locator`) and approved registry IDs, while `provisional` entries have `locator: null`.
 3. **Rule 3 (Regional Attribution):** Confirms all entries have populated `region_or_locality`, `sub_variety`, and `variant_type`, and match `concept_coverage_summary`.
 4. **Rule 4 (Meaning & Context):** Enforces allowed register enums (`formal_and_polite_spoken`, `everyday_spoken`, etc.) and semantic coherence within each concept.
@@ -103,13 +103,13 @@ The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Sema
 
 ---
 
-## 5. Automated Vitest Suite (15/15 Passing)
+## 5. Automated Vitest Suite (19/19 Passing)
 
 ```bash
-✓ src/__tests__/app.test.ts (15 tests) 74ms
-  ✓ 1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors 59ms
+✓ src/__tests__/app.test.ts (19 tests) 71ms
+  ✓ 1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors 54ms
   ✓ 2. Enforces all 6 Semantic Validation Rules via validateAtlasDataset 1ms
-  ✓ 3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts (resolving Argon report 12 vs 13) 0ms
+  ✓ 3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts (resolving Argon report 12 vs 13) 1ms
   ✓ 4. Enforces provisional status and null locators on candidate entries (no invented citations) 1ms
   ✓ 5. Enforces per-entry licensing metadata and top-level license policy 1ms
   ✓ 6. Verifies sparse 6-region matrix states include shared-form and honest missing-data handling 1ms
@@ -120,12 +120,16 @@ The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Sema
   ✓ 11. Verifies quiz questions contain unique options and morphological mechanism notes 0ms
   ✓ 12. Actively asserts zero occurrences of forbidden synthetic titles across all active application datasets 7ms
   ✓ 13. Verifies semantic validator actively rejects blacklisted titles and unregistered source IDs 1ms
-  ✓ 14. Asserts no entry or question claims source_attested without physical locator and registered source ID 1ms
+  ✓ 14. Asserts no entry or question claims source_attested without physical locator and registered source ID 0ms
   ✓ 15. Validates licensing metadata completeness and fair dealing/ODbL disclosure compliance 0ms
+  ✓ 16. Verifies exact active 5 concepts: how-are-you, what-are-you-doing, where-setting-out, good-fine, boy-youth 1ms
+  ✓ 17. Verifies Kundagannada candidate nka-how-are-you-coastal-kunda ("ಹೆಂಗಿದ್ದಿರಿ?") provenance and limitations 0ms
+  ✓ 18. Enforces strictly 0 E3 records across datasets and confirms removal of unverified SRC-BHAT-1967 0ms
+  ✓ 19. Asserts zero pseudo-corpus or fake oral collection names in secondary source metadata 1ms
 
 Test Files  1 passed (1)
-     Tests  15 passed (15)
-  Duration  299ms
+     Tests  19 passed (19)
+  Duration  298ms
 ```
 
 ---

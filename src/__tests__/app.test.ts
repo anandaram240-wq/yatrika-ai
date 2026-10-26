@@ -281,4 +281,90 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
       ]).toContain(entry.license_status);
     });
   });
+
+  it('16. Verifies exact active 5 concepts: how-are-you, what-are-you-doing, where-setting-out, good-fine, boy-youth', () => {
+    const expectedConceptIds = [
+      'concept-how-are-you',
+      'concept-what-are-you-doing',
+      'concept-where-setting-out',
+      'concept-good-fine',
+      'concept-boy-youth',
+    ];
+
+    expect(CONCEPTS.map((c) => c.concept_id)).toEqual(expectedConceptIds);
+
+    const counts = CONCEPTS.map((c) => c.documented_entry_ids.length);
+    expect(counts).toEqual([3, 4, 2, 2, 2]);
+    expect(counts.reduce((a, b) => a + b, 0)).toBe(13);
+  });
+
+  it('17. Verifies Kundagannada candidate nka-how-are-you-coastal-kunda ("ಹೆಂಗಿದ್ದಿರಿ?") provenance and limitations', () => {
+    const kundaEntry = ALL_ENTRIES.find((e) => e.id === 'nka-how-are-you-coastal-kunda');
+    expect(kundaEntry).toBeDefined();
+    expect(kundaEntry?.kannada_script).toBe('ಹೆಂಗಿದ್ದಿರಿ?');
+    expect(kundaEntry?.transliteration).toBe('heṅgiddiri?');
+    expect(kundaEntry?.pattern_evidence_level).toBe('E2');
+    expect(kundaEntry?.evidence_level).toBe('E4');
+    expect(kundaEntry?.evidence_status).toBe('provisional');
+    expect(kundaEntry?.citation.locator).toBeNull();
+    expect(kundaEntry?.review_record).toBeNull();
+
+    // Verify disclosure that 'heṅge' is shared with informal southern/malnad speech in context
+    expect(kundaEntry?.context).toContain('also occurs widely in informal Southern and Malnad Kannada');
+    expect(kundaEntry?.limitations.some((l) => l.includes('before promoting from provisional'))).toBe(true);
+    expect(kundaEntry?.citation.locator).toBeNull();
+  });
+
+  it('18. Enforces strictly 0 E3 records across datasets and confirms removal of unverified SRC-BHAT-1967', () => {
+    // 1. Confirm SRC-BHAT-1967 is not in approved registry
+    expect(APPROVED_BIBLIOGRAPHY_REGISTRY['SRC-BHAT-1967']).toBeUndefined();
+
+    // 2. Approved registry contains strictly verifiable titles
+    const approvedKeys = Object.keys(APPROVED_BIBLIOGRAPHY_REGISTRY);
+    expect(approvedKeys).toEqual([
+      'SRC-UPADHYAYA-1976',
+      'SRC-VENKATASUBBIAH-IGO',
+      'SRC-KITTEL-1894',
+      'SRC-KSP-NIGHANTU',
+    ]);
+
+    // 3. Candidate entries have 0 E3 records
+    const candidateE3Count = ALL_ENTRIES.filter((e) => e.evidence_status === 'speaker_reviewed').length;
+    expect(candidateE3Count).toBe(0);
+
+    // 4. Candidate review records are all null
+    ALL_ENTRIES.forEach((entry) => {
+      expect(entry.review_record).toBeNull();
+    });
+  });
+
+  it('19. Asserts zero pseudo-corpus or fake oral collection names in secondary source metadata', () => {
+    const pseudoCorpusPatterns = [/corpus/i, /oral usage record/i, /oral usage documentation/i];
+
+    REGIONS.forEach((r) => {
+      r.signaturePhrases.forEach((p) => {
+        pseudoCorpusPatterns.forEach((pat) => {
+          expect(p.source.title).not.toMatch(pat);
+          expect(p.source.authorOrInstitution).not.toMatch(pat);
+        });
+        expect(p.source.title).toBe('Provisional colloquial candidate (no established source)');
+      });
+    });
+
+    QUIZ_QUESTIONS.forEach((q) => {
+      pseudoCorpusPatterns.forEach((pat) => {
+        expect(q.source.title).not.toMatch(pat);
+        expect(q.source.authorOrInstitution).not.toMatch(pat);
+      });
+      expect(q.source.title).toBe('Provisional colloquial candidate (no established source)');
+    });
+
+    GLOSSARY_WORDS.forEach((w) => {
+      pseudoCorpusPatterns.forEach((pat) => {
+        expect(w.source.title).not.toMatch(pat);
+        expect(w.source.authorOrInstitution).not.toMatch(pat);
+      });
+      expect(w.source.title).toBe('Unverified colloquial backlog (no established source)');
+    });
+  });
 });

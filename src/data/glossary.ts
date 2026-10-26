@@ -17,10 +17,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Colloquial North Karnataka Particle Corpus',
-      authorOrInstitution: 'Field observation & oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -39,10 +38,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Coastal Communal Address & Kinship Marker',
-      authorOrInstitution: 'Coastal community oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -61,10 +59,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kundagannada Sub-variety Banter Corpus',
-      authorOrInstitution: 'Kundapura community oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -83,10 +80,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Old Mysuru Polite Conversational Idiom',
-      authorOrInstitution: 'Southern colloquial oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -105,10 +101,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Northern Plains Conversational Honorific',
-      authorOrInstitution: 'Field observation & oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -127,10 +122,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kalyana Karnataka Kinship Address',
-      authorOrInstitution: 'Northeastern community oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -149,10 +143,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Northern Commercial Vernacular Term',
-      authorOrInstitution: 'Field observation & oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -171,10 +164,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kundagannada Culinary Vocabulary',
-      authorOrInstitution: 'Coastal community oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -193,10 +185,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Malnad Western Ghats Colloquial Address',
-      authorOrInstitution: 'Western Ghats community oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -215,10 +206,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Mandya Rural Conversational Tag',
-      authorOrInstitution: 'Mandya community oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -237,10 +227,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Northern Sensory Onomatopoeia',
-      authorOrInstitution: 'Field observation & oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -259,10 +248,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kalyana Karnataka Deccani Loan Vocabulary',
-      authorOrInstitution: 'Northeastern community oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -281,10 +269,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Bengaluru Metropolitan Youth Slang',
-      authorOrInstitution: 'Urban collegiate oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -303,10 +290,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Urban Colloquial Appreciation Slang',
-      authorOrInstitution: 'Urban colloquial oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   },
   {
@@ -325,10 +311,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Bengaluru Metropolitan Bilingual Code-Mixing',
-      authorOrInstitution: 'Urban conversational oral usage record',
-      year: null as any,
-      sourceLocation: 'Colloquial oral usage pending archival collation'
+      title: 'Unverified colloquial backlog (no established source)',
+      authorOrInstitution: 'Colloquial oral usage',
+      sourceLocation: 'None (pending primary source citation)'
     }
   }
 ];

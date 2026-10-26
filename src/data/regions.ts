@@ -29,10 +29,9 @@ export const REGIONS: Region[] = [
         transliteration: 'En ri sahookar, aaram deereni?',
         meaning: 'How are you doing, chief / respected friend? Is everything well?',
         source: {
-          title: 'Colloquial Northern Plain Address (Dharwad / Belagavi)',
-          authorOrInstitution: 'Field observation & oral usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       },
@@ -41,10 +40,9 @@ export const REGIONS: Region[] = [
         transliteration: 'Haudla! Naan modle helilva?',
         meaning: 'Is that so! Didn\'t I mention that to you earlier?',
         source: {
-          title: 'Northern Conversational Particle Corpus',
-          authorOrInstitution: 'Field observation & oral usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       }
@@ -84,10 +82,9 @@ export const REGIONS: Region[] = [
         transliteration: 'En marre, ivattu saukhya unta?',
         meaning: 'Hello my friend, is all well with you today?',
         source: {
-          title: 'Coastal Conversational Address & Existential Auxiliary',
-          authorOrInstitution: 'Coastal oral usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       },
@@ -96,10 +93,9 @@ export const REGIONS: Region[] = [
         transliteration: 'Boliya, yellidya marre ishtottige?',
         meaning: 'Hey buddy, where were you hiding all this time?',
         source: {
-          title: 'Kundagannada Sub-variety Banter Corpus',
-          authorOrInstitution: 'Kundapura oral usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       }
@@ -139,10 +135,9 @@ export const REGIONS: Region[] = [
         transliteration: 'Banni swamy, oota madkondu hoguviranthe!',
         meaning: 'Please come, Sir! Please do join us for lunch before leaving!',
         source: {
-          title: 'Southern Polite Register & Courtly Greeting',
-          authorOrInstitution: 'Old Mysuru oral usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       },
@@ -151,10 +146,9 @@ export const REGIONS: Region[] = [
         transliteration: 'Beda bidi swamy, aden dodd vishyena?',
         meaning: 'Let it be, friend! Is that really such a major issue?',
         source: {
-          title: 'Southern Conversational Idiom',
-          authorOrInstitution: 'Old Mysuru colloquial usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       }
@@ -194,10 +188,9 @@ export const REGIONS: Region[] = [
         transliteration: 'En bavaji, yellige hontiri ivath?',
         meaning: 'Hey dear friend/brother, where are you headed today?',
         source: {
-          title: 'Northeastern Kinship Address & Deccani Contact Register',
-          authorOrInstitution: 'Kalyana Karnataka oral usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       }
@@ -237,10 +230,9 @@ export const REGIONS: Region[] = [
         transliteration: 'Male nintha mele kaapi thotakke hogi barona banni maraayre!',
         meaning: 'Once the rain subsides, come let us take a walk through the coffee estate, good fellow!',
         source: {
-          title: 'Malnad Western Ghats Colloquial Address',
-          authorOrInstitution: 'Western Ghats oral usage record',
-          year: null as any,
-          sourceLocation: 'Oral field collection pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       }
@@ -280,10 +272,9 @@ export const REGIONS: Region[] = [
         transliteration: 'En macha, scene illa! Aaramagi set madana!',
         meaning: 'Hey bro, no problem at all! We will comfortably take care of it!',
         source: {
-          title: 'Contemporary Bengaluru Metropolitan Vernacular',
-          authorOrInstitution: 'Metropolitan youth code-switching corpus',
-          year: null as any,
-          sourceLocation: 'Urban oral usage pending archival verification',
+          title: 'Provisional colloquial candidate (no established source)',
+          authorOrInstitution: 'Colloquial oral usage',
+          sourceLocation: 'None (pending primary source citation)',
         },
         status: 'provisional'
       }

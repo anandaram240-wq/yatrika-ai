@@ -258,22 +258,11 @@ def create_presentation():
    • Ajv Draft 2020-12: Full JSON schema validation wired into Vitest automated tests.
    • Semantic Validator: Evaluates all 6 linguistic rules (bibliographic registry, locator, script, register, consent).
 
-2. AUTOMATED VITEST SUITE (15 PASSING TESTS):
-   • Test 1: JSON Schema Draft 2020-12 compliance with zero validation errors.
-   • Test 2: Enforces all 6 Semantic Validation Rules across entries.
-   • Test 3: Reconciles counts: confirms exactly 13 candidate entries across 5 concepts.
-   • Test 4: Enforces provisional status and null locators on candidate entries.
-   • Test 5: Enforces per-entry licensing metadata and top-level license policy.
-   • Test 6: Verifies sparse 6-region matrix states (shared baselines and empty states).
-   • Test 7: Speech service diagnostics check (honest TTS labeling).
-   • Test 8: Educational macro-cluster taxonomy & isogloss notes for 6 regions.
-   • Test 9: Zero duplicate IDs across concepts, candidates, regions, glossary, and quiz.
-   • Test 10: Quarantined legacy glossary backlog verification (E5 unverified).
-   • Test 11: Quiz questions options uniqueness & morphological mechanism notes.
-   • Test 12: Zero occurrences of forbidden synthetic titles across all datasets.
-   • Test 13: Semantic validator actively rejects blacklisted titles & unregistered source IDs.
-   • Test 14: Asserts no entry or question claims source_attested without physical locator.
-   • Test 15: Validates licensing metadata completeness and fair dealing/ODbL compliance.
+2. AUTOMATED VITEST SUITE (19 PASSING TESTS):
+   • Test 1-6: Schema Draft 2020-12, 6 Semantic Validation Rules, reconciled 13-entry count, provisional null locators, licensing, sparse matrix states.
+   • Test 7-11: Speech service diagnostics, 6-region macro-clusters, zero duplicate IDs, E5 quarantined backlog, quiz options uniqueness.
+   • Test 12-15: Zero forbidden synthetic titles in active data, validator rejection of fake titles, zero ungrounded source_attested claims, licensing completeness.
+   • Test 16-19: Exact 5 active concepts, Kundagannada candidate provenance, strictly 0 E3 records & removal of uncataloged SRC-BHAT-1967, zero pseudo-corpora.
 
 3. KANNADA TYPOGRAPHY & ACCESSIBILITY:
    • Strict lang="kn" and line-height: 1.65 (leading-loose) across script containers to prevent ottakshara clipping.

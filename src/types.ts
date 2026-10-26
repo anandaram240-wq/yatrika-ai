@@ -6,6 +6,8 @@ export type RegionId =
   | 'malenadu'
   | 'bengaluru-urban';
 
+export type KarnatakaRegionId = RegionId;
+
 export type RegionMatrixSlotId = 
   | 'old_mysuru_southern'
   | 'kittur_karnataka'
@@ -202,7 +204,6 @@ export interface Region {
   };
 }
 
-
 export interface GlossaryWord {
   id: string;
   wordKannada: string;
@@ -257,4 +258,144 @@ export interface CommunityContribution {
   evidence_status?: EvidenceStatus;
   evidence_level?: EvidenceLevel;
   localNotes?: string;
+}
+
+// ==========================================
+// YATRIKA AI (PROBLEM STATEMENT 06) TYPES
+// ==========================================
+
+export type TripVibe = 
+  | 'heritage'      // UNESCO, ancient temples, royal palaces
+  | 'nature'        // Waterfalls, rainforests, hills, wildlife
+  | 'coastal'       // Beaches, coastal temples, sea sports
+  | 'coffee-hills'  // Coffee estates, hill stations, mist
+  | 'spiritual'     // Sacred shrines, temple circuits
+  | 'balanced';     // Mix of everything
+
+export type BudgetTier = 'backpacker' | 'comfort' | 'luxury';
+
+export type TravelStyle = 'solo' | 'couple' | 'family' | 'friends';
+
+export type DestinationCategory = 
+  | 'heritage'
+  | 'waterfall'
+  | 'beach'
+  | 'hill-station'
+  | 'temple'
+  | 'wildlife'
+  | 'viewpoint';
+
+export interface TravelPhrase {
+  id: string;
+  situation: string;
+  kannada: string;
+  transliteration: string;
+  englishMeaning: string;
+  regionalNote?: string;
+  category: 'greeting' | 'transit' | 'food' | 'temple' | 'shopping' | 'emergency';
+  audioAvailable: boolean;
+}
+
+export interface Destination {
+  id: string;
+  name: string;
+  nameKannada: string;
+  region: KarnatakaRegionId;
+  district: string;
+  category: DestinationCategory;
+  lat: number;
+  lon: number;
+  timings: string;
+  entryFee: {
+    indianAdult: number;
+    indianChild?: number;
+    foreignAdult?: number;
+    parking?: number;
+    notes?: string;
+  };
+  durationHours: number;
+  bestSeason: string;
+  description: string;
+  highlights: string[];
+  tips: string[];
+  mustEatDishes: string[];
+  restaurantSuggestion: string;
+  relevantPhrases: TravelPhrase[];
+  imageEmoji: string;
+  accentColor: string;
+  distanceFromBengaluruKm: number;
+  drivingTimeFromBengaluruHours: number;
+}
+
+export interface TripInputs {
+  startingCity: 'bengaluru' | 'mysuru' | 'mangaluru' | 'hubballi';
+  vibe: TripVibe;
+  durationDays: 1 | 2 | 3 | 5 | 7;
+  budgetTier: BudgetTier;
+  travelStyle: TravelStyle;
+}
+
+export interface ItinerarySlot {
+  timeSlot: 'morning' | 'afternoon' | 'evening';
+  timeLabel: string;
+  destination: Destination;
+  activityTitle: string;
+  activityDescription: string;
+  travelTimeFromPrev: string;
+  travelDistanceKm: number;
+  estimatedExpense: number;
+  insiderTip: string;
+  phraseToUse: TravelPhrase;
+}
+
+export interface ItineraryDay {
+  dayNumber: number;
+  dayTitle: string;
+  routeOverview: string;
+  slots: ItinerarySlot[];
+  dayTravelDistanceKm: number;
+  dayEstimatedCost: {
+    stay: number;
+    food: number;
+    transport: number;
+    tickets: number;
+    total: number;
+  };
+  lunchRecommendation: {
+    dishName: string;
+    placeName: string;
+    approxPrice: number;
+  };
+}
+
+export interface FoodSpecialty {
+  id: string;
+  name: string;
+  nameKannada: string;
+  region: KarnatakaRegionId;
+  regionName: string;
+  description: string;
+  famousPlace: string;
+  avgPrice: string;
+  tags: string[];
+  emoji: string;
+}
+
+export interface GeneratedItinerary {
+  tripId: string;
+  title: string;
+  inputs: TripInputs;
+  summary: {
+    totalDays: number;
+    totalDistanceKm: number;
+    totalBudgetEstimated: number;
+    budgetPerPerson: number;
+    regionsCovered: KarnatakaRegionId[];
+    destinationsCount: number;
+  };
+  days: ItineraryDay[];
+  smartAlerts: string[];
+  kannadaCompanionPhrases: TravelPhrase[];
+  suggestedFoodTrail: FoodSpecialty[];
+  createdTimestamp: string;
 }

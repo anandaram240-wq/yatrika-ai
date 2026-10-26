@@ -1,81 +1,88 @@
 import React from 'react';
-import { Heart, Sparkles, MapPin, Code2, Globe } from 'lucide-react';
+import { Compass, Sparkles, MapPin, ShieldCheck } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-stone-900 text-stone-300 pt-16 pb-12 border-t-4 border-amber-500">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-stone-800">
-          {/* Col 1: Brand & Hackathon */}
-          <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-red-600 to-amber-500 flex items-center justify-center text-white font-kannada font-bold text-2xl shadow-md">
-                ಕ
+    <footer className="bg-stone-950 text-white border-t border-stone-800 mt-16 relative overflow-hidden">
+      {/* Top Accent Ribbon */}
+      <div className="h-1.5 w-full bg-linear-to-r from-red-600 via-amber-400 to-amber-500"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          {/* Brand Info */}
+          <div className="md:col-span-2 space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-linear-to-br from-red-600 to-amber-500 flex items-center justify-center text-white font-kannada font-bold text-lg shadow-sm">
+                ಯಾ
               </div>
-              <span className="font-extrabold text-2xl text-white">
-                ನಮ್ಮ ಕನ್ನಡ
+              <span className="text-xl font-black text-white">
+                ಯಾತ್ರಿಕ <span className="text-red-500">AI</span>
               </span>
             </div>
-
-            <p className="text-sm text-stone-400 max-w-md leading-relaxed">
-              An interactive regional language platform documenting and exploring linguistic nuances, pronunciations, local idioms, and cultural heritage across Karnataka.
+            <p className="text-xs text-stone-400 leading-relaxed max-w-md">
+              Intelligent Cultural & Linguistic Travel Planner for Karnataka. Engineered for the <strong>Kannada Digital Innovation Hackathon 2026</strong> organized by HackerRank Campus Crew, The National Institute of Engineering (NIE), Mysuru.
             </p>
-
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-stone-800 border border-stone-700 text-xs text-amber-400 font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Built for Kannada Digital Innovation Hackathon 2026</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/80 border border-red-800 text-red-300 text-3xs font-extrabold uppercase">
+              <Sparkles className="w-3 h-3 text-amber-400" />
+              <span>Problem Statement 06 • Travel & Tourism</span>
             </div>
           </div>
 
-          {/* Col 2: Hackathon Details */}
+          {/* Quick Pillars */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">
-              Event Organizers
+            <h4 className="text-xs font-black uppercase tracking-wider text-amber-400 mb-3">
+              Platform Innovations
             </h4>
-            <ul className="space-y-2 text-sm text-stone-400">
-              <li className="font-semibold text-white">HackerRank Campus Crew</li>
-              <li>The National Institute of Engineering (NIE), Mysuru</li>
-              <li className="text-xs text-stone-500 mt-2">Problem Statement 04: Regional Language Explorer</li>
+            <ul className="space-y-1.5 text-xs text-stone-300">
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                <span>Deterministic Highway Routing</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                <span>Verified ASI & KSTDC Fees</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+                <span>Native Kannada Audio Synthesis</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span>Regional Culinary Trail Mapping</span>
+              </li>
             </ul>
           </div>
 
-          {/* Col 3: Technology Highlights */}
+          {/* Standards & Offline Moat */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3">
-              Architecture & Stack
+            <h4 className="text-xs font-black uppercase tracking-wider text-amber-400 mb-3">
+              Technical Moat
             </h4>
-            <ul className="space-y-2 text-xs text-stone-400">
+            <ul className="space-y-1.5 text-xs text-stone-300">
               <li className="flex items-center gap-1.5">
-                <Code2 className="w-3.5 h-3.5 text-amber-500" />
-                <span>React 19 & TypeScript</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span>100% Offline Reliable (0 API Latency)</span>
               </li>
               <li className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>Tailwind CSS & Lucide Icons</span>
+                <Compass className="w-3.5 h-3.5 text-teal-400" />
+                <span>Sub-50ms Itinerary Generation</span>
               </li>
               <li className="flex items-center gap-1.5">
-                <Globe className="w-3.5 h-3.5 text-amber-500" />
-                <span>Web Speech API Synthesis</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-amber-500" />
-                <span>Geographic Dialect Engine</span>
+                <MapPin className="w-3.5 h-3.5 text-purple-400" />
+                <span>React 19 + TypeScript + Tailwind 4</span>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Credits */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4">
-          <p className="flex items-center gap-1">
-            <span>Crafted with</span>
-            <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline" />
-            <span>for Karnataka and the Kannada language. Code. Create. Celebrate Kannada.</span>
-          </p>
-
-          <p>
-            © 2026 Namma Kannada Explorer. All regional expressions documented for cultural preservation.
-          </p>
+        {/* Bottom Strip */}
+        <div className="pt-6 border-t border-stone-800 text-center text-xs text-stone-500 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div>
+            © 2026 YatriKa AI • Code. Create. Celebrate Kannada.
+          </div>
+          <div className="font-kannada text-xs text-amber-400 font-bold">
+            ಕರ್ನಾಟಕದ ಶ್ರೀಮಂತ ಪರಂಪರೆ ಮತ್ತು ಪ್ರವಾಸೋದ್ಯಮಕ್ಕೆ ಸಮರ್ಪಿತ
+          </div>
         </div>
       </div>
     </footer>

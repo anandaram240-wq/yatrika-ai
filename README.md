@@ -8,7 +8,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38b2ac.svg)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Vitest-Passing%20(6%2F6)-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-Passing%20(8%2F8)-brightgreen.svg)](https://vitest.dev/)
 [![License](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
 
 ---
@@ -140,7 +140,7 @@ flowchart TD
 | **Lucide React** | Accessible Iconography | Semantic SVG icons. |
 | **Web Speech API** | Client-Side Audio Guide | Zero-cost client-side synthesis with transparent synthetic disclosures. |
 | **Canvas Confetti** | Gamification Engine | Visual reward animations for quiz completion. |
-| **Vitest** | Automated Test Runner | 6 passing test suites validating data integrity and schema compliance. |
+| **Vitest** | Automated Test Runner | 8 passing test suites validating data integrity, schema compliance, and speech diagnostics. |
 
 ---
 
@@ -186,14 +186,61 @@ npm run preview
 | Deliverable | File / Location | Status |
 | :--- | :--- | :---: |
 | **1. Source Code Repository** | Standalone Git repo with complete commit history | ✅ Verified |
-| **2. Presentation Deck** | [`Namma_Kannada_Regional_Explorer_Presentation.pptx`](./Namma_Kannada_Regional_Explorer_Presentation.pptx) | ✅ Verified (38 KB) |
-| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (6 test suites) | ✅ Passed (201ms) |
+| **2. Presentation Deck** | [`Namma_Kannada_Regional_Explorer_Presentation.pptx`](./Namma_Kannada_Regional_Explorer_Presentation.pptx) | ✅ Verified (39 KB) |
+| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (8 test suites) | ✅ 8/8 Passed (154ms) |
 | **4. Environment Template** | [`.env.example`](./.env.example) | ✅ Present |
-| **5. Video Walkthrough Script** | Included in evaluation documentation (3–5 min timed) | ✅ Ready |
+| **5. Video Walkthrough Script** | Section 7 below (3:45 timed script) | ✅ Ready to Record |
 
 ---
 
-## 7. License & Credits
+## 7. 3-to-5 Minute Video Walkthrough Script
+
+*Total duration: ~3 minutes 45 seconds. Structured specifically for hackathon evaluators.*
+
+### [0:00 - 0:45] Hook, Problem Statement & Academic Grounding
+- **Visual:** Camera on speaker holding up the running application on screen or screen recording of the Hero section.
+- **Spoken Script:**
+  > "Namaskara! I am presenting *Namma Kannada Atlas*, built for Problem Statement 04: Regional Language Explorer at the Kannada Digital Innovation Hackathon 2026.
+  > 
+  > Standard NLP and translation tools treat Kannada as a single monolithic block, almost always defaulting to formal literary *Granthika Kannada*. But in real life, spoken Kannada changes every 50 kilometers—from the direct cadences of Dharwad and Belagavi to coastal Kundagannada and Old Mysore courtliness.
+  > 
+  > Instead of building a decorative chatbot with simulated AI accents, our mission was simple: create an **evidence-graded, source-grounded regional language explorer** where every single entry is backed by linguistic literature, clear isogloss awareness, and transparent provenance."
+
+### [0:45 - 1:40] Regional Explorer & Isogloss Taxonomy
+- **Visual:** Switch to screen capture. Click on "Uttara Karnataka", then "Karavali", then "Mysuru-Mandya". Point out the isogloss warning and source citations.
+- **Spoken Script:**
+  > "Here in the **Regional Atlas**, we map Karnataka into six educational macro-clusters. Notice this critical disclosure: we do not pretend these are rigid administrative dialect borders. Spoken Kannada exists on a continuum—an isogloss gradient.
+  > 
+  > When you inspect any zone, such as *Uttara Karnataka* or *Karavali*, you see verified phonetic characteristics, vocal cadence descriptions, pronouns, and signature phrases. Crucially, look right here: every single signature phrase links directly to authoritative publications—such as Kannada University Hampi's dialect studies, CIIL Mysuru, and Ferdinand Kittel's dictionary. Zero hallucinated entries."
+
+### [1:40 - 2:35] Comparative Transformer Matrix & Speech Integrity
+- **Visual:** Navigate to "Comparative Matrix". Click on "Have you eaten?" and "Where are you going?". Point to the morphological mechanism badges and click the "Synthetic Audio" button.
+- **Spoken Script:**
+  > "Next, our **Cross-Dialect Comparative Matrix** lets users take an everyday communicative situation and compare how it is naturally expressed across regions.
+  > 
+  > Look at this: when an expression like 'Have you had your food?' is viewed, you see morphological mechanisms like northern phonological contraction ('Aatheni'), coastal culinary references, and Old Mysore agrarian invitations. Notice something even more important: we refuse to force a symmetrical 6-column grid. Where a phrase has no documented regional parallel, we honestly show an empty state rather than inventing synthetic dialect phrases.
+  > 
+  > When you click audio, notice our transparent label: *Synthetic Browser Audio*. We explicitly reject the hackathon trap of pitch-shifting browser speech and claiming it's an authentic regional dialect recording. We provide an honest baseline pronunciation with clear phonetic guidance."
+
+### [2:35 - 3:15] Shabda Kosha Glossary & Interactive Quiz
+- **Visual:** Navigate to "Shabda Kosha Glossary" and filter by "Source-Attested". Then click "Phrase Quiz", answer a question, and show the confetti + explanation.
+- **Spoken Script:**
+  > "In our **Namma Shabda Kosha**, we have 15 deeply researched regional idioms—from Dharwad's *'Haudla'* and Kundapura's *'Boliya'* to Gulbarga's *'Bavaji'*. Each word includes its cultural origin etymology, sample dialogues, and exact literature citations.
+  > 
+  > For learners, our **Regional Phrase Knowledge Quiz** presents 8 source-cited questions that test actual comprehension of regional idioms, offering immediate feedback, streak counters, and cultural trivia."
+
+### [3:15 - 3:45] Community Vault, Research Export & Conclusion
+- **Visual:** Navigate to "Community Vault". Click "Draft New Entry", then click "Export Research JSON". Show the downloaded file.
+- **Spoken Script:**
+  > "Finally, our **Community Vault** empowers native speakers to document idioms from their hometowns with CC-BY-4.0 licensing consent. We are completely transparent: drafts are saved locally in the user's browser, and with one click of **'Export Research JSON'**, contributors can export structured archives for academic linguistic research.
+  > 
+  > The project is 100% type-safe, passes 8 automated tests, builds with zero errors, and is fully documented on GitHub with an accompanying slide deck.
+  > 
+  > Thank you! Sirigannadam Gelge, Sirigannadam Balge!"
+
+---
+
+## 8. License & Credits
 
 - **License:** MIT License for software code; linguistic metadata shared under Creative Commons Attribution 4.0 International (CC-BY 4.0).
 - **Hackathon:** Kannada Digital Innovation Hackathon 2026.

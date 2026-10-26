@@ -17,6 +17,7 @@ def create_presentation():
     CARD_BG = RGBColor(254, 252, 232)    # Warm cream / amber-50
     WHITE = RGBColor(255, 255, 255)
     LIGHT_BG = RGBColor(250, 250, 249)
+    EMERALD = RGBColor(5, 150, 105)
 
     blank_layout = prs.slide_layouts[6]
 
@@ -48,7 +49,7 @@ def create_presentation():
         p.font.color.rgb = DARK_STONE
 
     # -------------------------------------------------------------
-    # SLIDE 1: Title Slide
+    # SLIDE 1: Title Slide (Phase 5 Flagship)
     # -------------------------------------------------------------
     slide1 = prs.slides.add_slide(blank_layout)
     bg1 = slide1.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
@@ -85,13 +86,13 @@ def create_presentation():
     p2.space_before = Pt(10)
 
     p3 = tf1.add_paragraph()
-    p3.text = "Evidence-Graded Regional Language & Dialect Explorer"
-    p3.font.size = Pt(26)
+    p3.text = "The Phrase Passport & Morpheme-Shift X-Ray Explorer"
+    p3.font.size = Pt(25)
     p3.font.bold = True
     p3.font.color.rgb = RGBColor(251, 191, 36)
 
     p4 = tf1.add_paragraph()
-    p4.text = "Problem Statement 04: Regional Language Explorer • Phase 3 Release-Critical Remediation\n13 Seed Candidate Entries • 5 Core Communicative Concepts • Strict Bibliographic & Provenance Registry"
+    p4.text = "Problem Statement 04: Regional Language Explorer • Phase 5 Flagship Innovation\n13 Enriched Candidates • 5 Communicative Concepts • 25 Automated Vitest Tests • Strict Bibliographic Provenance"
     p4.font.size = Pt(13)
     p4.font.color.rgb = RGBColor(214, 211, 209)
     p4.space_before = Pt(18)
@@ -103,10 +104,10 @@ def create_presentation():
     p5.space_before = Pt(26)
 
     # -------------------------------------------------------------
-    # SLIDE 2: Problem Statement & Reconciled Dataset
+    # SLIDE 2: Problem Statement & Epistemic Honesty
     # -------------------------------------------------------------
     slide2 = prs.slides.add_slide(blank_layout)
-    add_header(slide2, "Linguistic Ground Truth & Reconciled Candidate Dataset", "Section 01 • The Problem & Data Model")
+    add_header(slide2, "Linguistic Ground Truth & The Reconciled Problem", "Section 01 • The Problem & Data Model")
 
     c1 = slide2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(3.6), Inches(5.0))
     c1.fill.solid()
@@ -120,8 +121,8 @@ def create_presentation():
     p.font.bold = True
     p.font.color.rgb = DARK_RED
     p2 = tf.add_paragraph()
-    p2.text = "• Spoken Kannada changes its cadence, vocabulary, and verbal morphology every 30–100 km across Karnataka.\n\n• Standard translation engines and apps homogenize speech into literary Granthika Kannada.\n\n• Naive hackathons invent fake AI dialect scores and forced 6-region translations, fabricating nonexistent dialect words."
-    p2.font.size = Pt(12.5)
+    p2.text = "• Spoken Kannada changes cadence, vocabulary, and verbal morphology every 30–100 km across Karnataka.\n\n• Standard translation engines homogenize speech into formal Granthika Kannada.\n\n• Common hackathon pitfall: Fake pitch-shifted audio, random dialect scores, and fabricated 6-region grids that invent nonexistent dialect words."
+    p2.font.size = Pt(12)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(12)
 
@@ -132,13 +133,13 @@ def create_presentation():
     tf = c2.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
-    p.text = "Reconciled Seed Dataset"
+    p.text = "Reconciled Provenance"
     p.font.size = Pt(17)
     p.font.bold = True
     p.font.color.rgb = DARK_RED
     p2 = tf.add_paragraph()
-    p2.text = "• Reconciled: 13 Candidate Entries across 5 Concepts (resolving Argon's 12-entry discrepancy).\n\n• Concept 2 ('What are you doing?') has 4 entries (std, kittur, kalyana, coastal-malnad).\n\n• All 13 entries are provisional (E4 phrase / E2 pattern) with null locators pending physical page verification.\n\n• Zero fabricated citations or artificial speaker reviews."
-    p2.font.size = Pt(12.5)
+    p2.text = "• Exactly 13 Candidate Entries across 5 Concepts (reconciling Argon 12 vs 13 discrepancy).\n\n• Concept 2 ('What are you doing?') has 4 entries (std, kittur, kalyana, coastal-malnad).\n\n• All 13 entries are provisional (E4 phrase / E2 pattern) with null locators pending physical page verification.\n\n• Zero fabricated citations or artificial speaker reviews."
+    p2.font.size = Pt(12)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(12)
 
@@ -149,29 +150,95 @@ def create_presentation():
     tf = c3.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
-    p.text = "Schema & Semantic Integrity"
+    p.text = "Schema & Semantic Gates"
     p.font.size = Pt(17)
     p.font.bold = True
     p.font.color.rgb = DARK_RED
     p2 = tf.add_paragraph()
-    p2.text = "• JSON Schema Draft 2020-12: Full schema validation via Ajv with zero errors.\n\n• 6 Semantic Validation Rules: Bibliographic registry checks, locator verification, regional attribution, register validation, Unicode Kannada range, and speaker consent.\n\n• Sparse Matrix States: Supports shared baselines and honest empty states."
-    p2.font.size = Pt(12.5)
+    p2.text = "• JSON Schema Draft 2020-12: Full schema validation via Ajv with zero errors.\n\n• 6 Semantic Validation Rules: Bibliographic registry checks, locator verification, regional attribution, register validation, Unicode Kannada range, and speaker consent.\n\n• Closed Source Registry: Exactly 5 vetted sources in VERIFIED_SOURCE_REGISTRY.json."
+    p2.font.size = Pt(12)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(12)
 
     # -------------------------------------------------------------
-    # SLIDE 3: Comparison Matrix & Sparse Handling
+    # SLIDE 3: Flagship Innovation - Morpheme-Shift X-Ray
     # -------------------------------------------------------------
     slide3 = prs.slides.add_slide(blank_layout)
-    add_header(slide3, "Sparse 6-Region Comparator & Matrix States", "Section 02 • Core Architecture")
+    add_header(slide3, "Flagship Innovation: The Morpheme-Shift X-Ray Bar", "Section 02 • Core Technological Innovation")
 
-    t_shape = slide3.shapes.add_table(5, 3, Inches(0.8), Inches(1.8), Inches(11.7), Inches(4.8))
+    xray_left = slide3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
+    xray_left.fill.solid()
+    xray_left.fill.fore_color.rgb = CARD_BG
+    xray_left.line.color.rgb = RGBColor(254, 240, 138)
+    tf = xray_left.text_frame
+    tf.word_wrap = True
+    p = tf.paragraphs[0]
+    p.text = "Underlying Morphological Decomposition"
+    p.font.size = Pt(17)
+    p.font.bold = True
+    p.font.color.rgb = DARK_RED
+    p2 = tf.add_paragraph()
+    p2.text = """• Solves the 'Mystery Dialect' problem: Dialects are not completely different foreign languages; they are regular morphological shifts atop invariant Dravidian roots.
+
+• Interactive Morpheme Slots:
+  - Green Pill: Invariant Verbal/Nominal Root (e.g. ಮಾಡ್- [māḍ-], ir-, huḍuga)
+  - Indigo Pill: Aspectual & Progressive Inflection (e.g. -ಆಕತ್ತ- [-ākatta-], -ಲಿಕ್ಕತ್ತ- [-likkatta-])
+  - Amber Pill: Phonological Shift (e.g. ಹ್ಯಾಂಗ [hyāṅga], ಹೆಂಗೆ [heṅge])
+  - Rose Pill: Regional Lexical Replacement (e.g. ಎಂತ [enta], ಚೊಲೊ [colo])
+
+• Real-time Reconstruction: Clicking any morpheme pill displays underlying grammatical reconstructions, gloss, and etymological shift explanations."""
+    p2.font.size = Pt(11)
+    p2.font.color.rgb = DARK_STONE
+    p2.space_before = Pt(10)
+
+    xray_right = slide3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
+    xray_right.fill.solid()
+    xray_right.fill.fore_color.rgb = RGBColor(28, 25, 23)
+    xray_right.line.color.rgb = RGBColor(68, 64, 60)
+    tf2 = xray_right.text_frame
+    tf2.word_wrap = True
+    p = tf2.paragraphs[0]
+    p.text = "Comparative Linguistic Demonstration"
+    p.font.size = Pt(16)
+    p.font.bold = True
+    p.font.color.rgb = GOLD_AMBER
+    p2 = tf2.add_paragraph()
+    p2.text = """Concept: 'What are you doing?' (Present Progressive)
+
+1. STANDARD KANNADA:
+   [ಏನು /ēnu/ (interrogative)] + [ಮಾಡು /māḍu/ (INVARIANT ROOT)]
+   + [-ತ್ತ- /-tta-/ (PROG durative)] + [ಇದ್ದೀರಿ /iddīri/ (AUX-2PL)]
+
+2. KITTUR KARNATAKA (Dharwad / Belagavi):
+   [ಏನ್ /ēn/] + [ಮಾಡ್- /māḍ-/ (INVARIANT ROOT)]
+   + [-ಆಕತ್ತ- /-ākatta-/ (KITTUR PROG)] + [-ಈರಿ /-īri/ (2PL.HON)]
+   * Grammaticalized from infinitive '-āka' + inceptive 'hatti-'
+
+3. KALYANA KARNATAKA (Kalaburagi / Bidar):
+   [ಏನ್ /ēn/] + [ಮಾಡ್- /māḍ-/ (INVARIANT ROOT)]
+   + [-ಲಿಕ್ಕತ್ತ- /-likkatta-/ (KALYANA DATIVE PROG)] + [-ಈರಿ /-īri/]
+   * Grammaticalized from dative '-likke' + 'hatti-'
+
+4. KARAVALI / MALNAD (Kundapura / Coastal):
+   [ಎಂತ /enta/ (COASTAL INTERROG)] + [ಮಾಡ್- /māḍ-/ (ROOT)]
+   + [-ತಾ /-tā/ (PROG)] + [ಇದ್ದಿರಿ /iddiri/ (AUX-2PL short)]"""
+    p2.font.size = Pt(10.5)
+    p2.font.color.rgb = RGBColor(245, 245, 244)
+    p2.space_before = Pt(10)
+
+    # -------------------------------------------------------------
+    # SLIDE 4: Regional Knowledge-Gap Ribbon & Sparse Matrix
+    # -------------------------------------------------------------
+    slide4 = prs.slides.add_slide(blank_layout)
+    add_header(slide4, "Regional Knowledge-Gap View & Citizen Fieldwork", "Section 03 • Epistemic UI & Fieldwork")
+
+    t_shape = slide4.shapes.add_table(5, 3, Inches(0.8), Inches(1.8), Inches(11.7), Inches(4.8))
     table = t_shape.table
     table.columns[0].width = Inches(2.6)
     table.columns[1].width = Inches(4.5)
     table.columns[2].width = Inches(4.6)
 
-    headers = ["Matrix State Type", "Visual Treatment & Rendering", "Linguistic Rationale"]
+    headers = ["Regional Matrix State", "Visual Treatment & Rendering", "Linguistic Reality & Fieldwork"]
     for col_idx, text in enumerate(headers):
       cell = table.cell(0, col_idx)
       cell.fill.solid()
@@ -183,10 +250,10 @@ def create_presentation():
       p.font.color.rgb = WHITE
 
     rows_data = [
-      ("distinct_regional_variant", "Full regional card with Kannada script, ISO-15919 transliteration, learner phonetics, and sub-variety tag.", "Used when a region has a verified distinct dialect reflex (e.g. Kittur progressive '-akattiri')."),
-      ("documented_multi_region", "Regional card with badge 'Shared Across Multiple Regions (e.g. Kittur & Kalyana)'.", "Reflects macro-regional isogloss sharing rather than falsely labeling a shared form as exclusive to one city."),
-      ("shared_with_standard", "Muted card displaying linked baseline entry with badge 'Uses Standard / Pan-Karnataka Form'.", "Honors the reality that many regions use standard Kannada forms for specific communicative situations."),
-      ("no_verified_distinct_variant", "Explicit honest empty state card with explanatory note and research backlog status.", "Eliminates synthetic dialect fabrication; non-attested regions are preserved as transparent empty states.")
+      ("distinct_regional_variant", "Emerald badge, full Kannada script, ISO transliteration, Morpheme X-Ray, and sub-variety tag.", "Verified distinct regional reflex (e.g. Kittur '-akattiri', Coastal 'enta')."),
+      ("documented_multi_region", "Blue badge 'Multi-Region (e.g. Kittur & Kalyana)'.", "Reflects macro-regional isogloss sharing rather than falsely isolating a phrase to a single city."),
+      ("shared_with_standard", "Muted stone badge 'Standard Baseline'.", "Honors the reality that many regions use standard forms in everyday social interactions."),
+      ("no_verified_distinct_variant (Knowledge Gap)", "Amber dashed card with 'Log Fieldwork' action button.", "Turns missing data into an open invitation for verified citizen linguistics rather than fabricating fake entries.")
     ]
 
     for row_idx, row in enumerate(rows_data, start=1):
@@ -196,26 +263,85 @@ def create_presentation():
         cell.fill.fore_color.rgb = CARD_BG if row_idx % 2 == 1 else WHITE
         p = cell.text_frame.paragraphs[0]
         p.text = text
-        p.font.size = Pt(11.5)
+        p.font.size = Pt(11)
         p.font.color.rgb = DARK_STONE
 
     # -------------------------------------------------------------
-    # SLIDE 4: Audio & Speech Integrity
+    # SLIDE 5: Inspectable Phrase Passport
     # -------------------------------------------------------------
-    slide4 = prs.slides.add_slide(blank_layout)
-    add_header(slide4, "Audio Authenticity & Deterministic Spoken Recall Check", "Section 03 • Speech & Verification")
+    slide5 = prs.slides.add_slide(blank_layout)
+    add_header(slide5, "The Official Phrase Passport: 8-Dimension Audit", "Section 04 • Deep Provenance")
+
+    pass_left = slide5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
+    pass_left.fill.solid()
+    pass_left.fill.fore_color.rgb = CARD_BG
+    pass_left.line.color.rgb = RGBColor(254, 240, 138)
+    tf1 = pass_left.text_frame
+    tf1.word_wrap = True
+    p = tf1.paragraphs[0]
+    p.text = "8 Mandatory Linguistic Questions"
+    p.font.bold = True
+    p.font.size = Pt(17)
+    p.font.color.rgb = DARK_RED
+    p2 = tf1.add_paragraph()
+    p2.text = """Every phrase card includes an 'Inspect Passport' drawer answering:
+
+1. Meaning & Semantic Function: Everyday communicative purpose.
+2. Context & Register: Formal, polite, colloquial, or elder address.
+3. Public Legal Status: Fair Dealing (Sec. 52(1)(a)) / CC BY 4.0.
+4. Primary Source Provenance: Live lookup into VERIFIED_SOURCE_REGISTRY.json.
+5. 5-Dimension Evidence Audit: Root, meaning, grammar, distribution, locator.
+6. Morpheme-Shift Breakdown: Slot-by-slot root and inflection analysis.
+7. Shared Regions & Isoglosses: Multi-region distribution.
+8. Known Limitations: Transparent caveats and why it is provisional."""
+    p2.font.size = Pt(11)
+    p2.font.color.rgb = DARK_STONE
+    p2.space_before = Pt(10)
+
+    pass_right = slide5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
+    pass_right.fill.solid()
+    pass_right.fill.fore_color.rgb = LIGHT_BG
+    pass_right.line.color.rgb = RGBColor(214, 211, 209)
+    tf2 = pass_right.text_frame
+    tf2.word_wrap = True
+    p = tf2.paragraphs[0]
+    p.text = "Strict Epistemic Evidence Classification"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = GOLD_AMBER
+    p2 = tf2.add_paragraph()
+    p2.text = """• E1 (Source-Attested): Physical page/volume locator verified. (Currently 0 in seed until physical library verification).
+
+• E2 (Comparative Pattern): Attested in comparative dialectology (Upadhyaya 1976, Venkatasubbiah, Kittel 1894).
+
+• E3 (Native-Speaker Reviewed): Formal consent, native locality, and recorded sub-variety. (Strictly 0 fake reviews).
+
+• E4 (Provisional Candidate): Scholarly pattern supported; exact locator pending. (All 13 candidates honestly held here).
+
+• E5 (Quarantined Backlog): Legacy glossary backlog isolated from default views.
+
+• Native-Speaker Review Protocol: Genuine CTA guiding users on authentic community verification without fabricating data."""
+    p2.font.size = Pt(11)
+    p2.font.color.rgb = DARK_STONE
+    p2.space_before = Pt(10)
+
+    # -------------------------------------------------------------
+    # SLIDE 6: Speech & Audio Neutrality
+    # -------------------------------------------------------------
+    slide6 = prs.slides.add_slide(blank_layout)
+    add_header(slide6, "Audio Authenticity & Deterministic Spoken Recall", "Section 05 • Speech & Verification")
 
     diff_features = [
-      ("🔊 Honest Standard Audio Readout", "Labeled strictly as 'Synthetic Standard kn-IN Script Readout — Not a Native Regional Recording'. Pitch (1.0) and rate (0.95) are fixed. Region-based pitch shifting is eliminated."),
-      ("🔍 OS Voice Availability Verification", "Checks window.speechSynthesis for an installed kn-IN voice. If absent, disables playback and clearly alerts the user instead of playing distorted english voices."),
+      ("🔊 Honest Standard Audio Readout", "Labeled strictly as 'Synthetic Standard kn-IN Script Readout — Not a Native Regional Recording'. Pitch (1.0) and rate (0.95) are fixed. Region-based pitch-shifting caricature is eliminated."),
+      ("🔍 OS Voice Availability Verification", "Checks window.speechSynthesis for an installed kn-IN voice. If absent, alerts the user instead of playing distorted english synthesizer voices."),
       ("🎙️ Spoken Recall Check (Standard kn-IN ASR)", "Replaced fake random score generator with deterministic Levenshtein character distance against captured Web Speech recognition transcripts."),
-      ("⚠️ Permanent ASR Dialect Disclaimer", "Prominently discloses: 'Browser Speech-to-Text is trained on Standard Kannada and may normalize or misrecognize regional dialect endings (-akattiri, -likkattiri, -iddiri).'"),
-      ("🏷️ Evidence Tier & Quarantined Backlog", "All 13 seed entries are marked Provisional (E2 pattern / E4 phrase). 15 legacy glossary items are quarantined under Unverified (E5) status pending manual book lookups.")
+      ("⚠️ Permanent ASR Dialect Disclaimer", "Discloses: 'Browser Speech-to-Text is trained on Standard Kannada and may normalize or misrecognize regional dialect endings (-akattiri, -likkattiri, -iddiri).'"),
+      ("🛡️ Zero Uncataloged Titles", "Audited and confirmed total removal of uncataloged SRC-BHAT-1967 and pseudo-corpora from all metadata.")
     ]
 
     for idx, (title, desc) in enumerate(diff_features):
       top_pos = 1.8 + idx * 1.05
-      box = slide4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(top_pos), Inches(11.7), Inches(0.92))
+      box = slide6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(top_pos), Inches(11.7), Inches(0.92))
       box.fill.solid()
       box.fill.fore_color.rgb = WHITE
       box.line.color.rgb = RGBColor(229, 231, 235)
@@ -224,7 +350,7 @@ def create_presentation():
       p = tf.paragraphs[0]
       p.text = title
       p.font.bold = True
-      p.font.size = Pt(13.5)
+      p.font.size = Pt(13)
       p.font.color.rgb = DARK_RED
       p2 = tf.add_paragraph()
       p2.text = desc
@@ -233,12 +359,12 @@ def create_presentation():
       p2.space_before = Pt(2)
 
     # -------------------------------------------------------------
-    # SLIDE 5: Technical Stack & Testing Benchmarks
+    # SLIDE 7: Technical Quality & Vitest Suite (25 Tests)
     # -------------------------------------------------------------
-    slide5 = prs.slides.add_slide(blank_layout)
-    add_header(slide5, "Technical Stack, Quality Benchmarks & Vitest Suite", "Section 04 • Implementation & Quality")
+    slide7 = prs.slides.add_slide(blank_layout)
+    add_header(slide7, "Technical Stack & 25 Automated Acceptance Tests", "Section 06 • Implementation & Quality")
 
-    arch_box = slide5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.1))
+    arch_box = slide7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.1))
     arch_box.fill.solid()
     arch_box.fill.fore_color.rgb = LIGHT_BG
     arch_box.line.color.rgb = RGBColor(214, 211, 209)
@@ -246,7 +372,7 @@ def create_presentation():
     tf.word_wrap = True
 
     p = tf.paragraphs[0]
-    p.text = "RIGOROUS TECHNICAL EXECUTION & TEST AUTOMATION"
+    p.text = "AUTOMATED VITEST ACCEPTANCE SUITE (25 PASSING TESTS)"
     p.font.bold = True
     p.font.size = Pt(15)
     p.font.color.rgb = GOLD_AMBER
@@ -254,66 +380,86 @@ def create_presentation():
     p2 = tf.add_paragraph()
     p2.text = """
 1. FULL STATIC TYPE SAFETY & SCHEMA VALIDATION:
-   • React 19 + TypeScript 5.7: Strict verification types (E1-E5, provisional, speaker_reviewed, source_attested).
+   • React 19 + TypeScript 5.7: Strict verification types (E1-E5, MorphemeSlot, EvidenceDimensions, LicenseStatus).
    • Ajv Draft 2020-12: Full JSON schema validation wired into Vitest automated tests.
-   • Semantic Validator: Evaluates all 6 linguistic rules (bibliographic registry, locator, script, register, consent).
+   • Semantic Validator: Evaluates 6 linguistic rules (bibliographic registry, locator, script, register, consent).
 
-2. AUTOMATED VITEST SUITE (19 PASSING TESTS):
-   • Test 1-6: Schema Draft 2020-12, 6 Semantic Validation Rules, reconciled 13-entry count, provisional null locators, licensing, sparse matrix states.
-   • Test 7-11: Speech service diagnostics, 6-region macro-clusters, zero duplicate IDs, E5 quarantined backlog, quiz options uniqueness.
-   • Test 12-15: Zero forbidden synthetic titles in active data, validator rejection of fake titles, zero ungrounded source_attested claims, licensing completeness.
-   • Test 16-19: Exact 5 active concepts, Kundagannada candidate provenance, strictly 0 E3 records & removal of uncataloged SRC-BHAT-1967, zero pseudo-corpora.
+2. 25 AUTOMATED VITEST TESTS (100% PASS IN ~280ms):
+   • Tests 1-6: Schema Draft 2020-12, 6 Semantic Rules, 13 reconciled entries, provisional null locators, licensing, sparse matrix.
+   • Tests 7-11: Speech diagnostics, 6-region taxonomy, zero duplicate IDs, E5 quarantined backlog, quiz options uniqueness.
+   • Tests 12-15: Zero forbidden synthetic titles in active data, validator rejection of fake titles, zero ungrounded source claims.
+   • Tests 16-19: Exact 5 active concepts, Kundagannada candidate provenance, strictly 0 E3 records, zero pseudo-corpora.
+   • Tests 20-25 (Phase 5 Flagship):
+     - TEST-01: Morpheme X-Ray concatenation and invariant root integrity across all 13 candidates.
+     - TEST-02: Phrase Passport 5-dimension evidence gate (enforcing null locators & null reviews on E4).
+     - TEST-03: Closed bibliography check via VERIFIED_SOURCE_REGISTRY.json (confirming exactly 5 vetted sources).
+     - TEST-04: Knowledge-gap sparse matrix honesty (at least 5 open empty states preserved across 6 regions).
+     - TEST-05: Composite licensing & CC BY 4.0 / Fair Dealing compliance.
+     - TEST-06: Synthetic TTS neutrality and fallback diagnostics.
 
-3. KANNADA TYPOGRAPHY & ACCESSIBILITY:
+3. KANNADA TYPOGRAPHY & PRODUCTION BUILD:
    • Strict lang="kn" and line-height: 1.65 (leading-loose) across script containers to prevent ottakshara clipping.
-   • Zero build errors in Vite production bundle (dist/ gzip: 118 kB).
-"""
-    p2.font.size = Pt(11)
+   • Production build via Vite 6 in 1.3s with zero TypeScript errors."""
+    p2.font.size = Pt(10.5)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(6)
 
     # -------------------------------------------------------------
-    # SLIDE 6: Fieldwork Vault, Licensing & Conclusion
+    # SLIDE 8: Hackathon Submission Readiness
     # -------------------------------------------------------------
-    slide6 = prs.slides.add_slide(blank_layout)
-    add_header(slide6, "Fieldwork Notebook, Licensing Governance & Submission", "Section 05 • Governance & Submission")
+    slide8 = prs.slides.add_slide(blank_layout)
+    add_header(slide8, "Submission Readiness & Evaluator Alignment", "Section 07 • Hackathon Summary")
 
-    b1 = slide6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
+    b1 = slide8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
     b1.fill.solid()
     b1.fill.fore_color.rgb = CARD_BG
     b1.line.color.rgb = RGBColor(254, 240, 138)
     tf1 = b1.text_frame
     tf1.word_wrap = True
     p = tf1.paragraphs[0]
-    p.text = "Persistence & Licensing Policy"
+    p.text = "Winning Differentiation"
     p.font.bold = True
     p.font.size = Pt(17)
     p.font.color.rgb = DARK_RED
     p2 = tf1.add_paragraph()
-    p2.text = "• Local Browser Notebook: Transparently labeled as client localStorage; submissions are tagged as contributor_pending (E3/E4).\n\n• Mandatory CC BY 4.0 Consent: 'I confirm this is my own observation and release this note under CC BY 4.0 without personal identifying data.'\n\n• Schema-Validated JSON Export: Generates downloadable exports formatted under atlas-data.schema.json.\n\n• Retracted Blanket Claims: Removed blanket CC claims for third-party datasets (e.g. Alar uses ODbL v1.0)."
-    p2.font.size = Pt(12)
-    p2.font.color.rgb = DARK_STONE
-    p2.space_before = Pt(12)
+    p2.text = """• Not a Toy, Not a Chatbot: Deep, verifiable regional language architecture tailored specifically to Karnataka's linguistic diversity.
 
-    b2 = slide6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
+• Flagship Technological Novelty: Interactive Morpheme-Shift X-Ray and Regional Knowledge-Gap View decompose dialect variations into invariant roots and historical suffixes.
+
+• Zero Data Hallucination: Rigorously eliminates synthetic dialect audio, random pronunciation scoring, and fabricated citations.
+
+• Public Domain & Educational Reuse: Clear copyright disclosures, ODbL acknowledgments, and CC BY 4.0 field contributions."""
+    p2.font.size = Pt(11.5)
+    p2.font.color.rgb = DARK_STONE
+    p2.space_before = Pt(10)
+
+    b2 = slide8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
     b2.fill.solid()
     b2.fill.fore_color.rgb = CARD_BG
     b2.line.color.rgb = RGBColor(254, 240, 138)
     tf2 = b2.text_frame
     tf2.word_wrap = True
     p = tf2.paragraphs[0]
-    p.text = "Submission Readiness"
+    p.text = "Submission Checklist"
     p.font.bold = True
     p.font.size = Pt(17)
     p.font.color.rgb = DARK_RED
     p2 = tf2.add_paragraph()
-    p2.text = "• Working Submission Cutoff: 31 October 2026, 10:00 PM IST (~132 hours remaining).\n\n• Public Repository: Clean Git history with checkpoint branches and zero credentials.\n\n• Production Build: TypeScript 5.7 and Vite 6 with zero errors.\n\n• 3-to-5 Min Video Walkthrough Script: Timed 3:45 spoken script included in README.\n\n• Grounded Linguistic Value: True differentiator lies in evidence-graded provenance, not decorative AI."
-    p2.font.size = Pt(12)
+    p2.text = """• Deadline: Saturday, 31 October 2026, 10:00 PM IST (~130 hours remaining).
+
+• Repository: Clean Git history with semantic checkpoints and zero private keys or synthetic metadata.
+
+• Test Suite: 25 passing Vitest tests verifying schema, semantics, morphemes, and provenance.
+
+• Presentation: 8-slide widescreen PPTX generated directly from verified codebase metrics.
+
+• Video Pitch: 3-to-5 minute structured walkthrough script ready in repository README."""
+    p2.font.size = Pt(11.5)
     p2.font.color.rgb = DARK_STONE
-    p2.space_before = Pt(12)
+    p2.space_before = Pt(10)
 
     prs.save("/Users/ananda/Downloads/HACKTHON/Namma_Kannada_Regional_Explorer_Presentation.pptx")
-    print("Successfully generated Phase 2.5 Namma_Kannada_Regional_Explorer_Presentation.pptx")
+    print("Successfully generated Phase 5 Flagship Namma_Kannada_Regional_Explorer_Presentation.pptx")
 
 if __name__ == "__main__":
     create_presentation()

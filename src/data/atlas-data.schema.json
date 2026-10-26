@@ -385,6 +385,55 @@
             "type": "string",
             "minLength": 10
           }
+        },
+        "morpheme_decomposition": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "slot_id",
+              "slot_label",
+              "surface_kn",
+              "surface_iso",
+              "underlying_form",
+              "gloss_en",
+              "is_invariant_root",
+              "shift_category",
+              "shift_explanation"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "slot_id": { "type": "string" },
+              "slot_label": { "type": "string" },
+              "surface_kn": { "type": "string" },
+              "surface_iso": { "type": "string" },
+              "underlying_form": { "type": "string" },
+              "gloss_en": { "type": "string" },
+              "is_invariant_root": { "type": "boolean" },
+              "shift_category": { "type": "string" },
+              "shift_explanation": { "type": "string" }
+            }
+          }
+        },
+        "evidence_dimensions": {
+          "type": "object",
+          "required": [
+            "lexical_root",
+            "meaning_equivalence",
+            "grammatical_pattern",
+            "regional_distribution",
+            "exact_sentence_locator",
+            "native_speaker_review"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "lexical_root": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] },
+            "meaning_equivalence": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] },
+            "grammatical_pattern": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] },
+            "regional_distribution": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] },
+            "exact_sentence_locator": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] },
+            "native_speaker_review": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] }
+          }
         }
       },
       "allOf": [

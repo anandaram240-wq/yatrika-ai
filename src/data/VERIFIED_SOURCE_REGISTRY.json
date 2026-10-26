@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.1.0",
+  "registry_id": "namma-kannada-verified-sources",
+  "sources": [
+    {
+      "source_id": "SRC-UPADHYAYA-1976",
+      "short_title": "Upadhyaya (1976)",
+      "full_title": "A Comparative Study of Kannada Dialects",
+      "author": "Dr. U. Padmanabha Upadhyaya",
+      "publisher": "Prasaranga, University of Mysore",
+      "publication_year": 1976,
+      "license_or_access": "Scholarly publication; cited under Fair Dealing (Sec. 52(1)(a) Indian Copyright Act) for non-commercial linguistic education.",
+      "description": "Comprehensive comparative phonological and grammatical survey of regional Kannada dialects across Mysore, Dharwad, Gulbarga, and South Kanara."
+    },
+    {
+      "source_id": "SRC-VENKATASUBBIAH-IGO",
+      "short_title": "Venkatasubbiah (Igo Kannada)",
+      "full_title": "Igo Kannada (ಇಗೋ ಕನ್ನಡ) - Sociolinguistic Dictionary",
+      "author": "Prof. G. Venkatasubbiah",
+      "publisher": "Navakarnataka Publications, Bangalore",
+      "publication_year": 1996,
+      "license_or_access": "Scholarly lexicon; cited under Fair Dealing for educational dialectology.",
+      "description": "Exhaustive descriptive dictionary of spoken regional usages, idioms, and colloquial phonological shifts in Kannada."
+    },
+    {
+      "source_id": "SRC-KITTEL-1894",
+      "short_title": "Kittel (1894)",
+      "full_title": "A Kannada-English Dictionary",
+      "author": "Rev. Ferdinand Kittel",
+      "publisher": "Basel Mission Press, Mangalore (Digital version via DSAL, University of Chicago)",
+      "publication_year": 1894,
+      "url": "https://dsal.uchicago.edu/dictionaries/kittel/",
+      "license_or_access": "Public Domain (1894). Digitized by Digital South Asia Library (DSAL), University of Chicago.",
+      "description": "Historic foundational 1,752-page lexicon recording Dravidian etymologies, regional dialect words, and classical citations."
+    },
+    {
+      "source_id": "SRC-KSP-NIGHANTU",
+      "short_title": "KSP Nighantu (1970–1995)",
+      "full_title": "Kannada Sahitya Parishat Nighantu (Vols 1–8)",
+      "author": "Kannada Sahitya Parishat Editorial Board",
+      "publisher": "Kannada Sahitya Parishat, Bangalore",
+      "publication_year": 1995,
+      "license_or_access": "Government-supported statutory cultural academy dictionary. Consulted under fair dealing for educational lexical verification.",
+      "description": "Official 8-volume historical and descriptive dictionary of the Kannada language."
+    },
+    {
+      "source_id": "SRC-ALAR",
+      "short_title": "Alar Dictionary (V. Krishna)",
+      "full_title": "Alar: Open Kannada-English Dictionary Database",
+      "author": "V. Krishna",
+      "publisher": "alar.ink",
+      "url": "https://alar.ink/",
+      "publication_year": 2021,
+      "license_or_access": "Open Database License (ODbL v1.0). Any public database derivative must acknowledge Alar and share under ODbL.",
+      "description": "Modern open-source lexicographical database containing ~150,000+ Kannada headwords and definitions."
+    }
+  ]
+}

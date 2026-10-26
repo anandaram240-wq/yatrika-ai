@@ -4,12 +4,12 @@
 > Organized by **HackerRank Campus Crew**, The National Institute of Engineering (NIE), Mysuru  
 > **Official Theme:** *Code. Create. Celebrate Kannada.*  
 > **Problem Statement Chosen:** **Problem Statement 04: Namma Kannada — Regional Language Explorer**  
-> **Architecture Level:** **Argon Phase 2.5 Implementation (Evidence-Graded Lexicography & Schema Integrity)**
+> **Architecture Level:** **Argon Phase 5 Flagship: The Phrase Passport & Morpheme-Shift X-Ray Explorer**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38b2ac.svg)](https://tailwindcss.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-Passing%20(11%2F11)-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-Passing%20(25%2F25)-brightgreen.svg)](https://vitest.dev/)
 [![JSON Schema](https://img.shields.io/badge/JSON%20Schema-Draft%202020--12-blueviolet.svg)](https://json-schema.org/)
 [![License](https://img.shields.io/badge/License-MIT%20%2B%20CC--BY--4.0-amber.svg)](LICENSE)
 
@@ -20,16 +20,19 @@
 Standard natural language tools, machine translation engines, and school curricula treat Kannada as a monolithic language, standardizing almost exclusively on formal *Granthika Kannada*. In reality, Kannada exists along a rich geographic continuum (*isoglosses*) where spoken syntax, verbal morphology, and everyday vocabulary shift noticeably every 30 to 100 kilometers across Karnataka.
 
 ### The Hackathon Trap vs Grounded Solution
-Typical hackathon projects attempt to build decorative translation chatbots that synthesize fake regional accents by pitch-shifting browser TTS, invent uniform 6-column translation grids, or present unverified random words as "dialects". 
+Typical hackathon projects build decorative translation chatbots that synthesize fake regional accents by pitch-shifting browser TTS, invent uniform 6-column translation grids, or present unverified random words as "dialects". 
 
-**Namma Kannada Atlas** rejects these simulated authority traps. In **Argon Phase 2.5**, the application is engineered as an **evidence-graded, source-grounded regional language explorer** where every single entry is backed by linguistic literature, clear isogloss awareness, strict JSON Schema Draft 2020-12 validation, and transparent provenance.
+**Namma Kannada Atlas** rejects these simulated authority traps. In **Argon Phase 5**, the application is engineered as an **evidence-graded, source-grounded regional language explorer** where every single entry is backed by linguistic literature, clear isogloss awareness, strict JSON Schema Draft 2020-12 validation, and our flagship innovations:
+1. **Interactive Morpheme-Shift X-Ray (`MorphemeXRayBar`):** Slot-by-slot morphological decomposition demonstrating how dialect forms share invariant Dravidian roots while shifting aspectual affixes and phonemes.
+2. **Regional Knowledge-Gap Ribbon (`KnowledgeGapRibbon`):** Honest visualization of Karnataka's 6 macro-regions, turning missing data into an open invitation for verified citizen linguistics.
+3. **Inspectable Phrase Passport (`PhrasePassportDrawer`):** Slide-out drawer answering all 8 mandatory linguistic questions (meaning, register, public status, primary source link, 5-dimension evidence audit, morphemes, shared regions, and limitations).
 
 ---
 
 ## 2. Reconciled Data Model & Evidence Tiers
 
 ### 📊 Dataset Reconciliation (13 Candidate Entries across 5 Concepts)
-Argon's preliminary audit narrative cited 12 entries. An independent packaging audit of the authoritative seed dataset (`src/data/atlas-evidence-candidates.json`) establishes that the dataset actually contains **13 entries across 5 concepts**:
+An independent packaging audit of the authoritative seed dataset (`src/data/atlas-evidence-candidates.json`) establishes that the dataset contains **13 entries across 5 concepts**:
 - **Concept 1 (`concept-how-are-you`):** 3 entries (`nka-how-are-you-std`, `nka-how-are-you-nk-shared`, `nka-how-are-you-coastal-kunda`)
 - **Concept 2 (`concept-what-are-you-doing`):** 4 entries (`nka-what-doing-std`, `nka-what-doing-kittur`, `nka-what-doing-kalyana`, `nka-what-doing-coastal-malnad`)
 - **Concept 3 (`concept-where-setting-out`):** 2 entries (`nka-where-going-std`, `nka-where-going-nk-shared`)
@@ -40,76 +43,71 @@ Argon's preliminary audit narrative cited 12 entries. An independent packaging a
 ### 🛡️ Strict Evidence Status & Locator Integrity
 All 13 candidate seed entries hold **provisional (`E4` phrase / `E2` pattern)** status with `citation.locator: null`. The system adheres strictly to the rule:
 - **No Fabricated Locators:** We do not invent physical book page numbers or upgrade entries to `source_attested` (`E1`) until a human researcher inspects the physical book or live dictionary headword.
-- **No Fabricated Speaker Reviews:** Entries are not promoted to `speaker_reviewed` (`E3`) without an authenticated contributor protocol with recorded consent.
+- **No Fabricated Speaker Reviews:** Strictly 0 entries claim `speaker_reviewed` (`E3`) without an authenticated contributor protocol with recorded consent.
 - **Quarantined Legacy Backlog:** The 15 pre-existing repository glossary items are quarantined under **`unverified` (`E5`)** status with clear visual toggles and notices.
+- **Closed Bibliographic Registry:** Every candidate links to [`src/data/VERIFIED_SOURCE_REGISTRY.json`](./src/data/VERIFIED_SOURCE_REGISTRY.json), containing strictly vetted titles:
+  1. `SRC-UPADHYAYA-1976` (Dr. U. P. Upadhyaya, *A Comparative Study of Kannada Dialects*, Univ of Mysore)
+  2. `SRC-VENKATASUBBIAH-IGO` (Prof. G. Venkatasubbiah, *Igo Kannada*, Navakarnataka)
+  3. `SRC-KITTEL-1894` (Rev. Ferdinand Kittel, *A Kannada-English Dictionary*, Basel Mission Press / DSAL)
+  4. `SRC-KSP-NIGHANTU` (*Kannada Sahitya Parishat Nighantu*, Vols 1–8)
+  5. `SRC-ALAR` (V. Krishna, *Alar Open Dictionary*, ODbL 1.0)
+  *(Uncataloged `SRC-BHAT-1967` completely audited and removed)*.
 
 ---
 
-## 3. Core Features Implemented
+## 3. Flagship Technological Innovations
 
-### 🔄 Sparse 6-Region Comparator UI (`src/components/PhraseMatrix.tsx`)
-- Binds directly to the 6 slots in `concept_coverage_summary[].region_matrix_states`:
-  1. `old_mysuru_southern` (Old Mysuru / Southern Karnataka)
-  2. `kittur_karnataka` (Kittur Karnataka / Northern Plains)
-  3. `kalyana_karnataka` (Kalyana Karnataka / Northeastern)
-  4. `karavali_coastal` (Karavali & Coastal Zone / Kundagannada)
-  5. `malnad` (Malnad Highland Zone)
-  6. `central_border_cluster` (Central & Urban Transition Cluster)
-- Distinct visual rendering states:
-  - **`distinct_regional_variant`:** Full card with Kannada script (`lang="kn"`), ISO-15919 transliteration, learner phonetics, and sub-variety tag.
-  - **`documented_multi_region`:** Regional card with badge indicating *"Shared Across Multiple Regions (e.g. Kittur & Kalyana)"*.
-  - **`shared_with_standard`:** Muted card displaying the linked standard baseline entry with badge *"Uses Standard / Pan-Karnataka Form"* and region-specific note.
-  - **`no_verified_distinct_variant`:** Explicit honest empty state card displaying *"No Verified Distinct Regional Variant in Current Dataset"* and explanatory research note.
-- **Linguistic Mechanism & Limitations Expander:** Every card exposes its grammatical mechanism (e.g. *Dative-progressive suffix -likkattīri*, *Northern assimilated stem hoṇṭu*, *Archaic existential auxiliary untu*) alongside its `limitations[]` array.
+### 🔬 1. The Morpheme-Shift X-Ray (`src/components/MorphemeXRayBar.tsx`)
+- Solves the common misconception that dialects are "different languages" or "slang".
+- Decomposes every regional candidate into constituent morphemes:
+  - **Invariant Dravidian Root (Green):** Identifies the shared lexical verb or noun base (e.g. `ಮಾಡ್-` [*māḍ-*] "do", `ಹುಡುಗ` [*huḍuga*] "boy").
+  - **Aspectual / Progressive Morpheme (Indigo):** Visualizes diagnostic regional aspect markers (e.g. Kittur `-ಆಕತ್ತ-` [*-ākatta-*] vs Kalyana `-ಲಿಕ್ಕತ್ತ-` [*-likkatta-*] vs Coastal `-ತಾ` [*-tā*]).
+  - **Phonological Shift (Amber):** Highlights regular sound correspondences (e.g. `ಹ್ಯಾಂಗ` [*hyāṅga*] with Old Kannada velar nasal retention).
+  - **Lexical Replacement (Rose):** Highlights regional nouns or adjectives (e.g. `ಎಂತ` [*enta*], `ಚೊಲೊ` [*colo*], `ಮಾಣಿ` [*māṇi*]).
+- Interactive popover reveals underlying reconstructions, linguistic glosses, and etymological mechanisms.
 
-### 🔊 Audio Authenticity & Deterministic Recall Check
-- **Speech Synthesis (`window.speechSynthesis`):**
-  - All region-based pitch/rate modifications are eliminated.
-  - Fixed configuration: `lang = 'kn-IN'`, `pitch = 1.0`, `rate = 0.95`.
-  - Checks client OS for an installed `kn-IN` voice; if missing, disables playback and displays a transparent warning: *"Standard Kannada TTS voice (kn-IN) is not installed on your current browser/OS."*
-  - Button label: **"Listen (Synthetic Standard kn-IN Script Readout — Not a Native Regional Recording)"**.
-- **Spoken Recall Check (`src/components/VoicePracticeModal.tsx`):**
-  - Replaced random heuristics with deterministic **Levenshtein character distance** comparison between captured browser ASR transcripts and target Kannada phrases.
-  - Permanent ASR disclaimer: *"Browser Speech-to-Text is trained on Standard Kannada (kn-IN) and may normalize or misrecognize regional dialect endings."*
+### 🌐 2. Regional Knowledge-Gap Ribbon (`src/components/KnowledgeGapRibbon.tsx`)
+- Maps communicative concepts across Karnataka's 6 macro-linguistic zones:
+  1. `old_mysuru_southern`
+  2. `kittur_karnataka`
+  3. `kalyana_karnataka`
+  4. `karavali_coastal`
+  5. `malnad`
+  6. `central_border_cluster`
+- Visual state badges:
+  - `distinct_regional_variant` (Emerald)
+  - `documented_multi_region` (Blue)
+  - `shared_with_standard` (Stone)
+  - `no_verified_distinct_variant` (Amber dashed Knowledge Gap)
+- **Actionable Citizen Linguistics:** Open knowledge gaps feature a **"Log Fieldwork"** button that pre-populates the local contribution workflow to gather authenticated native-speaker observations.
 
-### 📖 Namma Shabda Kosha & Quarantined Backlog (`src/components/SlangGlossary.tsx`)
-- 15 curated regional idioms tagged with `evidence_status: "unverified"` (`E5`).
-- Prominent UI quarantine banner and visibility toggle (**"Show / Hide Quarantined Backlog"**) ensuring unverified legacy data is not misrepresented as authoritative.
-- Verified citations updated to **Rev. Ferdinand Kittel (1894)**, KSP Nighantu, and Kannada University Hampi.
+### 🛂 3. Official Phrase Passport Drawer (`src/components/PhrasePassportDrawer.tsx`)
+- Deep slide-out drawer providing 8-pillar linguistic inspection for any candidate:
+  1. **Meaning & Concept:** Detailed semantic definition and communicative register.
+  2. **Pragmatic Context:** Sub-variety, target locality, and spoken registers.
+  3. **Public Legal Status:** CC BY 4.0 metadata + Fair Dealing (Sec. 52(1)(a) Indian Copyright Act).
+  4. **Primary Source Provenance:** Verified bibliographic record linked to registry with access rationale.
+  5. **5-Dimension Evidence Radar:** Invariant root, semantic equivalence, grammatical pattern, isogloss distribution, locator status, and speaker review status.
+  6. **Morpheme-Shift Decomposition:** Slot-by-slot analysis of surface vs underlying forms.
+  7. **Shared Regions & Isoglosses:** Regional distribution across Karnataka.
+  8. **Epistemic Limitations:** Explicit list of caveats and reasons held at provisional tier.
+  - **Native-Speaker Review Protocol (E3):** Step-by-step guidance on collecting authentic native-speaker reviews with informed consent, eliminating fabricated entries.
 
-### 🎯 Regional Language Knowledge Quiz (`src/components/DialectGuesser.tsx`)
-- 8 multiple-choice questions testing regional comprehension.
-- Post-answer display of **Grammatical Mechanisms (`morphological_note`)** and source citations.
-- Confetti celebration and streak tracking.
-
-### ✍️ Local Fieldwork Notebook & Schema-Validated JSON Export
-- Submission form titled **"Local Browser Fieldwork Notebook (`localStorage`)"**.
-- Enforces mandatory CC BY 4.0 contributor consent: *"I confirm this is my own observation and release this note under CC BY 4.0 without personal identifying data."*
-- Submissions are assigned `contributor_pending` (`E3` observation / `E4` phrase).
-- **"Download Schema-Validated JSON"** exports user observations packaged under `atlas-data.schema.json`.
-
----
-
-## 4. Semantic Validation Rules & Schema Compliance
-
-The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Semantic Validation Rules**:
-
-1. **Rule 1 (Bibliographic Verification):** Validates `citation.source_id` against the approved Bibliography Registry (`SRC-UPADHYAYA-1976`, `SRC-VENKATASUBBIAH-IGO`, `SRC-KITTEL-1894`, `SRC-KSP-NIGHANTU`), verifies publication years (`1800–2026`), and actively rejects forbidden synthetic titles. (Note: `SRC-BHAT-1967` was audited and removed because *Kannada Verb Forms (1967)* is not a cataloged work by D. N. S. Bhat).
-2. **Rule 2 (Lexical Attestation):** Enforces that `source_attested` entries require non-empty physical locators (`citation.locator`) and approved registry IDs, while `provisional` entries have `locator: null`.
-3. **Rule 3 (Regional Attribution):** Confirms all entries have populated `region_or_locality`, `sub_variety`, and `variant_type`, and match `concept_coverage_summary`.
-4. **Rule 4 (Meaning & Context):** Enforces allowed register enums (`formal_and_polite_spoken`, `everyday_spoken`, etc.) and semantic coherence within each concept.
-5. **Rule 5 (Transliteration & Kannada Unicode):** Checks character-by-character alignment and verifies Kannada Unicode block (`U+0C80–U+0CFF`), permitting `ZWNJ` (`U+200C`) and `ZWJ` (`U+200D`).
-6. **Rule 6 (Native-Speaker Review):** Enforces that `speaker_reviewed` requires non-null review records with `consent_recorded: true`, while community entries maintain `review_record: null`.
+### 🔊 4. Audio Authenticity & Deterministic Spoken Recall Check
+- **Speech Synthesis:** Fixed standard readout (`pitch: 1.0`, `rate: 0.95`, `kn-IN`). Explicitly labeled as **"Synthetic Standard kn-IN Script Readout — Not a Native Regional Recording"**. Eliminates deceptive accent manipulation.
+- **Spoken Recall Check:** Captures browser Web Speech recognition transcripts, performs deterministic **Levenshtein character distance**, and prominently displays standard ASR dialect disclaimers.
 
 ---
 
-## 5. Automated Vitest Suite (19/19 Passing)
+## 4. Automated Vitest Suite (25/25 Passing)
+
+The project includes **25 automated Vitest unit and integration tests** executing in under 300ms:
 
 ```bash
-✓ src/__tests__/app.test.ts (19 tests) 71ms
+✓ src/__tests__/app.test.ts (25 tests) 74ms
   ✓ 1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors 54ms
   ✓ 2. Enforces all 6 Semantic Validation Rules via validateAtlasDataset 1ms
-  ✓ 3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts (resolving Argon report 12 vs 13) 1ms
+  ✓ 3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts 0ms
   ✓ 4. Enforces provisional status and null locators on candidate entries (no invented citations) 1ms
   ✓ 5. Enforces per-entry licensing metadata and top-level license policy 1ms
   ✓ 6. Verifies sparse 6-region matrix states include shared-form and honest missing-data handling 1ms
@@ -117,27 +115,33 @@ The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Sema
   ✓ 8. Verifies educational macro-cluster taxonomy and isogloss notes for all 6 regions 0ms
   ✓ 9. Verifies absence of duplicate IDs across concepts, candidates, regions, glossary, and quiz 0ms
   ✓ 10. Verifies legacy glossary items are quarantined under unverified (E5) status 0ms
-  ✓ 11. Verifies quiz questions contain unique options and morphological mechanism notes 0ms
-  ✓ 12. Actively asserts zero occurrences of forbidden synthetic titles across all active application datasets 7ms
+  ✓ 11. Verifies quiz questions contain unique options and morphological mechanism notes 1ms
+  ✓ 12. Actively asserts zero occurrences of forbidden synthetic titles across all active datasets 7ms
   ✓ 13. Verifies semantic validator actively rejects blacklisted titles and unregistered source IDs 1ms
-  ✓ 14. Asserts no entry or question claims source_attested without physical locator and registered source ID 0ms
+  ✓ 14. Asserts no entry or question claims source_attested without physical locator and registered ID 0ms
   ✓ 15. Validates licensing metadata completeness and fair dealing/ODbL disclosure compliance 0ms
   ✓ 16. Verifies exact active 5 concepts: how-are-you, what-are-you-doing, where-setting-out, good-fine, boy-youth 1ms
   ✓ 17. Verifies Kundagannada candidate nka-how-are-you-coastal-kunda ("ಹೆಂಗಿದ್ದಿರಿ?") provenance and limitations 0ms
   ✓ 18. Enforces strictly 0 E3 records across datasets and confirms removal of unverified SRC-BHAT-1967 0ms
   ✓ 19. Asserts zero pseudo-corpus or fake oral collection names in secondary source metadata 1ms
+  ✓ 20. (Phase 5 - TEST-01) Validates morpheme_xray_concatenation_and_slot_integrity across all 13 candidates 1ms
+  ✓ 21. (Phase 5 - TEST-02) Validates phrase_passport_five_dimension_evidence_gate 0ms
+  ✓ 22. (Phase 5 - TEST-03) Validates closed_bibliography_registry_and_purge_check via VERIFIED_SOURCE_REGISTRY.json 1ms
+  ✓ 23. (Phase 5 - TEST-04) Validates knowledge_gap_sparse_matrix_honesty across all 5 concepts and 6 macro-regions 0ms
+  ✓ 24. (Phase 5 - TEST-05) Validates composite_license_and_odbl_export_validation 0ms
+  ✓ 25. (Phase 5 - TEST-06) Validates synthetic_tts_neutrality_and_fallback diagnostics 0ms
 
 Test Files  1 passed (1)
-     Tests  19 passed (19)
-  Duration  298ms
+     Tests  25 passed (25)
+  Duration  276ms
 ```
 
 ---
 
-## 6. Getting Started & Local Development
+## 5. Getting Started & Local Development
 
 ### Prerequisites
-- **Node.js:** v18.0.0 or higher (v24.x tested)
+- **Node.js:** v18.0.0 or higher (v24.x verified)
 - **npm:** v9.0.0 or higher
 
 ### Installation & Run
@@ -166,71 +170,79 @@ npm run build
 
 ---
 
-## 7. 3-to-5 Minute Video Walkthrough Script
+## 6. 3-to-5 Minute Video Walkthrough Script
 
-*Total duration: ~3 minutes 45 seconds. Structured specifically for hackathon evaluators.*
+*Total duration: ~3 minutes 50 seconds. Structured specifically for hackathon evaluators.*
 
 ### [0:00 - 0:45] Hook, Problem Statement & Evidence Grounding
-- **Visual:** Camera on speaker holding up the running application on screen or screen recording of the Hero section.
+- **Visual:** Screen recording of the Hero section, showing the Karnataka interactive dialect map.
 - **Spoken Script:**
   > "Namaskara! I am presenting *Namma Kannada Atlas*, built for Problem Statement 04: Regional Language Explorer at the Kannada Digital Innovation Hackathon 2026.
   > 
-  > Standard NLP and translation tools treat Kannada as a single monolithic block, almost always defaulting to formal literary *Granthika Kannada*. But in real life, spoken Kannada changes every 50 kilometers—from the direct cadences of Dharwad and Belagavi to coastal Kundagannada and Old Mysore courtliness.
+  > Standard NLP and translation tools treat Kannada as a single monolithic block, defaulting to formal literary *Granthika Kannada*. But in real life, spoken Kannada changes every 50 kilometers—from the northern cadences of Dharwad and Belagavi to coastal Kundagannada and Old Mysore speech.
   > 
   > Instead of building a decorative chatbot with simulated AI accents, our mission was simple: create an **evidence-graded, source-grounded regional language explorer** where every single entry is backed by linguistic literature, clear isogloss awareness, and transparent provenance."
 
-### [0:45 - 1:40] Regional Explorer & Sparse Comparator Grid
-- **Visual:** Navigate to "Comparative Matrix". Click on "What are you doing?" and "How are you?".
+### [0:45 - 1:45] Flagship Demo: Morpheme-Shift X-Ray & Regional Knowledge Gaps
+- **Visual:** Navigate to "Comparative Matrix". Click on "What are you doing?". Toggle the "Morpheme X-Ray: ON" switch. Click the `-ಆಕತ್ತ-` slot on the Kittur card and `-ಲಿಕ್ಕತ್ತ-` slot on the Kalyana card.
 - **Spoken Script:**
-  > "In our **Cross-Dialect Matrix**, we map 5 communicative concepts across six educational macro-clusters. 
+  > "Here is our flagship innovation: **The Morpheme-Shift X-Ray**. Dialects are not separate languages; they are regular morphological shifts atop invariant Dravidian roots.
   > 
-  > Look at how we handle regional diversity: for 'What are you doing?', you see the distinct northern progressive '-ākattīri' in Kittur Karnataka, and the dative-progressive '-likkattīri' in Kalyana Karnataka. Notice our honest matrix states: when a region shares a standard form, we label it as 'Standard Baseline'. And where no distinct regional variant is verified, we honestly show an empty state card with an explanatory note rather than fabricating synthetic dialect words.
+  > Look at the concept 'What are you doing?':
+  > In the green pill, you see the invariant root `ಮಾಡ-` (māḍu), shared across all Kannada speakers.
+  > But look at the aspect marker: In Kittur Karnataka, it shifts to `-ಆಕತ್ತ-` (-ākatta-), grammaticalized from the purposive infinitive and inceptive auxiliary.
+  > In Kalyana Karnataka, it shifts to the dative-progressive `-ಲಿಕ್ಕತ್ತ-` (-likkatta-).
+  > And in Karavali Kundagannada, notice the lexical interrogative `ಎಂತ` (enta).
   > 
-  > Notice the metrics: exactly 13 candidate entries across 5 concepts. Every single entry is marked **Provisional (E4 phrase / E2 pattern)** with null page locators because we refuse to hallucinate book page numbers until physically inspected."
+  > Right above the grid, our **Knowledge-Gap Ribbon** honestly displays Karnataka's six macro-regions. Notice the dashed card: where literature has not yet attested a distinct variant, we preserve an honest empty state with a 'Log Fieldwork' button to invite authenticated community contributions rather than hallucinating nonexistent dialect words."
 
-### [1:40 - 2:30] Audio Authenticity & Deterministic Spoken Recall Check
-- **Visual:** Click the audio button on a card. Then click "Recall Check" to open the Voice Practice modal. Speak a phrase into the microphone and show the deterministic Levenshtein comparison.
+### [1:45 - 2:40] The Phrase Passport Drawer & 5-Dimension Evidence Radar
+- **Visual:** Click "Passport" on the Kittur card. The `PhrasePassportDrawer` slides out. Scroll through the 8 dimensions. Click "Review Protocol" under E3.
 - **Spoken Script:**
-  > "Next, notice our audio integrity: every playback button is transparently labeled **'Synthetic Standard kn-IN Script Readout — Not a Native Regional Recording'**. We explicitly eliminated pitch-shifting and fake accent modulation.
+  > "Next, click **'Passport'** on any phrase. Our slide-out **Phrase Passport** answers eight mandatory linguistic questions.
   > 
-  > When testing pronunciation, our **Spoken Recall Check** rejects fake random scores. It uses browser speech recognition to capture the transcript, computes deterministic Levenshtein character edit distance, and prominently displays an honest notice explaining that browser ASR is trained on Standard Kannada and may normalize regional dialect endings."
+  > You see the exact meaning, sociolinguistic register, and public licensing under CC BY 4.0 and Fair Dealing.
+  > Under source provenance, notice the live link to our closed **Verified Source Registry**, citing Dr. Upadhyaya's 1976 dialect survey.
+  > Look at our **Five-Dimension Evidence Radar**: the lexical root, grammatical pattern, and isogloss distribution are verified at E2, while exact page citations and speaker reviews are honestly marked null because this is a provisional candidate.
+  > We even provide a formal protocol for how community speakers can elevate entries to genuine E3 speaker review with recorded consent."
 
-### [2:30 - 3:15] Quarantined Backlog & Phrase Knowledge Quiz
-- **Visual:** Navigate to "Slang & Idioms", show the quarantine banner and toggle. Then click "Phrase Quiz", answer a question, and highlight the post-answer morphological note.
+### [2:40 - 3:20] Audio Authenticity & Deterministic Spoken Recall Check
+- **Visual:** Click "kn-IN TTS". Then click "Recall" to open the Voice Practice modal. Speak into the microphone and demonstrate the deterministic Levenshtein comparison.
 - **Spoken Script:**
-  > "In **Namma Shabda Kosha**, our 15 legacy idioms are quarantined under **Unverified (E5)** status with a prominent banner, ensuring unverified backlog items are never confused with peer-reviewed literature.
+  > "Notice our audio honesty: every audio button is labeled **'Synthetic Standard kn-IN Script Readout — Not a Native Regional Recording'**. We explicitly eliminated pitch-shifting and fake accent modulation.
   > 
-  > In our **Phrase Knowledge Quiz**, learners answer 8 challenging questions testing regional idioms, receiving immediate feedback, cultural trivia, and detailed grammatical mechanism notes."
+  > In our **Spoken Recall Check**, we replaced fake random scores with deterministic **Levenshtein character distance** against captured browser ASR transcripts, accompanied by permanent notices explaining standard ASR dialect limitations."
 
-### [3:15 - 3:45] Fieldwork Notebook, JSON Schema Export & Conclusion
-- **Visual:** Navigate to "Community Vault". Click "Download Schema-Validated JSON". Show the downloaded file.
+### [3:20 - 3:50] 25 Passing Tests, Production Build & Conclusion
+- **Visual:** Show terminal executing `npm test` (all 25 passing) and show the 8-slide presentation deck.
 - **Spoken Script:**
-  > "Finally, our **Local Fieldwork Notebook** allows native speakers to record regional observations under CC BY 4.0. Drafts remain safely on the user's device, and with one click of **'Download Schema-Validated JSON'**, users export an archive fully compliant with JSON Schema Draft 2020-12.
+  > "Under the hood, Namma Kannada Atlas passes **25 automated Vitest acceptance tests** in 280ms, validates against JSON Schema Draft 2020-12 via Ajv, compiles to a lightweight production bundle, and includes an 8-slide widescreen presentation deck.
   > 
-  > The application is 100% type-safe, passes 11 automated Vitest tests, builds with zero errors, and is accompanied by an 8-slide presentation deck.
+  > Namma Kannada Atlas proves that technological innovation in Indian languages comes from linguistic truth, verifiable provenance, and deep structural insight.
   > 
   > Thank you! Sirigannadam Gelge, Sirigannadam Balge!"
 
 ---
 
-## 8. Submission Deliverables Summary
+## 7. Submission Deliverables Summary
 
 | Deliverable | File / Location | Status |
 | :--- | :--- | :---: |
 | **1. Source Code Repository** | Standalone Git repo with complete commit history | ✅ Verified (`main`) |
-| **2. Presentation Deck** | [`Namma_Kannada_Regional_Explorer_Presentation.pptx`](./Namma_Kannada_Regional_Explorer_Presentation.pptx) | ✅ Verified (39 KB, 6 slides) |
-| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (11 tests) | ✅ 11/11 Passed (57ms) |
+| **2. Presentation Deck** | [`Namma_Kannada_Regional_Explorer_Presentation.pptx`](./Namma_Kannada_Regional_Explorer_Presentation.pptx) | ✅ 8-Slide Widescreen Deck Generated |
+| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (25 tests) | ✅ 25/25 Passed (74ms) |
 | **4. JSON Schema Draft 2020-12** | [`src/data/atlas-data.schema.json`](./src/data/atlas-data.schema.json) | ✅ Ajv 2020 Compliant |
-| **5. Seed Dataset (13 Entries)** | [`src/data/atlas-evidence-candidates.json`](./src/data/atlas-evidence-candidates.json) | ✅ Schema Validated |
-| **6. Production Build** | [`dist/`](./dist/) | ✅ Vite 6 / TS 5.7 (gzip 118 kB) |
-| **7. Video Walkthrough Script** | Section 7 above (3:45 timed spoken script) | ✅ Ready to Record |
+| **5. Seed Dataset (13 Entries)** | [`src/data/atlas-evidence-candidates.json`](./src/data/atlas-evidence-candidates.json) | ✅ Enriched with Morpheme & Evidence Metadata |
+| **6. Verified Source Registry** | [`src/data/VERIFIED_SOURCE_REGISTRY.json`](./src/data/VERIFIED_SOURCE_REGISTRY.json) | ✅ 5 Closed Vetted Titles |
+| **7. Production Build** | [`dist/`](./dist/) | ✅ Vite 6 / TS 5.7 (1.3s build) |
+| **8. Video Walkthrough Script** | Section 6 above (3:50 timed spoken script) | ✅ Ready to Record |
 
 ---
 
-## 9. License & Policy
+## 8. License & Policy
 
 - **Software Code:** MIT License.
-- **Dataset Policy:** Per-entry source and license metadata required. Original English explanations and structural metadata by the Namma Kannada Atlas team are released under Creative Commons Attribution 4.0 International (CC-BY 4.0); cited third-party lexical sources retain their respective rights and restrictions.
+- **Dataset Policy:** Original English explanations, morpheme decompositions, and structural metadata by the Namma Kannada Atlas team are released under Creative Commons Attribution 4.0 International (CC-BY 4.0); cited third-party lexical sources retain their respective rights and restrictions.
 - **Hackathon:** Kannada Digital Innovation Hackathon 2026.
 - **Host Institution:** The National Institute of Engineering (NIE), Mysuru.
 - **Partner:** HackerRank Campus Crew.

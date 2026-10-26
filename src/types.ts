@@ -69,6 +69,27 @@ export interface SpeakerReviewRecord {
   review_notes: string;
 }
 
+export interface MorphemeSlot {
+  slot_id: string;
+  slot_label: string;
+  surface_kn: string;
+  surface_iso: string;
+  underlying_form: string;
+  gloss_en: string;
+  is_invariant_root: boolean;
+  shift_category: string;
+  shift_explanation: string;
+}
+
+export interface EvidenceDimensions {
+  lexical_root: EvidenceLevel | null;
+  meaning_equivalence: EvidenceLevel | null;
+  grammatical_pattern: EvidenceLevel | null;
+  regional_distribution: EvidenceLevel | null;
+  exact_sentence_locator: EvidenceLevel | null;
+  native_speaker_review: EvidenceLevel | null;
+}
+
 export interface AtlasEntry {
   id: string;
   concept_id: string;
@@ -92,6 +113,8 @@ export interface AtlasEntry {
   review_record: SpeakerReviewRecord | null;
   license_status: LicenseStatus;
   limitations: string[];
+  morpheme_decomposition?: MorphemeSlot[];
+  evidence_dimensions?: EvidenceDimensions;
 }
 
 export interface AtlasDataset {

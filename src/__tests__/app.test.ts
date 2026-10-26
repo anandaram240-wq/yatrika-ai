@@ -9,6 +9,7 @@ import { REGIONS } from '../data/regions';
 import { GLOSSARY_WORDS } from '../data/glossary';
 import { QUIZ_QUESTIONS } from '../data/quiz';
 import { speechService } from '../utils/speech';
+import verifiedSourceRegistry from '../data/VERIFIED_SOURCE_REGISTRY.json';
 import { RegionId } from '../types';
 
 describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification Suite', () => {
@@ -366,5 +367,146 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
       });
       expect(w.source.title).toBe('Unverified colloquial backlog (no established source)');
     });
+  });
+
+  // --- Argon Phase 5: Flagship Innovation Discovery Acceptance Tests ---
+
+  it('20. (Phase 5 - TEST-01) Validates morpheme_xray_concatenation_and_slot_integrity across all 13 candidates', () => {
+    expect(ALL_ENTRIES).toHaveLength(13);
+    ALL_ENTRIES.forEach((entry) => {
+      expect(entry.morpheme_decomposition).toBeDefined();
+      expect(entry.morpheme_decomposition?.length).toBeGreaterThan(0);
+
+      // Must have at least one invariant root slot
+      const rootSlots = entry.morpheme_decomposition?.filter((s) => s.is_invariant_root);
+      expect(rootSlots?.length).toBeGreaterThanOrEqual(1);
+
+      entry.morpheme_decomposition?.forEach((slot) => {
+        expect(slot.slot_id).toBeTruthy();
+        expect(slot.slot_label).toBeTruthy();
+        expect(slot.surface_kn).toBeTruthy();
+        expect(slot.surface_iso).toBeTruthy();
+        expect(slot.underlying_form).toBeTruthy();
+        expect(slot.gloss_en).toBeTruthy();
+        expect(typeof slot.is_invariant_root).toBe('boolean');
+        expect(slot.shift_category).toBeTruthy();
+        expect(slot.shift_explanation).toBeTruthy();
+      });
+    });
+
+    // Check Kittur vs Kalyana progressive morphological markers
+    const kitturEntry = ALL_ENTRIES.find((e) => e.id === 'nka-what-doing-kittur');
+    const kalyanaEntry = ALL_ENTRIES.find((e) => e.id === 'nka-what-doing-kalyana');
+
+    expect(kitturEntry).toBeDefined();
+    expect(kalyanaEntry).toBeDefined();
+
+    const kitturAspect = kitturEntry?.morpheme_decomposition?.find((s) => s.slot_id === 'slot-aspect-suffix');
+    const kalyanaAspect = kalyanaEntry?.morpheme_decomposition?.find((s) => s.slot_id === 'slot-aspect-suffix');
+
+    expect(kitturAspect?.surface_kn).toBe('-ಆಕತ್ತ-');
+    expect(kitturAspect?.shift_category).toBe('aspect_morphology');
+    expect(kalyanaAspect?.surface_kn).toBe('-ಲಿಕ್ಕತ್ತ-');
+    expect(kalyanaAspect?.shift_category).toBe('aspect_morphology');
+  });
+
+  it('21. (Phase 5 - TEST-02) Validates phrase_passport_five_dimension_evidence_gate', () => {
+    ALL_ENTRIES.forEach((entry) => {
+      expect(entry.evidence_dimensions).toBeDefined();
+      const dims = entry.evidence_dimensions!;
+
+      // Enforce null exact locator & null native speaker review for all provisional E4 candidates
+      expect(dims.exact_sentence_locator).toBeNull();
+      expect(dims.native_speaker_review).toBeNull();
+
+      // Enforce established comparative dimensions
+      expect(['E1', 'E2']).toContain(dims.lexical_root);
+      expect(dims.meaning_equivalence).toBe('E2');
+      expect(dims.grammatical_pattern).toBe('E2');
+      expect(dims.regional_distribution).toBe('E2');
+    });
+  });
+
+  it('22. (Phase 5 - TEST-03) Validates closed_bibliography_registry_and_purge_check via VERIFIED_SOURCE_REGISTRY.json', () => {
+    expect(verifiedSourceRegistry.schema_version).toBe('1.1.0');
+    expect(verifiedSourceRegistry.sources).toHaveLength(5);
+
+    const registeredIds = verifiedSourceRegistry.sources.map((s) => s.source_id);
+    expect(registeredIds).toEqual([
+      'SRC-UPADHYAYA-1976',
+      'SRC-VENKATASUBBIAH-IGO',
+      'SRC-KITTEL-1894',
+      'SRC-KSP-NIGHANTU',
+      'SRC-ALAR',
+    ]);
+
+    // Zero mentions of unverified Bhat 1967
+    expect(registeredIds).not.toContain('SRC-BHAT-1967');
+    verifiedSourceRegistry.sources.forEach((s) => {
+      expect(s.full_title).not.toContain('Kannada Verb Forms');
+      expect(s.author).not.toContain('Shankara Bhat');
+    });
+
+    // All 13 candidate entries link to registered sources
+    ALL_ENTRIES.forEach((entry) => {
+      expect(registeredIds).toContain(entry.citation.source_id);
+    });
+  });
+
+  it('23. (Phase 5 - TEST-04) Validates knowledge_gap_sparse_matrix_honesty across all 5 concepts and 6 macro-regions', () => {
+    const requiredRegions = [
+      'old_mysuru_southern',
+      'kittur_karnataka',
+      'kalyana_karnataka',
+      'karavali_coastal',
+      'malnad',
+      'central_border_cluster',
+    ];
+
+    let totalGaps = 0;
+
+    CONCEPTS.forEach((concept) => {
+      requiredRegions.forEach((reg) => {
+        const slotState = concept.region_matrix_states[reg as keyof typeof concept.region_matrix_states];
+        expect(slotState).toBeDefined();
+        if (slotState.status === 'no_verified_distinct_variant') {
+          totalGaps++;
+          expect(slotState.entry_id).toBeNull();
+          expect(slotState.note).toBeTruthy();
+        }
+      });
+    });
+
+    // Confirms at least 5 honest empty states across the matrix
+    expect(totalGaps).toBeGreaterThanOrEqual(5);
+  });
+
+  it('24. (Phase 5 - TEST-05) Validates composite_license_and_odbl_export_validation', () => {
+    expect(ATLAS_DATASET.license_policy).toContain('CC BY 4.0');
+    expect(ATLAS_DATASET.license_policy).toBeTruthy();
+
+    ALL_ENTRIES.forEach((entry) => {
+      expect(entry.license_status).toBe('approved_for_planned_use');
+      expect(entry.limitations.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('25. (Phase 5 - TEST-06) Validates synthetic_tts_neutrality_and_fallback diagnostics', () => {
+    // 1. Diagnostics in runtime environment
+    const diag = speechService.getDiagnostics();
+    expect(typeof diag.isSupported).toBe('boolean');
+    expect(typeof diag.hasKannadaVoice).toBe('boolean');
+    expect(typeof diag.notice).toBe('string');
+
+    // 2. Verify speak rejects simulated accents and reports honest fallback error in headless/unsupported environment
+    let errorReceived = '';
+    const result = speechService.speak({
+      kannadaText: 'ನಮಸ್ಕಾರ',
+      onError: (err) => {
+        errorReceived = err;
+      },
+    });
+    expect(result).toBe(false);
+    expect(errorReceived).toContain('Web Speech API is not supported in this browser environment.');
   });
 });

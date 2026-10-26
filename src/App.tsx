@@ -163,7 +163,7 @@ export function App() {
     tags: ['Community Draft', c.district],
     status: c.status,
     evidence_status: 'contributor_pending',
-    evidence_level: 'E3',
+    evidence_level: 'E4',
     source: {
       title: `Community Field Submission (${c.district})`,
       authorOrInstitution: c.contributorName,
@@ -198,6 +198,7 @@ export function App() {
             <PhraseMatrix
               initialRegionId={matrixInitialRegion}
               onOpenVoicePractice={handleOpenVoicePractice}
+              onOpenContributeModal={() => setIsContributeModalOpen(true)}
             />
           )}
 

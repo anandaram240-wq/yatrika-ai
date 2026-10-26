@@ -148,6 +148,8 @@ export function validateAtlasDataset(dataset: AtlasDataset): SemanticValidationR
         errors.push(`${prefix}: citation.locator must be an exact page/headword, not a bare domain URL.`);
       } else if (!entry.citation.source_id || !APPROVED_BIBLIOGRAPHY_REGISTRY[entry.citation.source_id]) {
         errors.push(`${prefix}: evidence_status is "source_attested" but source_id "${entry.citation.source_id}" is not in approved registry.`);
+      } else if (!entry.citation.locator_human_verified) {
+        errors.push(`${prefix}: evidence_status is "source_attested" requires citation.locator_human_verified: true.`);
       }
     } else if (entry.evidence_status === 'provisional') {
       provisionalCount++;

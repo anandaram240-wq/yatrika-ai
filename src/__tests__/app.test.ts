@@ -594,10 +594,23 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
       forbiddenPhrases.forEach((fp) => {
         expect(e.citation.source_title).not.toContain(fp);
       });
-      // Zero entries claim source_attested without locator
-      if (e.evidence_status === 'source_attested') {
-        expect(e.citation.locator).toBeTruthy();
-      }
+      // Zero entries claim source_attested or have human verification flags
+      expect(e.evidence_status).not.toBe('source_attested');
+      expect(e.citation.locator).toBeNull();
+      expect(e.citation.locator_human_verified).toBe(false);
+    });
+
+    // Confirms strictly 0 source_attested entries in active candidates
+    expect(candidateData.entries.filter((e) => e.evidence_status === 'source_attested')).toHaveLength(0);
+
+    // Assert zero occurrences in regional signature phrases
+    REGIONS.forEach((r) => {
+      r.signaturePhrases.forEach((sp) => {
+        forbiddenPhrases.forEach((fp) => {
+          expect(sp.source.title).not.toContain(fp);
+        });
+        expect(sp.status).toBe('provisional');
+      });
     });
 
     // Assert zero occurrences in quiz questions
@@ -616,5 +629,21 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
       expect(w.evidence_status).toBe('unverified');
       expect(w.evidence_level).toBe('E5');
     });
+
+    // Validator check: Rejects source_attested without locator_human_verified: true
+    const mutantFakeAttestation = JSON.parse(JSON.stringify(candidateData));
+    mutantFakeAttestation.entries[0].evidence_status = 'source_attested';
+    mutantFakeAttestation.entries[0].citation.locator = 'p. 142';
+    mutantFakeAttestation.entries[0].citation.locator_human_verified = false;
+    const mutResult = validateAtlasDataset(mutantFakeAttestation);
+    expect(mutResult.valid).toBe(false);
+    expect(mutResult.errors.some((err) => err.includes('locator_human_verified: true'))).toBe(true);
+
+    // Validator check: Rejects entry citing an unknown source_id
+    const mutantUnknownSource = JSON.parse(JSON.stringify(candidateData));
+    mutantUnknownSource.entries[0].citation.source_id = 'SRC-UNAPPROVED-2026';
+    const mutResult2 = validateAtlasDataset(mutantUnknownSource);
+    expect(mutResult2.valid).toBe(false);
+    expect(mutResult2.errors.some((err) => err.includes('not in approved registry'))).toBe(true);
   });
 });

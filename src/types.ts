@@ -90,6 +90,7 @@ export interface CitationRecord {
   publication_year: number | null;
   locator: string | null;
   url: string | null;
+  locator_human_verified?: boolean;
 }
 
 export interface SpeakerReviewRecord {

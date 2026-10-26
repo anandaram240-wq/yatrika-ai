@@ -192,6 +192,10 @@
         "url": {
           "type": ["string", "null"],
           "format": "uri"
+        },
+        "locator_human_verified": {
+          "type": "boolean",
+          "description": "Must be true only if a human researcher has inspected the physical book, journal, or dictionary entry."
         }
       }
     },
@@ -490,6 +494,7 @@
               "evidence_level": { "const": "E1" },
               "citation": {
                 "type": "object",
+                "required": ["locator_human_verified"],
                 "properties": {
                   "source_id": { "type": "string" },
                   "source_title": { "type": "string" },
@@ -497,7 +502,8 @@
                   "locator": {
                     "type": "string",
                     "not": { "pattern": "^https?://[^/]+/?$" }
-                  }
+                  },
+                  "locator_human_verified": { "const": true }
                 }
               }
             }

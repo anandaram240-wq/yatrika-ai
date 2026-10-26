@@ -8,6 +8,10 @@ import { DialectGuesser } from './components/DialectGuesser';
 import { CommunityVault } from './components/CommunityVault';
 import { ContributeModal } from './components/ContributeModal';
 import { VoicePracticeModal } from './components/VoicePracticeModal';
+import { PhonologicalRuleSandbox } from './components/PhonologicalRuleSandbox';
+import { DiachronicTimeMachine } from './components/DiachronicTimeMachine';
+import { DialectometryMatrixView } from './components/DialectometryMatrixView';
+import { DpiExporterModal } from './components/DpiExporterModal';
 import { Footer } from './components/Footer';
 import { CommunityContribution, GlossaryWord, RegionId } from './types';
 
@@ -72,6 +76,7 @@ const INITIAL_LOCAL_DRAFTS: CommunityContribution[] = [
 export function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('map');
   const [isContributeModalOpen, setIsContributeModalOpen] = useState(false);
+  const [isDpiModalOpen, setIsDpiModalOpen] = useState(false);
   const [matrixInitialRegion, setMatrixInitialRegion] = useState<RegionId | undefined>(undefined);
 
   // Voice practice modal state
@@ -181,6 +186,7 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenContributeModal={() => setIsContributeModalOpen(true)}
+        onOpenDpiModal={() => setIsDpiModalOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -217,6 +223,39 @@ export function App() {
               bookmarkedIds={bookmarkedIds}
             />
           )}
+
+          {activeTab === 'linguistics' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+              <div className="text-center max-w-3xl mx-auto mb-8">
+                <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-900 border border-red-300">
+                  Computational Dravidian Linguistics & DPI Lab
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 mt-2 tracking-tight">
+                  Formal Phonology, Diachrony & Dialectometry
+                </h2>
+                <p className="text-sm text-stone-600 mt-2">
+                  Advancements 5 through 8: Grounded in peer-reviewed Dravidian linguistics (Bright 1958, Schiffman 1983, Upadhyaya 1976, Shankara Bhat 2001, and Kēśirāja’s 13th-century Śabdamaṇidarpaṇa).
+                </p>
+                <div className="mt-4 flex justify-center gap-3">
+                  <button
+                    onClick={() => setIsDpiModalOpen(true)}
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md transition-colors flex items-center gap-2"
+                  >
+                    <span>Download GoK PadaKanaja & Glottolog CLDF Datasets</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Advancement 5: Generative Phonology */}
+              <PhonologicalRuleSandbox />
+
+              {/* Advancement 6: Diachronic Time Machine */}
+              <DiachronicTimeMachine />
+
+              {/* Advancement 7: Dialectometry Matrix */}
+              <DialectometryMatrixView />
+            </div>
+          )}
         </div>
       </main>
 
@@ -237,6 +276,12 @@ export function App() {
         kannadaPhrase={voicePhrase.kannada}
         transliteration={voicePhrase.transliteration}
         meaning={voicePhrase.meaning}
+      />
+
+      {/* DPI & CLDF Exporter Modal */}
+      <DpiExporterModal
+        isOpen={isDpiModalOpen}
+        onClose={() => setIsDpiModalOpen(false)}
       />
     </div>
   );

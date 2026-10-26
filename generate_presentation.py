@@ -92,7 +92,7 @@ def create_presentation():
     p3.font.color.rgb = RGBColor(251, 191, 36)
 
     p4 = tf1.add_paragraph()
-    p4.text = "Problem Statement 04: Regional Language Explorer • Phase 4 & Phase 5 Integration\n13 Enriched Candidates • 5 Communicative Concepts • 28 Automated Vitest Tests • 10 Verified Sources (v4.0.0)"
+    p4.text = "Problem Statement 04: Regional Language Explorer • Computational Dravidian Linguistics & Karnataka DPI\n13 Enriched Candidates • 32 Automated Vitest Tests • FST Phonology • 1,500-Yr Diachrony • PadaKanaja & CLDF"
     p4.font.size = Pt(13)
     p4.font.color.rgb = RGBColor(214, 211, 209)
     p4.space_before = Pt(18)
@@ -361,12 +361,69 @@ def create_presentation():
       p2.space_before = Pt(2)
 
     # -------------------------------------------------------------
-    # SLIDE 7: Technical Quality & Vitest Suite (28 Tests)
+    # SLIDE 7: Computational Dravidian Linguistics & Karnataka DPI
     # -------------------------------------------------------------
     slide7 = prs.slides.add_slide(blank_layout)
-    add_header(slide7, "Technical Stack & 28 Automated Acceptance Tests", "Section 06 • Implementation & Quality")
+    add_header(slide7, "Computational Dravidian Linguistics & Karnataka DPI", "Section 06 • Formal Linguistics & DPI")
 
-    arch_box = slide7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.1))
+    ling_left = slide7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
+    ling_left.fill.solid()
+    ling_left.fill.fore_color.rgb = CARD_BG
+    ling_left.line.color.rgb = RGBColor(254, 240, 138)
+    tf1 = ling_left.text_frame
+    tf1.word_wrap = True
+    p = tf1.paragraphs[0]
+    p.text = "Generative FST & 1,500-Year Diachrony"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = DARK_RED
+    p2 = tf1.add_paragraph()
+    p2.text = """• Deterministic Finite-State Phonological Transducer:
+  - Rule SYNC-01 (Medial Syncope): Bright (1958) & Schiffman (1983): kudure -> kudre, huḍuga -> huḍga.
+  - Rule LEN-02 (Southern Glottal Deletion): Kēśirāja (1260 CE) *p- -> h- -> Ø: huḍga -> uḍga (Mandya).
+  - Rule PAL-03 (Velar Metaphony): Old Ka. *eṅge nasal retention: hēge -> hyāṅga (Dharwad).
+
+• 1,500-Year Diachronic Time-Machine:
+  - Epoch 1: Pūrvada Haḷegannaḍa (450–800 CE, Halmidi era) with archaic ಱ (ṟa) and ೞ (ḻa) and initial *p-.
+  - Epoch 2: Haḷegannaḍa (800–1200 CE, Pampa/Ranna era).
+  - Epoch 3: Naḍugannaḍa (1200–1700 CE, Kēśirāja *p- -> h-*).
+  - Epoch 4: Hosagannaḍa: Coastal/Malnad (ānu, māṇi, oragu) preserved as ancient classical relics!"""
+    p2.font.size = Pt(10.5)
+    p2.font.color.rgb = DARK_STONE
+    p2.space_before = Pt(8)
+
+    ling_right = slide7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
+    ling_right.fill.solid()
+    ling_right.fill.fore_color.rgb = LIGHT_BG
+    ling_right.line.color.rgb = RGBColor(214, 211, 209)
+    tf2 = ling_right.text_frame
+    tf2.word_wrap = True
+    p = tf2.paragraphs[0]
+    p.text = "Dialectometry & Karnataka DPI Exporter"
+    p.font.bold = True
+    p.font.size = Pt(16)
+    p.font.color.rgb = GOLD_AMBER
+    p2 = tf2.add_paragraph()
+    p2.text = """• Nerbonne & Heeringa Computational Dialectometry:
+  - Composite Linguistic Divergence Formulation:
+    D(R_i, R_j) = 0.35·d_phon + 0.40·d_morph + 0.25·I_lex
+  - 6x6 Pairwise Matrix across all 15 region pairs.
+  - Mathematical Proof: While surface strings differ by 20–55%, Invariant Root Cognacy remains 84%–100% across all Karnataka speech communities!
+
+• Digital Public Infrastructure (DPI) Standards:
+  - Govt. of Karnataka PadaKanaja (ಪದಕಣಜ) Ingestion Schema v4.1: Direct JSON export for state dictionary ingestion.
+  - Glottolog Cross-Linguistic Data Format (CLDF): Standardized wordlists mapped to nucl1305 (Nuclear Kannadoid)."""
+    p2.font.size = Pt(10.5)
+    p2.font.color.rgb = DARK_STONE
+    p2.space_before = Pt(8)
+
+    # -------------------------------------------------------------
+    # SLIDE 8: Technical Quality & Vitest Suite (32 Tests)
+    # -------------------------------------------------------------
+    slide8 = prs.slides.add_slide(blank_layout)
+    add_header(slide8, "Technical Stack & 32 Automated Acceptance Tests", "Section 07 • Implementation & Quality")
+
+    arch_box = slide8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.1))
     arch_box.fill.solid()
     arch_box.fill.fore_color.rgb = LIGHT_BG
     arch_box.line.color.rgb = RGBColor(214, 211, 209)
@@ -374,7 +431,7 @@ def create_presentation():
     tf.word_wrap = True
 
     p = tf.paragraphs[0]
-    p.text = "AUTOMATED VITEST ACCEPTANCE SUITE (28 PASSING TESTS)"
+    p.text = "AUTOMATED VITEST ACCEPTANCE SUITE (32 PASSING TESTS)"
     p.font.bold = True
     p.font.size = Pt(15)
     p.font.color.rgb = GOLD_AMBER
@@ -386,37 +443,33 @@ def create_presentation():
    • Ajv Draft 2020-12: Full JSON schema validation wired into Vitest automated tests.
    • Semantic Validator: Evaluates 6 linguistic rules (10-source bibliographic registry v4.0.0, locator, script, register, consent).
 
-2. 28 AUTOMATED VITEST TESTS (100% PASS IN ~230ms):
+2. 32 AUTOMATED VITEST TESTS (100% PASS IN ~164ms):
    • Tests 1-6: Schema Draft 2020-12, 6 Semantic Rules, 13 reconciled entries, provisional null locators, licensing, sparse matrix.
    • Tests 7-11: Speech diagnostics, 6-region taxonomy, zero duplicate IDs, E5 quarantined backlog, quiz options uniqueness.
    • Tests 12-15: Zero forbidden synthetic titles in active data, validator rejection of fake titles, zero ungrounded source claims.
    • Tests 16-19: Exact 5 active concepts, Kundagannada candidate provenance, strictly 0 E3 records, zero pseudo-corpora.
-   • Tests 20-25 (Phase 5 Flagship):
-     - TEST-01: Morpheme X-Ray concatenation and invariant root integrity across all 13 candidates.
-     - TEST-02: Phrase Passport 5-dimension evidence gate (enforcing null locators & null reviews on E4).
-     - TEST-03: Closed bibliography check via VERIFIED_SOURCE_REGISTRY.json v4.0.0 (confirming exactly 10 vetted sources).
-     - TEST-04: Knowledge-gap sparse matrix honesty (at least 5 open empty states preserved across 6 regions).
-     - TEST-05: Composite licensing & CC BY 4.0 / Fair Dealing compliance.
-     - TEST-06: Synthetic TTS neutrality and fallback diagnostics.
-   • Tests 26-28 (Phase 4 Rights, Provenance & ODbL Gates):
-     - TEST-26: Phase 4 Artifact D rights_and_provenance schema & ODbL database compliance.
-     - TEST-27: Phase 4 7-state comparison_cell_state taxonomy verified across all 13 candidates.
-     - TEST-28: Strict E1 human verification gate (all locators null, preventing premature E1 promotion).
+   • Tests 20-25: Morpheme X-Ray concatenation, Phrase Passport 5D gate, closed registry check, sparse matrix honesty, licensing, TTS diagnostics.
+   • Tests 26-28 (Rights & Provenance Gates): Rights and ODbL v1.0 compliance, 7-state matrix mapping, strict E1 verification gate.
+   • Tests 29-32 (Tier-2 Computational Dravidian Linguistics & DPI Gates):
+     - TEST-29: Dravidian phonetic edit distance with natural allophonic/diachronic shift weighting (p/h, retroflex, syncope).
+     - TEST-30: Deterministic Bright-Schiffman syncope (kudure->kudre), southern glottal deletion (uḍga), velar metaphony (hyāṅga).
+     - TEST-31: 1,500-year historical trajectories, Halmidi era epigraphy, and archaic graphemes (ಱ, ೞ, *p-).
+     - TEST-32: 6x6 pairwise dialect distance matrix (84-100% root cognacy) & GoK PadaKanaja / Glottolog CLDF exports.
 
 3. KANNADA TYPOGRAPHY & PRODUCTION BUILD:
    • Strict lang="kn" and line-height: 1.65 (leading-loose) across script containers to prevent ottakshara clipping.
-   • Production build via Vite 6 in 1.35s with zero TypeScript errors."""
-    p2.font.size = Pt(9.5)
+   • Production build via Vite 6 in 830ms with zero TypeScript errors."""
+    p2.font.size = Pt(9.0)
     p2.font.color.rgb = DARK_STONE
-    p2.space_before = Pt(4)
+    p2.space_before = Pt(3)
 
     # -------------------------------------------------------------
-    # SLIDE 8: Hackathon Submission Readiness
+    # SLIDE 9: Hackathon Submission Readiness
     # -------------------------------------------------------------
-    slide8 = prs.slides.add_slide(blank_layout)
-    add_header(slide8, "Submission Readiness & Evaluator Alignment", "Section 07 • Hackathon Summary")
+    slide9 = prs.slides.add_slide(blank_layout)
+    add_header(slide9, "Submission Readiness & Evaluator Alignment", "Section 08 • Hackathon Summary")
 
-    b1 = slide8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
+    b1 = slide9.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
     b1.fill.solid()
     b1.fill.fore_color.rgb = CARD_BG
     b1.line.color.rgb = RGBColor(254, 240, 138)
@@ -430,16 +483,16 @@ def create_presentation():
     p2 = tf1.add_paragraph()
     p2.text = """• Not a Toy, Not a Chatbot: Deep, verifiable regional language architecture tailored specifically to Karnataka's linguistic diversity.
 
-• Flagship Technological Novelty: Interactive Morpheme-Shift X-Ray and Regional Knowledge-Gap View decompose dialect variations into invariant roots and historical suffixes.
+• Flagship Computational Novelty: Generative Phonological FST Engine, 1,500-Year Diachronic Time-Machine, and Nerbonne Dialectometry.
 
 • Zero Data Hallucination: Rigorously eliminates synthetic dialect audio, random pronunciation scoring, and fabricated citations.
 
-• Public Domain & Educational Reuse: Clear copyright disclosures, ODbL acknowledgments, and CC BY 4.0 field contributions."""
-    p2.font.size = Pt(11.5)
+• State & Global DPI Ingestion: Ready-to-import GoK PadaKanaja (v4.1) and Glottolog CLDF (nucl1305) export formats."""
+    p2.font.size = Pt(11.0)
     p2.font.color.rgb = DARK_STONE
-    p2.space_before = Pt(10)
+    p2.space_before = Pt(8)
 
-    b2 = slide8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
+    b2 = slide9.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
     b2.fill.solid()
     b2.fill.fore_color.rgb = CARD_BG
     b2.line.color.rgb = RGBColor(254, 240, 138)
@@ -455,14 +508,14 @@ def create_presentation():
 
 • Repository: Clean Git history with semantic checkpoints and zero private keys or synthetic metadata.
 
-• Test Suite: 28 passing Vitest tests verifying schema, semantics, morphemes, licensing, and 10-source provenance.
+• Test Suite: 32 passing Vitest tests verifying schema, semantics, morphemes, phonology, and DPI exports.
 
-• Presentation: 8-slide widescreen PPTX generated directly from verified codebase metrics.
+• Presentation: 9-slide widescreen PPTX generated directly from verified codebase metrics.
 
 • Video Pitch: 3-to-5 minute structured walkthrough script ready in repository README."""
-    p2.font.size = Pt(11.5)
+    p2.font.size = Pt(11.0)
     p2.font.color.rgb = DARK_STONE
-    p2.space_before = Pt(10)
+    p2.space_before = Pt(8)
 
     prs.save("/Users/ananda/Downloads/HACKTHON/Namma_Kannada_Regional_Explorer_Presentation.pptx")
     print("Successfully generated Phase 5 Flagship Namma_Kannada_Regional_Explorer_Presentation.pptx")

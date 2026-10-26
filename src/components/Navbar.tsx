@@ -1,18 +1,20 @@
 import React from 'react';
-import { Compass, BookOpen, Layers, Award, PlusCircle, Sparkles, MapPin } from 'lucide-react';
+import { Compass, BookOpen, Layers, Award, PlusCircle, Sparkles, MapPin, Binary, Globe2 } from 'lucide-react';
 
-export type ActiveTab = 'map' | 'matrix' | 'glossary' | 'quiz' | 'community';
+export type ActiveTab = 'map' | 'matrix' | 'glossary' | 'quiz' | 'community' | 'linguistics';
 
 interface NavbarProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
   onOpenContributeModal: () => void;
+  onOpenDpiModal?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   onOpenContributeModal,
+  onOpenDpiModal,
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-amber-200/80 shadow-xs">
@@ -108,10 +110,33 @@ export const Navbar: React.FC<NavbarProps> = ({
               <MapPin className="w-4 h-4 text-purple-600" />
               <span>Community Vault</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('linguistics')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${
+                activeTab === 'linguistics'
+                  ? 'bg-white text-stone-900 shadow-xs border border-amber-200/60 font-bold'
+                  : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+              }`}
+            >
+              <Binary className="w-4 h-4 text-emerald-600" />
+              <span>Linguistics Lab</span>
+            </button>
           </nav>
 
           {/* Action Button */}
           <div className="flex items-center gap-2">
+            {onOpenDpiModal && (
+              <button
+                onClick={onOpenDpiModal}
+                className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold border border-stone-200 transition-colors"
+                title="Export Government of Karnataka PadaKanaja & Glottolog CLDF Datasets"
+              >
+                <Globe2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Export DPI</span>
+              </button>
+            )}
+
             <button
               onClick={onOpenContributeModal}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-linear-to-r from-red-600 to-amber-600 text-white text-sm font-bold shadow-md hover:shadow-lg hover:from-red-700 hover:to-amber-700 active:scale-95 transition-all"
@@ -164,6 +189,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             ✍️ Vault
+          </button>
+          <button
+            onClick={() => setActiveTab('linguistics')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap ${
+              activeTab === 'linguistics' ? 'bg-amber-500 text-white' : 'text-stone-600 bg-stone-100'
+            }`}
+          >
+            🔬 Linguistics
           </button>
         </div>
       </div>

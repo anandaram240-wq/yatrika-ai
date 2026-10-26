@@ -11,6 +11,15 @@ import { QUIZ_QUESTIONS } from '../data/quiz';
 import { speechService } from '../utils/speech';
 import verifiedSourceRegistry from '../data/VERIFIED_SOURCE_REGISTRY.json';
 import { RegionId } from '../types';
+import {
+  computeDravidianPhoneticDistance,
+  computeCompositeDialectDivergence,
+  PHONOLOGICAL_DERIVATION_RULES,
+  DIACHRONIC_TRAJECTORIES,
+  generatePairwiseDialectometryMatrix,
+  generatePadaKanajaExport,
+  generateCLDFWordlistExport,
+} from '../utils/dialectometryEngine';
 
 describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification Suite', () => {
   const EXPECTED_REGIONS: RegionId[] = [
@@ -645,5 +654,129 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
     const mutResult2 = validateAtlasDataset(mutantUnknownSource);
     expect(mutResult2.valid).toBe(false);
     expect(mutResult2.errors.some((err) => err.includes('not in approved registry'))).toBe(true);
+  });
+
+  // --- Tier-2 Deep Research & Computational Linguistics Engine Tests (Advancements 5–8) ---
+
+  it('29. (Advancement 5 - Phonetic Distance) Validates Dravidian allophonic edit distance & natural sound shift costs', () => {
+    // Identity check
+    expect(computeDravidianPhoneticDistance('māḍu', 'māḍu')).toBe(0);
+
+    // Natural Dravidian diachronic shift (p:h) should cost 0.5 substitution vs generic 1.0
+    const phDist = computeDravidianPhoneticDistance('pālu', 'hālu');
+    const genericDist = computeDravidianPhoneticDistance('pālu', 'zālu');
+    expect(phDist).toBeLessThan(genericDist);
+    expect(phDist).toBe(0.125); // 0.5 / 4 = 0.125
+
+    // Retroflex vs alveolar shift (r:ṟ) costs 0.5
+    const rDist = computeDravidianPhoneticDistance('oṟagu', 'oragu');
+    expect(rDist).toBe(0.1); // 0.5 / 5 = 0.1
+
+    // Syncope deletion penalty (0.8)
+    const syncopeDist = computeDravidianPhoneticDistance('kudure', 'kudre');
+    expect(syncopeDist).toBeGreaterThan(0);
+    expect(syncopeDist).toBeLessThan(0.3);
+  });
+
+  it('30. (Advancement 5 - FST Derivations) Validates deterministic Bright-Schiffman syncope & glottal deletion rules', () => {
+    // 1. Bright-Schiffman medial vowel syncope: kudure -> kudre
+    const kudureSteps = PHONOLOGICAL_DERIVATION_RULES['kudure-to-kudre'];
+    expect(kudureSteps).toBeDefined();
+    expect(kudureSteps[0].ruleCode).toBe('UR-BASE');
+    expect(kudureSteps[1].ruleCode).toBe('SYNC-01');
+    expect(kudureSteps[1].outputFormKannada).toBe('ಕುದ್ರೆ');
+    expect(kudureSteps[2].ruleCode).toBe('SR-FINAL');
+
+    // 2. Syncope + southern glottal deletion: huḍuga -> huḍga -> uḍga
+    const hudugaSteps = PHONOLOGICAL_DERIVATION_RULES['huduga-to-udga'];
+    expect(hudugaSteps).toBeDefined();
+    expect(hudugaSteps[1].ruleCode).toBe('SYNC-01');
+    expect(hudugaSteps[1].outputFormKannada).toBe('ಹುಡ್ಗ');
+    expect(hudugaSteps[2].ruleCode).toBe('LEN-02');
+    expect(hudugaSteps[2].outputFormKannada).toBe('ಉಡ್ಗ');
+    expect(hudugaSteps[2].formalNotation).toContain('#h- → Ø');
+
+    // 3. Velar-palatal metaphony: hēge -> hyāṅga
+    const hegeSteps = PHONOLOGICAL_DERIVATION_RULES['hege-to-hyanga'];
+    expect(hegeSteps).toBeDefined();
+    expect(hegeSteps[1].ruleCode).toBe('PAL-03');
+    expect(hegeSteps[1].outputFormKannada).toBe('ಹ್ಯಾಂಗ');
+    expect(hegeSteps[1].formalNotation).toContain('ē → yā');
+  });
+
+  it('31. (Advancement 6 - Diachrony) Validates 1,500-year historical trajectories and archaic graphemes (ಱ, ೞ, *p-)', () => {
+    expect(DIACHRONIC_TRAJECTORIES.length).toBeGreaterThanOrEqual(3);
+
+    DIACHRONIC_TRAJECTORIES.forEach((traj) => {
+      expect(traj.stages).toHaveLength(4);
+      const [purvada, halegannada, nadugannada, hosagannada] = traj.stages;
+
+      expect(purvada.epochId).toBe('purvada-halegannada');
+      expect(halegannada.epochId).toBe('halegannada');
+      expect(nadugannada.epochId).toBe('nadugannada');
+      expect(hosagannada.epochId).toBe('hosagannada-regional');
+
+      // Each epoch must have historical note and retention note
+      traj.stages.forEach((s) => {
+        expect(s.historicalNote).toBeTruthy();
+        expect(s.retentionInModernDialects).toBeTruthy();
+        expect(s.formKannada).toBeTruthy();
+        expect(s.formIAST).toBeTruthy();
+      });
+    });
+
+    // Check specific archaic grapheme preservation in Pūrvada Haḷegannaḍa
+    const boyTraj = DIACHRONIC_TRAJECTORIES.find((t) => t.conceptId === 'concept-boy-youth');
+    expect(boyTraj?.stages[0].archaicGraphemesUsed).toContain('ಱ (ṟa)');
+    expect(boyTraj?.stages[0].archaicGraphemesUsed).toContain('*p- initial');
+
+    const progressiveTraj = DIACHRONIC_TRAJECTORIES.find((t) => t.conceptId === 'concept-what-doing');
+    expect(progressiveTraj?.stages[0].archaicGraphemesUsed).toContain('ೞ (ḻa)');
+  });
+
+  it('32. (Advancements 7 & 8 - Dialectometry & DPI) Validates 6x6 dialect distance matrix & GoK PadaKanaja/CLDF exports', () => {
+    // 1. Dialectometry matrix
+    const matrix = generatePairwiseDialectometryMatrix();
+    // 6 regions pairwise = 6 * 5 / 2 = 15 pairs
+    expect(matrix).toHaveLength(15);
+
+    // Direct divergence calculation verification
+    const sampleDiv = computeCompositeDialectDivergence({
+      rootIastA: 'māḍu',
+      rootIastB: 'māḍu',
+      suffixIastA: 'tiddīri',
+      suffixIastB: 'ākattīri',
+      fullSurfaceIastA: 'ēn māḍtiddīri',
+      fullSurfaceIastB: 'ēn māḍākattīri',
+    });
+    expect(sampleDiv.rootCognacyPct).toBe(100);
+    expect(sampleDiv.surfaceDivergencePct).toBeGreaterThan(0);
+    expect(sampleDiv.morphemicShiftPct).toBeGreaterThan(0);
+
+    matrix.forEach((pair) => {
+      expect(pair.rootCognacyPct).toBeGreaterThanOrEqual(84); // Invariant roots remain 84-100% cognate!
+      expect(pair.rootCognacyPct).toBeLessThanOrEqual(100);
+      expect(pair.surfaceDivergencePct).toBeGreaterThanOrEqual(0);
+      expect(pair.surfaceDivergencePct).toBeLessThanOrEqual(100);
+      expect(['High (>80%)', 'Moderate (65-80%)', 'Contact-Divergent (<65%)']).toContain(
+        pair.mutualIntelligibilityLevel
+      );
+    });
+
+    // 2. PadaKanaja DPI Export
+    const padaKanaja = generatePadaKanajaExport(ALL_ENTRIES) as any;
+    expect(padaKanaja.dpi_standard).toContain('PadaKanaja');
+    expect(padaKanaja.records_count).toBe(13);
+    expect(padaKanaja.lexical_entries).toHaveLength(13);
+    expect(padaKanaja.lexical_entries[0].headword_kannada).toBeTruthy();
+    expect(padaKanaja.lexical_entries[0].evidence_tier).toBe('E4');
+
+    // 3. Glottolog CLDF Wordlist Export
+    const cldf = generateCLDFWordlistExport(ALL_ENTRIES) as any;
+    expect(cldf.cldfVersion).toBe('2.0');
+    expect(cldf.glottologLanguoid).toBe('nucl1305');
+    expect(cldf.tables.Wordlist).toHaveLength(13);
+    expect(cldf.tables.Wordlist[0].Language_ID).toBeTruthy();
+    expect(cldf.tables.Wordlist[0].Gloss).toBeTruthy();
   });
 });

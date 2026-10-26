@@ -38,11 +38,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ನಮ್ಮ ಕನ್ನಡ
                 </span>
                 <span className="hidden sm:inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-900 border border-amber-300">
-                  Dialect Explorer
+                  Regional Atlas
                 </span>
               </div>
               <p className="text-xs text-stone-500 font-medium">
-                Celebrating Regional Dialects of Karnataka
+                Source-Grounded Regional Language Explorer
               </p>
             </div>
           </div>
@@ -70,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Layers className="w-4 h-4 text-red-600" />
-              <span>Cross-Dialect Matrix</span>
+              <span>Comparative Matrix</span>
             </button>
 
             <button
@@ -94,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <Award className="w-4 h-4 text-indigo-600" />
-              <span>Dialect Guesser</span>
+              <span>Phrase Quiz</span>
             </button>
 
             <button
@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-linear-to-r from-red-600 to-amber-600 text-white text-sm font-bold shadow-md hover:shadow-lg hover:from-red-700 hover:to-amber-700 active:scale-95 transition-all"
             >
               <PlusCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">Add Your Local Slang</span>
+              <span className="hidden sm:inline">Draft Local Entry</span>
               <span className="sm:hidden">Contribute</span>
             </button>
           </div>
@@ -131,7 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               activeTab === 'map' ? 'bg-amber-500 text-white' : 'text-stone-600 bg-stone-100'
             }`}
           >
-            🗺️ Dialect Map
+            🗺️ Map
           </button>
           <button
             onClick={() => setActiveTab('matrix')}
@@ -139,7 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               activeTab === 'matrix' ? 'bg-amber-500 text-white' : 'text-stone-600 bg-stone-100'
             }`}
           >
-            🔄 Translator
+            🔄 Matrix
           </button>
           <button
             onClick={() => setActiveTab('glossary')}
@@ -163,7 +163,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               activeTab === 'community' ? 'bg-amber-500 text-white' : 'text-stone-600 bg-stone-100'
             }`}
           >
-            ✍️ Community
+            ✍️ Vault
           </button>
         </div>
       </div>

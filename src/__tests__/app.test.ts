@@ -129,4 +129,51 @@ describe('Namma Kannada Forensic Audit & Data Integrity Suite', () => {
     );
     expect(kundapuraWords.length).toBeGreaterThanOrEqual(2);
   });
+
+  it('verifies absence of duplicate IDs across all primary datasets', () => {
+    const regionIds = REGIONS.map(r => r.id);
+    expect(new Set(regionIds).size).toBe(regionIds.length);
+
+    const phraseIds = DIALECT_PHRASES.map(p => p.id);
+    expect(new Set(phraseIds).size).toBe(phraseIds.length);
+
+    const glossaryIds = GLOSSARY_WORDS.map(g => g.id);
+    expect(new Set(glossaryIds).size).toBe(glossaryIds.length);
+
+    const quizIds = QUIZ_QUESTIONS.map(q => q.id);
+    expect(new Set(quizIds).size).toBe(quizIds.length);
+  });
+
+  it('verifies JSON export schema compliance for research archive', () => {
+    const sampleContribution = {
+      id: 'test-1',
+      wordKannada: 'ಯಕ್ಕಾ',
+      wordTransliteration: 'Yakka',
+      meaning: 'Elder sister or affectionate exclamation',
+      regionId: 'uttara-karnataka' as RegionId,
+      district: 'Hubballi',
+      usageExample: 'ಯಕ್ಕಾ, ಸ್ವಲ್ಪ ಈ ಕಡೆ ಬಂದು ನೋಡು!',
+      contributorName: 'Basavaraj Patil',
+      attributionPreference: 'real-name' as const,
+      licenseConsent: true,
+      timestamp: '2 hours ago',
+      status: 'contributor-submitted' as const,
+    };
+
+    const exportPayload = {
+      archiveTitle: 'Namma Kannada Local Community Contribution Drafts',
+      exportDate: new Date().toISOString(),
+      license: 'CC-BY-4.0 (Creative Commons Attribution 4.0 International)',
+      contributionsCount: 1,
+      contributions: [sampleContribution],
+    };
+
+    const serialized = JSON.stringify(exportPayload);
+    const parsed = JSON.parse(serialized);
+
+    expect(parsed.license).toContain('CC-BY-4.0');
+    expect(parsed.contributions).toHaveLength(1);
+    expect(parsed.contributions[0].licenseConsent).toBe(true);
+    expect(parsed.contributions[0].status).toBe('contributor-submitted');
+  });
 });

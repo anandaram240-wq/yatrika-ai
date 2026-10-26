@@ -3,7 +3,7 @@ import { DIALECT_PHRASES } from '../data/phrases';
 import { REGIONS } from '../data/regions';
 import { DialectPhrase, PhraseCategory, RegionId } from '../types';
 import { speechService } from '../utils/speech';
-import { Volume2, Search, Mic, Sparkles } from 'lucide-react';
+import { Volume2, Search, Mic, Sparkles, BookOpen, AlertCircle } from 'lucide-react';
 
 interface PhraseMatrixProps {
   initialRegionId?: RegionId;
@@ -20,7 +20,7 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
   const [playingRegionId, setPlayingRegionId] = useState<string | null>(null);
 
   const categories: { id: PhraseCategory | 'all'; label: string; icon: string }[] = [
-    { id: 'all', label: 'All Expressions', icon: '✨' },
+    { id: 'all', label: 'All Documented Situations', icon: '✨' },
     { id: 'greetings', label: 'Greetings', icon: '🙏' },
     { id: 'food-dining', label: 'Food & Feasts', icon: '🍛' },
     { id: 'travel-auto', label: 'Travel & Autos', icon: '🛺' },
@@ -54,8 +54,8 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
     speechService.speak({
       kannadaText,
       transliteration,
-      pitch,
-      rate,
+      syntheticPitch: pitch,
+      syntheticRate: rate,
       onEnd: () => setPlayingRegionId(null),
       onError: () => setPlayingRegionId(null),
     });
@@ -68,18 +68,18 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
         <div className="mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-red-100 text-red-800 text-xs font-bold mb-2">
             <Sparkles className="w-3.5 h-3.5 text-red-600" />
-            <span>Cross-Dialect Transformer Matrix</span>
+            <span>Cross-Dialect Comparative Transformer Matrix</span>
           </div>
           <h2 className="text-3xl font-extrabold text-stone-900">
-            Compare How One Thought Sounds in 6 Dialects
+            Compare Documented Regional Phrases Side-by-Side
           </h2>
           <p className="text-stone-600 mt-1 max-w-2xl text-sm sm:text-base">
-            Select an everyday situation to witness how words change their cadence, grammar, and emotional flavor across Karnataka.
+            Select a communicative situation below to compare how sentences, grammatical markers, and tone nuances are documented across Karnataka.
           </p>
         </div>
 
         {/* Filter and Search Bar */}
-        <div className="bg-white p-4 rounded-3xl border border-stone-200 shadow-sm mb-6 space-y-4">
+        <div className="bg-white p-4 rounded-3xl border border-stone-200 shadow-xs mb-6 space-y-4">
           <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
             {/* Category Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
@@ -138,18 +138,18 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-stone-100">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
-                Context: {activePhrase.context}
+                Communicative Intent: {activePhrase.context}
               </span>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-900 mt-2">
                 "{activePhrase.english}"
               </h3>
             </div>
 
-            {/* Standard Kannada Reference Card */}
+            {/* Standard Kannada Baseline Card */}
             <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 flex items-center justify-between gap-4 max-w-md">
               <div>
                 <span className="text-2xs uppercase font-bold text-stone-500 tracking-wider">
-                  Standard Kannada (ಗ್ರಾಂಥಿಕ ಕನ್ನಡ)
+                  Standard Literary Baseline (ಗ್ರಾಂಥಿಕ ಕನ್ನಡ)
                 </span>
                 <div className="font-kannada font-bold text-lg text-stone-900">
                   {activePhrase.standardKannada.kannada}
@@ -157,6 +157,11 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                 <div className="text-xs text-stone-600 font-medium">
                   {activePhrase.standardKannada.transliteration}
                 </div>
+                {activePhrase.standardKannada.grammaticalNote && (
+                  <div className="text-3xs text-stone-400 mt-0.5">
+                    {activePhrase.standardKannada.grammaticalNote}
+                  </div>
+                )}
               </div>
 
               <button
@@ -170,26 +175,51 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                 className={`p-2.5 rounded-xl border border-stone-300 bg-white hover:bg-amber-50 transition-all cursor-pointer ${
                   playingRegionId === 'standard' ? 'bg-amber-500 text-white animate-pulse' : 'text-stone-700'
                 }`}
-                title="Listen to Standard Kannada"
+                title="Play synthetic baseline audio"
               >
                 <Volume2 className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          {/* 6 Regional Dialect Grid */}
+          {/* Regional Dialect Grid */}
           <div className="mt-8">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-4 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Regional Variations Across Karnataka</span>
-            </h4>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Documented Regional Variations & Citations</span>
+              </h4>
+              <span className="text-3xs text-stone-400 italic">
+                Only documented usages shown; non-attested regions are preserved as empty states.
+              </span>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {REGIONS.map((region) => {
                 const variation = activePhrase.variations[region.id];
-                if (!variation) return null;
                 const isPlaying = playingRegionId === region.id;
                 const isHighlighted = initialRegionId === region.id;
+
+                if (!variation) {
+                  return (
+                    <div
+                      key={region.id}
+                      className="rounded-2xl border border-dashed border-stone-300 bg-stone-50/40 p-5 flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-bold text-stone-500">
+                            {region.name.split(' (')[0]}
+                          </span>
+                        </div>
+                        <div className="text-xs text-stone-400 italic mt-4 flex items-start gap-1.5">
+                          <AlertCircle className="w-4 h-4 text-stone-300 shrink-0 mt-0.5" />
+                          <span>No parallel regional variation documented in primary sources for this concept.</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
 
                 return (
                   <div
@@ -197,7 +227,7 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                     className={`rounded-2xl border p-5 flex flex-col justify-between transition-all ${
                       isHighlighted
                         ? 'ring-2 ring-red-500 shadow-md bg-stone-50/90'
-                        : 'bg-stone-50/60 border-stone-200 hover:border-amber-400 hover:shadow-sm'
+                        : 'bg-stone-50/60 border-stone-200 hover:border-amber-400 hover:shadow-xs'
                     }`}
                   >
                     <div>
@@ -206,25 +236,40 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                         <span className="text-xs font-extrabold text-stone-800">
                           {region.name.split(' (')[0]}
                         </span>
-                        <span className="font-kannada text-xs text-amber-800 font-semibold bg-amber-100/60 px-2 py-0.5 rounded-md">
-                          {region.kannadaName.split(' (')[0]}
+                        <span className="px-2 py-0.5 rounded-md text-3xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                          {variation.status}
                         </span>
                       </div>
 
+                      {/* Locality Tag */}
+                      {variation.locality && (
+                        <div className="text-3xs text-stone-500 font-medium mb-1">
+                          Locality: <strong className="text-stone-700">{variation.locality}</strong>
+                        </div>
+                      )}
+
                       {/* Kannada Script */}
-                      <div className="font-kannada font-bold text-lg sm:text-xl text-stone-900 mt-2 leading-relaxed">
+                      <div className="font-kannada font-bold text-lg sm:text-xl text-stone-900 mt-1 leading-relaxed">
                         {variation.kannada}
                       </div>
 
                       {/* Transliteration */}
-                      <div className="text-xs sm:text-sm font-semibold text-red-700 mt-1">
-                        {variation.transliteration}
+                      <div className="text-xs sm:text-sm font-semibold text-red-700 mt-0.5">
+                        /{variation.transliteration}/
                       </div>
 
                       {/* Nuance explanation */}
                       <div className="mt-3 text-xs text-stone-600 bg-white/80 p-2.5 rounded-xl border border-stone-200/80">
                         <span className="font-bold text-stone-700">Linguistic Nuance: </span>
                         <span>{variation.nuance}</span>
+                      </div>
+
+                      {/* Citation */}
+                      <div className="mt-2.5 pt-2 border-t border-stone-200/50 text-2xs text-stone-500 font-mono flex items-center gap-1">
+                        <BookOpen className="w-3 h-3 text-stone-400 shrink-0" />
+                        <span className="truncate" title={`${variation.source.title} (${variation.source.authorOrInstitution})`}>
+                          {variation.source.title}
+                        </span>
                       </div>
                     </div>
 
@@ -236,8 +281,8 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                             variation.kannada,
                             variation.transliteration,
                             region.id,
-                            variation.audioPitch,
-                            variation.audioRate
+                            variation.syntheticAudioPitch,
+                            variation.syntheticAudioRate
                           )
                         }
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -245,9 +290,10 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                             ? 'bg-amber-500 text-stone-950 animate-pulse'
                             : 'bg-white text-stone-800 border border-stone-300 hover:bg-amber-50 hover:text-amber-900'
                         }`}
+                        title="Play synthetic audio guide"
                       >
                         <Volume2 className="w-3.5 h-3.5 text-amber-600" />
-                        <span>{isPlaying ? 'Playing...' : 'Listen'}</span>
+                        <span>{isPlaying ? 'Speaking...' : 'Synthetic Audio'}</span>
                       </button>
 
                       <button
@@ -259,7 +305,7 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                           )
                         }
                         className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-stone-600 hover:text-red-700 hover:bg-red-50 border border-stone-200 transition-colors cursor-pointer"
-                        title="Practice pronouncing this in your own voice"
+                        title="Practice reading this phrase"
                       >
                         <Mic className="w-3.5 h-3.5 text-red-600" />
                         <span>Practice</span>

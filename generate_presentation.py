@@ -14,7 +14,6 @@ def create_presentation():
     DARK_RED = RGBColor(153, 27, 27)    # #991b1b (Karnataka Crimson)
     GOLD_AMBER = RGBColor(217, 119, 6)   # #d97706 (Karnataka Haldi Gold)
     DARK_STONE = RGBColor(28, 25, 23)   # #1c1917 (Background / Text)
-    MUTED_GRAY = RGBColor(120, 113, 108) # #78716c
     CARD_BG = RGBColor(254, 252, 232)    # Warm cream / amber-50
     WHITE = RGBColor(255, 255, 255)
     LIGHT_BG = RGBColor(250, 250, 249)
@@ -57,7 +56,7 @@ def create_presentation():
     bg1.fill.fore_color.rgb = RGBColor(28, 25, 23)
     bg1.line.fill.background()
 
-    # Red & Yellow accent bars
+    # Red & Gold accent bars
     bar_red = slide1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.2), Inches(0.25), Inches(5.1))
     bar_red.fill.solid()
     bar_red.fill.fore_color.rgb = DARK_RED
@@ -79,21 +78,21 @@ def create_presentation():
     p.font.color.rgb = GOLD_AMBER
 
     p2 = tf1.add_paragraph()
-    p2.text = "Namma Kannada (ನಮ್ಮ ಕನ್ನಡ)"
+    p2.text = "Namma Kannada Atlas (ನಮ್ಮ ಕನ್ನಡ)"
     p2.font.size = Pt(40)
     p2.font.bold = True
     p2.font.color.rgb = WHITE
     p2.space_before = Pt(10)
 
     p3 = tf1.add_paragraph()
-    p3.text = "Regional Language & Dialect Explorer"
+    p3.text = "Grounded Regional Language & Dialect Explorer"
     p3.font.size = Pt(28)
     p3.font.bold = True
     p3.font.color.rgb = RGBColor(251, 191, 36)
 
     p4 = tf1.add_paragraph()
-    p4.text = "Problem Statement 04: Documenting & exploring regional variations of Kannada, local expressions, audio cadence, and cultural heritage."
-    p4.font.size = Pt(15)
+    p4.text = "Problem Statement 04: Documenting & exploring regional varieties of Kannada with scholarly citations, isogloss awareness, and open provenance."
+    p4.font.size = Pt(14)
     p4.font.color.rgb = RGBColor(214, 211, 209)
     p4.space_before = Pt(20)
 
@@ -104,12 +103,11 @@ def create_presentation():
     p5.space_before = Pt(30)
 
     # -------------------------------------------------------------
-    # SLIDE 2: Problem Statement
+    # SLIDE 2: Problem Statement & Context
     # -------------------------------------------------------------
     slide2 = prs.slides.add_slide(blank_layout)
-    add_header(slide2, "Problem Statement & Context", "Section 01 • The Challenge")
+    add_header(slide2, "Problem Statement: Linguistic Homogenization vs Regional Reality", "Section 01 • The Problem")
 
-    # Card 1: The Core Issue
     c1 = slide2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(3.6), Inches(5.0))
     c1.fill.solid()
     c1.fill.fore_color.rgb = CARD_BG
@@ -117,17 +115,16 @@ def create_presentation():
     tf = c1.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
-    p.text = "Linguistic Homogenization"
+    p.text = "The Real Problem"
     p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = DARK_RED
     p2 = tf.add_paragraph()
-    p2.text = "• Textbooks and digital tools teach only standardized 'Granthika' Kannada.\n\n• Regional spoken variations like Kundagannada, Dharwadi, Mandya rustic, and Kalyana Kannada are absent from mainstream tech platforms.\n\n• Young speakers are losing touch with ancestral idioms, metaphors, and folklore."
+    p2.text = "• Spoken Kannada changes its cadence, vocabulary, and verbal morphology every 30–100 km across Karnataka.\n\n• Mainstream software, translation engines, and curricula standardize exclusively on formal Granthika Kannada.\n\n• Regional speakers and learners face genuine communicative barriers when encountering northern, coastal, or northeastern vernaculars."
     p2.font.size = Pt(13)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(14)
 
-    # Card 2: Who Is Affected
     c2 = slide2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(4.8), Inches(1.8), Inches(3.6), Inches(5.0))
     c2.fill.solid()
     c2.fill.fore_color.rgb = CARD_BG
@@ -140,12 +137,11 @@ def create_presentation():
     p.font.bold = True
     p.font.color.rgb = DARK_RED
     p2 = tf.add_paragraph()
-    p2.text = "• Non-Kannadigas & Migrants: Baffled when moving across Karnataka because local auto drivers, vendors, and colleagues don't speak textbook Kannada.\n\n• Native Kannadigas: Misunderstandings between regions (e.g. Uttara Karnataka directness mistaken for anger; Kundapra jokes misinterpreted).\n\n• Cultural Historians: Urgent need to archive oral dialects before they fade."
+    p2.text = "• Migrants & Students: Unprepared for everyday street conversations with auto drivers, vendors, and colleagues in Dharwad, Kundapura, or Mandya.\n\n• Native Kannadigas: Cross-regional friction (e.g. North Karnataka's energetic directness mistaken for anger; coastal idioms misunderstood).\n\n• Linguists & Cultural Historians: Urgent need to preserve endangered oral vocabulary before it is swallowed by globalized urban slang."
     p2.font.size = Pt(13)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(14)
 
-    # Card 3: Why It Matters
     c3 = slide2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(8.8), Inches(1.8), Inches(3.6), Inches(5.0))
     c3.fill.solid()
     c3.fill.fore_color.rgb = CARD_BG
@@ -153,12 +149,12 @@ def create_presentation():
     tf = c3.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
-    p.text = "Why It Matters"
+    p.text = "Scholarly Significance"
     p.font.size = Pt(18)
     p.font.bold = True
     p.font.color.rgb = DARK_RED
     p2 = tf.add_paragraph()
-    p2.text = "• Language is identity: Karnataka's beauty lies in 'ಒಂದೊಂದು ಮೈಲಿಗೆ ಒಂದೊಂದು ರಾಗ' (a new tune every mile).\n\n• True digital empowerment must respect regional diversity, not erase it.\n\n• Fosters linguistic harmony, empathy, and tourism connection across all 31 districts of Karnataka."
+    p2.text = "• Linguistic research (CIIL Mysuru, LDC-IL, Kannada University Hampi) proves Kannada is a rich geographic continuum (isoglosses), not a monolithic block.\n\n• True digital celebration of Kannada requires preserving this dialect continuum with authentic scholarly citations rather than AI hallucinations."
     p2.font.size = Pt(13)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(14)
@@ -167,19 +163,16 @@ def create_presentation():
     # SLIDE 3: Existing Systems & Their Gaps
     # -------------------------------------------------------------
     slide3 = prs.slides.add_slide(blank_layout)
-    add_header(slide3, "Existing Systems & Critical Gaps", "Section 02 • Competitive Landscape")
+    add_header(slide3, "Existing Systems & Evidence-Supported Gaps", "Section 02 • Competitive Landscape")
 
-    # Table comparing existing systems
     t_shape = slide3.shapes.add_table(4, 4, Inches(0.8), Inches(1.8), Inches(11.7), Inches(4.8))
     table = t_shape.table
-
-    # Column widths
     table.columns[0].width = Inches(2.3)
     table.columns[1].width = Inches(3.1)
     table.columns[2].width = Inches(3.1)
     table.columns[3].width = Inches(3.2)
 
-    headers = ["Platform Type", "Current Solution", "Critical Limitation", "Namma Kannada Edge"]
+    headers = ["Existing System", "Current Capability", "Evidence-Supported Gap", "Namma Kannada Atlas Approach"]
     for col_idx, text in enumerate(headers):
         cell = table.cell(0, col_idx)
         cell.fill.solid()
@@ -191,9 +184,9 @@ def create_presentation():
         p.font.color.rgb = WHITE
 
     rows_data = [
-        ("Language Learning Apps (Duolingo, etc.)", "Focus on single standard dialect with English prompts", "Completely ignores regional slang, tone nuance, and situational dialect shifts", "6 parallel regional dialect variations with dual-script transliteration"),
-        ("Google Translate & AI Translators", "Direct grammatical translation into standard formal Kannada", "Sounds mechanical; unable to translate colloquialisms like 'Haudla', 'En Marre', 'Boliya'", "Context-aware vernacular matrix showing exact regional emotional nuances"),
-        ("Online Dictionaries & Wikipedia", "Static, text-only encyclopedic definitions", "No phonetic audio pronunciations, no gamification, no community contribution pipeline", "Live Web Speech API pronunciation + gamified quiz + crowdsourced vault")
+        ("Commercial Translators (Google Translate)", "Grammatical translation to standard literary Kannada", "Fails completely on regional idioms ('Haudla', 'Marre', 'Boliya', 'Beda Bidi'); sounds artificial", "Source-attested comparative matrix showing documented regional phrasing and context"),
+        ("Language Learning Apps (Duolingo, Ling)", "Basic flashcards for beginner vocabulary", "Confined to standard Bangalore-Mysore baseline; zero dialect or regional awareness", "Educational taxonomy of 6 zones with isogloss awareness and phonological trait notes"),
+        ("Academic Glossaries (CIIL / Hampi / Kittel)", "In-depth philological and dialect dictionaries", "Locked in physical library volumes or static PDFs; zero interactive web tools or audio guides", "Interactive digital atlas with verified citations, phonetic guides, and open JSON export")
     ]
 
     for row_idx, row in enumerate(rows_data, start=1):
@@ -210,14 +203,14 @@ def create_presentation():
     # SLIDE 4: How Our Solution Is Different
     # -------------------------------------------------------------
     slide4 = prs.slides.add_slide(blank_layout)
-    add_header(slide4, "How Our Solution Is Different", "Section 03 • Core Innovation")
+    add_header(slide4, "Core Innovation: Grounded Linguistic Provenance", "Section 03 • Differentiation")
 
     diff_features = [
-        ("🗺️ 6-Zone Dialect Map", "Comprehensive linguistic coverage spanning Uttara Karnataka, Karavali/Kundapura, Mysuru-Mandya, Kalyana Karnataka, Malenadu, and Bengaluru Urban with district tagging."),
-        ("🔄 Cross-Dialect Matrix", "World's first comparative situational transformer: view how one thought or situation translates across all 6 regions side-by-side with phonetic transliteration."),
-        ("🔊 Interactive Speech & Audio", "Integrated Web Speech API with regional pitch/rate modulation and audio fallback so anyone can listen to native pronunciations in one click."),
-        ("🎯 Dialect Guesser Game", "Gamified audio challenge that tests users' ability to recognize Karnataka's regional accents, rewarding them with cultural trivia and scores."),
-        ("✍️ Crowdsourced Community Vault", "Empowers Kannadigas across villages and cities to submit local words, idioms, meanings, and sentences with JSON export for open linguistic research.")
+        ("📚 Source-Attested Provenance", "Every public dialect phrase and glossary word is grounded in published literature (CIIL Mysuru, Kannada University Hampi, Kittel Dictionary, or documented surveys)."),
+        ("🌐 Dialect Continuum Recognition", "Avoids the false assumption that dialects align with 31 administrative districts. Explicitly explains isoglosses, transition zones, and community sub-dialects."),
+        ("🔄 Context-Aware Comparative Matrix", "Compares situational communication side-by-side without forcing artificial 6-column symmetry when a region has no attested parallel."),
+        ("🔊 Transparent Audio Synthesis", "Honestly labels browser Web Speech synthesis as a phonetic guide; does not pretend pitch adjustments create a genuine human regional accent."),
+        ("✍️ Local Vault & Open JSON Export", "Empowers users to draft contributions stored safely on their local device, exportable to standardized JSON under CC-BY 4.0 for open research.")
     ]
 
     for idx, (title, desc) in enumerate(diff_features):
@@ -243,9 +236,8 @@ def create_presentation():
     # SLIDE 5: Technical Architecture & Methodology
     # -------------------------------------------------------------
     slide5 = prs.slides.add_slide(blank_layout)
-    add_header(slide5, "Technical Architecture & Data Flow", "Section 04 • Implementation")
+    add_header(slide5, "Technical Architecture & Data Pipeline", "Section 04 • Implementation")
 
-    # Architecture diagram container
     arch_box = slide5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.1))
     arch_box.fill.solid()
     arch_box.fill.fore_color.rgb = LIGHT_BG
@@ -254,42 +246,42 @@ def create_presentation():
     tf.word_wrap = True
 
     p = tf.paragraphs[0]
-    p.text = "ARCHITECTURE & WORKFLOW PIPELINE"
+    p.text = "FULL-STACK ARCHITECTURAL WORKFLOW"
     p.font.bold = True
     p.font.size = Pt(15)
     p.font.color.rgb = GOLD_AMBER
 
     p2 = tf.add_paragraph()
     p2.text = """
-1. FRONTEND LAYER:
-   • React 19 + TypeScript: Modern component architecture, type-safe linguistic models, zero runtime exceptions.
-   • Tailwind CSS: Karnataka heritage theme (Crimson Red #991b1b, Haldi Gold #d97706), responsive across mobile, tablet, and desktop.
-   • Lucide React: Crisp semantic iconography for clean UX.
+1. CLIENT APPLICATION LAYER:
+   • React 19 + TypeScript 5.7: Type-safe linguistic schemas ensuring data integrity across components.
+   • Tailwind CSS 4.0: Accessible, responsive Karnataka heritage theme (Crimson Red #991b1b, Haldi Gold #d97706).
+   • Lucide React: Semantic accessible UI iconography.
 
-2. LINGUISTIC ENGINE & DATA LAYER:
-   • Curated Dialect Data Models: Structured schema supporting regional IDs, phonetic transliteration, grammatical nuances, and cultural origins.
-   • Cross-Dialect Matrix Engine: Real-time contextual phrase matching across 6 linguistic zones.
-   • Namma Shabda Kosha: Rich local slang glossary filterable by region, tags, and text search.
+2. LINGUISTIC SCHEMA & CITATION LAYER:
+   • Typed Provenance Model: Separation of linguistic content from verification status ('source-attested', 'provisional', 'contributor-submitted').
+   • Citation References: Tracks title, institution, year, volume/page for each linguistic record.
+   • Asymmetrical Matrix Support: Preserves empty states when a region has no attested variant, eliminating hallucinated data.
 
-3. SPEECH & INTERACTION LAYER:
-   • Web Speech API Synthesis Engine: Native Kannada (kn-IN) synthesis with adaptive phonetic fallback and dialect pitch/speed calibration.
-   • Speech Recognition Practice: Real-time voice capture with phonetic similarity scoring.
-   • Canvas-Confetti Gamification: Rewarding streaks and positive reinforcement in the Dialect Guesser.
+3. AUDIO & SPEECH PROCESSING:
+   • Web Speech API Synthesis Engine: Native kn-IN synthesis with calibrated phonetic fallback and honest diagnostics.
+   • Microphone Practice Interface: Transcript matching between user speech and target phrases without simulated fake scores.
+   • Canvas-Confetti Gamification: Visual reinforcement in the regional phrase knowledge quiz.
 
-4. CROWDSOURCING & PERSISTENCE LAYER:
-   • LocalStorage Reactive State + JSON Export: Instant offline persistence and downloadable dialect archives for open cultural research.
+4. PERSISTENCE & RESEARCH EXPORT:
+   • Client-Side LocalStorage: Offline draft storage without misleading claims of central multi-user synchronization.
+   • Structured JSON Research Export: Downloadable CC-BY 4.0 data payload for institutional language preservation.
 """
     p2.font.size = Pt(11.5)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(8)
 
     # -------------------------------------------------------------
-    # SLIDE 6: Conclusion & Future Scope
+    # SLIDE 6: Conclusion & Future Roadmap
     # -------------------------------------------------------------
     slide6 = prs.slides.add_slide(blank_layout)
-    add_header(slide6, "Impact, Conclusion & Future Roadmap", "Section 05 • Looking Ahead")
+    add_header(slide6, "Linguistic Impact & Future Roadmap", "Section 05 • Looking Ahead")
 
-    # Box 1: Impact Today
     b1 = slide6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(5.6), Inches(5.0))
     b1.fill.solid()
     b1.fill.fore_color.rgb = CARD_BG
@@ -297,18 +289,16 @@ def create_presentation():
     tf1 = b1.text_frame
     tf1.word_wrap = True
     p = tf1.paragraphs[0]
-    p.text = "Project Impact & Real-World Value"
+    p.text = "Real-World Impact Today"
     p.font.bold = True
     p.font.size = Pt(18)
     p.font.color.rgb = DARK_RED
-
     p2 = tf1.add_paragraph()
-    p2.text = "• Cultural Preservation: Documents endangered regional expressions (Kundagannada, Arebhashe, North Karnataka idioms) in a digital vault.\n\n• Bridge for Non-Kannadigas: Empowers non-native residents, students, and tourists to understand true local vernaculars in everyday life.\n\n• Mutual Empathy: Celebrates every corner of Karnataka — fostering regional unity through linguistic appreciation.\n\n• Zero Barrier to Entry: Runs in any modern browser without heavy downloads or expensive proprietary APIs."
+    p2.text = "• Cultural Preservation: Rescues regional phrases (Kundagannada, Dharwadi, Mandya agrarian idioms) from digital obscurity.\n\n• Educational Accuracy: Eliminates AI hallucinations by grounding every phrase in verifiable scholarly sources.\n\n• Social Harmony: Helps newcomers and native speakers appreciate linguistic diversity across Karnataka without regional prejudice.\n\n• Fully Tested & Open: 6 passing test suites in Vitest with zero build errors and zero external API dependencies."
     p2.font.size = Pt(12.5)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(14)
 
-    # Box 2: Future Scope
     b2 = slide6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(1.8), Inches(5.7), Inches(5.0))
     b2.fill.solid()
     b2.fill.fore_color.rgb = CARD_BG
@@ -320,15 +310,14 @@ def create_presentation():
     p.font.bold = True
     p.font.size = Pt(18)
     p.font.color.rgb = DARK_RED
-
     p2 = tf2.add_paragraph()
-    p2.text = "• AI Dialect Conversational Tutor: Fine-tune open-source Kannada LLM on regional corpus to simulate real-time conversational auto drivers, shopkeepers, and elders.\n\n• Voice Sample Crowd-Recording: Enable Kannadigas to record and upvote authentic native voice clips for every word.\n\n• Mobile PWA / App with Offline Pack: Full offline dialect survival guide for travellers in remote Western Ghats and rural districts.\n\n• School Curriculum Integration: Educational modules for Karnataka state schools to cultivate pride in linguistic heritage."
+    p2.text = "• Native Human Voice Repository: Partner with regional universities and cultural centers to record authentic human native voice clips with verified consent.\n\n• Institutional Backend Moderation: Deploy a secure backend review pipeline for crowdsourced community submissions.\n\n• Micro-Dialect Expansion: Extend documentation to specialized community varieties including Havyaka, Arebhashe, Halakki, and Soliga.\n\n• Open Dataset Integration: Contribute validated regional corpora to Bharatavani and LDC-IL open repositories."
     p2.font.size = Pt(12.5)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(14)
 
     prs.save("/Users/ananda/Downloads/HACKTHON/Namma_Kannada_Regional_Explorer_Presentation.pptx")
-    print("Successfully generated Namma_Kannada_Regional_Explorer_Presentation.pptx")
+    print("Successfully generated audited Namma_Kannada_Regional_Explorer_Presentation.pptx")
 
 if __name__ == "__main__":
     create_presentation()

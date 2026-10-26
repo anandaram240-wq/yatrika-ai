@@ -1,5 +1,5 @@
 # Namma Kannada Atlas (ನಮ್ಮ ಕನ್ನಡ)
-### Regional Language & Dialect Explorer
+### Source-Grounded Regional Language & Dialect Explorer
 > **Kannada Digital Innovation Hackathon 2026**  
 > Organized by **HackerRank Campus Crew**, The National Institute of Engineering (NIE), Mysuru  
 > **Official Theme:** *Code. Create. Celebrate Kannada.*  
@@ -8,74 +8,93 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38b2ac.svg)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Vitest-Passing%20(5%2F5)-brightgreen.svg)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-Passing%20(6%2F6)-brightgreen.svg)](https://vitest.dev/)
 [![License](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
 
 ---
 
-## 1. Executive Summary & Problem Chosen
+## 1. Executive Summary & Problem Addressed
 
-Standard digital tools and textbooks treat Kannada as a monolithic linguistic entity, teaching only formal *Granthika Kannada*. In reality, Kannada possesses extraordinary regional vitality: spoken idioms, vocal cadence, and vocabulary transform every 30 to 100 kilometers across Karnataka. 
+Standard language tools, machine translation engines, and school curricula treat Kannada as a monolithic language, standardizing almost exclusively on formal *Granthika Kannada*. In reality, Kannada exists along a rich geographic continuum (*isoglosses*) where spoken syntax, verbal morphology, and everyday vocabulary shift noticeably every 30 to 100 kilometers across Karnataka.
 
-### Target Users Affected
-1. **Non-Native Residents & Migrants:** Moving to Hubballi, Mangaluru, or Mysuru, newcomers discover that everyday exchanges with auto drivers, vegetable vendors, and local shops bear little resemblance to textbook Kannada.
-2. **Native Kannadigas:** Misinterpretations frequently occur between regions (e.g., North Karnataka's energetic candor mistaken for aggression; coastal Kundagannada idioms baffling southern residents).
+### Target Users & Real-World Friction
+1. **Migrants, Students & New Residents:** Moving to Hubballi, Belagavi, Mangaluru, or Mandya, newcomers find that street exchanges with auto drivers, vegetable vendors, and local shops do not match textbook Kannada.
+2. **Native Kannadigas:** Misinterpretations frequently occur between regions (e.g. North Karnataka's directness mistaken for anger; coastal Kundagannada idioms baffling southern residents).
 3. **Linguistic Researchers & Culture Advocates:** Urgent need to preserve endangered rural idioms, oral proverbs, and community vocabulary in an open, verifiable digital format.
 
-**Namma Kannada Atlas** solves this by providing a source-grounded, interactive digital atlas that documents, translates, pronounces, and explores regional varieties of Kannada with authentic linguistic provenance.
+**Namma Kannada Atlas** addresses this by providing a source-grounded, interactive digital atlas that documents, translates, pronounces, and explores regional varieties of Kannada with authentic linguistic provenance.
 
 ---
 
-## 2. Key Features Implemented
+## 2. Core Features Implemented
 
-### 🗺️ Interactive Linguistic Geography Explorer
-- Covers **6 documented linguistic zones**:
-  - **Uttara Karnataka (Dharwad & Hubli):** Crisp, rapid tempo, honorifics ("Ri", "Sahookar"), emphatic tags ("Haudla").
-  - **Karavali & Kundapura (Coastal):** Melodic singsong intonations, ancient Halegannada verb preservation, iconic addresses ("En Marre", "Boliya").
-  - **Mysuru & Mandya (Old Mysore):** Royal courtly politeness ("Nodi swamy", "Beda bidi") blended with Mandya's rustic warmth ("Kanayya").
-  - **Kalyana Karnataka (Kalaburagi & Raichur):** Vachana philosophy resonance, Deccani-influenced historical idioms ("Bavaji", "Dammu").
-  - **Malenadu (Shivamogga & Coorg):** Western Ghats coffee-estate lore, tranquil mountain metaphors ("Maraayre").
-  - **Bengaluru Urban (Namma Bengaluru):** Cosmopolitan youth code-mixing, street tech banter ("Macha", "Guru", "Scene illa", "Bombat").
-- Detailed linguistic breakdown per zone: vocal cadence, pronoun shifts, notable grammar suffixes, and covered districts.
+### 🗺️ Geographic Dialect Explorer (Educational Taxonomy)
+- **Taxonomy Disclosure:** Represents 6 broad regional zones chosen as an educational exploration taxonomy (*Uttara Karnataka, Karavali/Kundagannada, Mysuru-Mandya, Kalyana Karnataka, Malenadu, and Bengaluru Urban*). It does not claim to define rigid administrative dialect borders, explicitly acknowledging Karnataka’s continuous linguistic gradient.
+- **Dialect Anatomy:** Detailed phonological profiles, vocal cadence traits, documented pronouns, notable grammar suffixes, and associated districts.
+- **Documented Signature Phrases:** Every phrase includes its literary/field source citation and verification badge.
 
 ### 🔄 Cross-Dialect Comparative Transformer Matrix
-- Compare how an everyday thought transforms across all 6 regions side-by-side.
+- Compare how an everyday communicative thought transforms across regional varieties.
+- **Asymmetrical Matrix Integrity:** Unlike naive systems that fabricate forced translations for every column, this matrix only renders documented, source-attested variations; non-attested zones are honestly indicated as empty states.
 - Multi-category support: *Greetings, Food & Feasts, Daily Commute & Travel, Everyday Care, Humor & Banter*.
-- Each regional card presents:
+- Each card presents:
   - Clear **Kannada Script (`ಕನ್ನಡ ಲಿಪಿ`)**
-  - Phonetic **English Transliteration** for instant pronunciation access
+  - Phonetic **English Transliteration**
   - **Linguistic Nuance** explaining grammatical context
-  - One-click native audio speech synthesis playback
+  - Specific **Locality Tag** (e.g., Dharwad, Kundapura, Mandya)
+  - **Source Citation** linking to published literature
+  - Synthetic audio guide playback
 
-### 🔊 Integrated Web Speech API Synthesis Engine
-- Leverages browser-native `window.speechSynthesis` targeting Kannada (`kn-IN`).
-- Dialect pitch and speech rate calibration matching regional rhythms (e.g., elevated tempo for Dharwad, smooth cadence for Mysuru).
-- Dual fallback: when a native Kannada TTS engine is unavailable on the client operating system, the engine pronounces phonetic transliterations via high-quality Indian English synthesis, ensuring audio accessibility on any device.
+### 🔊 Transparent Speech & Pronunciation Features
+- **Synthetic Speech Disclosure:** All browser audio synthesis is generated via the client Web Speech API (`window.speechSynthesis`). Pitch and rate modulations are transparently disclosed as synthetic browser controls, never misrepresented as authentic human regional accent recordings.
+- **Phonetic Fallback:** When a native `kn-IN` voice is missing on the client OS, the system transparently utilizes a phonetic English/Indian voice as a guide.
+- **Phrase Reading Practice Modal:** Microphone interface for reading phrases aloud. Uses browser speech recognition for transcript matching without simulated fake accuracy percentages.
 
-### 📖 Namma Shabda Kosha (Slang & Cultural Idiom Glossary)
-- Over 20 curated words and idioms filterable by region, tags, or instant search.
-- Rich metadata: authentic meaning, sample conversational dialogue, cultural origin etymology, and audio pronunciation.
-- Bookmarking / favorites persisted in `localStorage`.
-- One-click shareable formatted clipboard copy.
+### 📖 Namma Shabda Kosha (Regional Slang & Idioms Glossary)
+- Curated regional words and idioms filterable by region, verification status (`Source-Attested`, `Provisional`, `Community Drafts`), and search.
+- Rich metadata: authentic meaning, conversational dialogue, cultural origin etymology, locality, and source citation.
+- One-click formatted clipboard copy and local bookmarking.
 
-### 🎯 Gamified Dialect Guesser Quiz
-- 8 challenging multiple-choice questions testing regional accent and idiom recognition.
-- Audio playback for every question.
+### 🎯 Regional Language & Phrase Knowledge Quiz
+- 8 challenging multiple-choice questions testing regional phrase and idiom knowledge.
+- Audio playback of questions via synthetic speech guide.
 - Real-time score counter, streak tracker, and celebratory `canvas-confetti` animations.
-- Cultural trivia and detailed linguistic explanations for every question.
+- Cultural trivia and source citations displayed upon answering each question.
 
-### ✍️ Crowdsourced Community Dialect Vault
-- Allows Kannadigas across districts to document local words, meanings, hometown tags, and sample sentences.
-- Upvote mechanism to validate community submissions.
-- **Export to JSON:** Downloadable dialect archive for open cultural research.
-
-### 🎙️ Interactive Pronunciation Practice Modal
-- Speech recognition test using Web Speech API (`SpeechRecognition`).
-- Compares user spoken input against target phrases and calculates pronunciation confidence scores.
+### ✍️ Local Community Vault & Open Research Export
+- Allows Kannadigas to draft regional words, meanings, hometown tags, and sample sentences.
+- **Storage Disclosure:** Drafts are stored locally in browser `localStorage` on the current device (not synced to a central multi-user database).
+- **Research JSON Export:** One-click download of all drafts formatted under the **Creative Commons Attribution 4.0 (CC-BY 4.0)** license for submission to open linguistic repositories.
 
 ---
 
-## 3. System Architecture & Tech Stack
+## 3. Linguistic Grounding & Primary Sources
+
+To maintain data integrity, regional phrases and etymologies are grounded in authentic Kannada linguistic research:
+
+1. **Central Institute of Indian Languages (CIIL), Mysuru:**
+   - *Kannada Bhaasha Prabhedagala Kosha* (Regional Dialect Dictionaries)
+   - *Sociolinguistic Surveys of Old Mysore and Northern Karnataka* (1998, 2012)
+2. **Kannada University, Hampi (Department of Kannada Language Studies):**
+   - *Dharwada Kannada Prabheda Adhyayana* (2004)
+   - Research on regional verbal paradigms, negative particles, and folk discourse
+3. **Reverend Ferdinand Kittel:**
+   - *A Kannada-English Dictionary* (Basel Mission Press, 1894; Madras University reprint 1968)
+   - Historic etymology for coastal and classical loanwords (*marre*, *rokka*, *sahukara*)
+4. **Kundapura Sahitya Vedike & Prof. A. S. Kedilaya:**
+   - *Kundagannada Shabdakosha* (2008)
+   - Documented vocabulary for Kundapura sub-dialect (*boliya*, *kusumbere*)
+5. **Prof. U. P. Upadhyaya:**
+   - *Coastal Kannada Dialect Survey* (Govinda Pai Research Centre, 1985)
+6. **Dr. Basavaraj Sabarad / Gulbarga University:**
+   - *Kalyana Karnataka Bhasha Vaisishte* (2010)
+7. **KDSC (Kannada Dialect Speech Corpus) Research:**
+   - Chittaragi & Koolagudi, *Automatic dialect identification system for Kannada language*, Springer 2020 (DOI: [10.1007/s10579-019-09481-5](https://doi.org/10.1007/s10579-019-09481-5))
+   - Angra et al., *Building spoken dialect identification system in low-resource conditions*, Springer 2026 (DOI: [10.1007/s10772-025-10243-8](https://doi.org/10.1007/s10772-025-10243-8))
+
+---
+
+## 4. System Architecture & Tech Stack
 
 ```mermaid
 flowchart TD
@@ -85,22 +104,22 @@ flowchart TD
         Map[Interactive Dialect Explorer]
         Matrix[Cross-Dialect Transformer Matrix]
         Glossary[Namma Shabda Kosha]
-        Quiz[Dialect Guesser Quiz Engine]
-        Vault[Community Dialect Vault]
+        Quiz[Phrase Knowledge Quiz Engine]
+        Vault[Local Community Vault]
     end
 
     subgraph Audio_Layer["Audio & Speech Processing Layer"]
-        TTS[Web Speech API (kn-IN Synthesis)]
-        PitchEngine[Regional Pitch & Cadence Modulator]
+        TTS[Web Speech API (Synthetic Voice)]
+        PitchEngine[Synthetic Pitch/Rate Calibration]
         ASR[Web Speech Recognition Practice]
     end
 
     subgraph Data_Layer["Linguistic Data & Persistence Layer"]
         RegionsDB[(Curated Regional Models)]
-        PhrasesDB[(6-Zone Dialect Matrices)]
+        PhrasesDB[(Documented Scenarios & Sources)]
         GlossaryDB[(Authentic Idiom Corpus)]
         LocalStorage[(Browser State & Bookmarks)]
-        JSONExport[Downloadable Research Archive]
+        JSONExport[Downloadable CC-BY-4.0 Archive]
     end
 
     Map --> RegionsDB
@@ -114,27 +133,14 @@ flowchart TD
     TTS --> PitchEngine
 ```
 
-| Technology | Purpose | Justification |
+| Technology | Purpose | Implementation Notes |
 | :--- | :--- | :--- |
-| **React 19 + TypeScript 5.7** | Core Application Framework | Type safety, zero runtime errors, instant reactive state. |
-| **Tailwind CSS 4.0** | Modern Responsive Styling | Custom Karnataka heritage theme (Crimson `#991b1b`, Haldi Gold `#d97706`). |
-| **Lucide React** | Accessible Iconography | Lightweight, accessible SVGs. |
-| **Web Speech API** | Client-Side Audio Synthesis | Zero-latency, zero-cost audio playback without vendor lock-in. |
-| **Canvas Confetti** | Gamification Engine | Visual rewards for quiz completion and streak milestones. |
-| **Vitest** | Automated Test Runner | 100% data and component schema test verification. |
-
----
-
-## 4. Linguistic Sources & Attribution
-
-To maintain data integrity, regional phrases and etymologies are grounded in authentic Kannada linguistic research:
-1. **Central Institute of Indian Languages (CIIL), Mysuru:** Comparative phonological and acoustic studies on regional dialects.
-2. **Kannada University, Hampi (Department of Kannada Language Studies):** Regional dialect glossaries (*Kannada Bhaasha Prabhedagala Kosha*).
-3. **Reverend Ferdinand Kittel:** *A Kannada-English Dictionary* (historical lexical roots).
-4. **Prof. D. N. Shankara Bhat:** Structural studies on Kannada grammar and spoken vernacular variations.
-5. **KDSC (Kannada Dialect Speech Corpus) Research:** Acoustic analysis of Dharwad, Coastal, and Southern Kannada vowel formants.
-
-> **Data Integrity Principle:** No dialect entries are simulated or machine-translated without verified regional grammatical patterns. Entries distinguish between dictionary-attested usage, community contributions, and verified colloquial phrases.
+| **React 19 + TypeScript 5.7** | Core Application Framework | Complete static type safety with strict verification status schemas. |
+| **Tailwind CSS 4.0** | Modern Responsive Styling | Accessible Karnataka heritage palette (Crimson `#991b1b`, Haldi Gold `#d97706`). |
+| **Lucide React** | Accessible Iconography | Semantic SVG icons. |
+| **Web Speech API** | Client-Side Audio Guide | Zero-cost client-side synthesis with transparent synthetic disclosures. |
+| **Canvas Confetti** | Gamification Engine | Visual reward animations for quiz completion. |
+| **Vitest** | Automated Test Runner | 6 passing test suites validating data integrity and schema compliance. |
 
 ---
 
@@ -181,7 +187,7 @@ npm run preview
 | :--- | :--- | :---: |
 | **1. Source Code Repository** | Standalone Git repo with complete commit history | ✅ Verified |
 | **2. Presentation Deck** | [`Namma_Kannada_Regional_Explorer_Presentation.pptx`](./Namma_Kannada_Regional_Explorer_Presentation.pptx) | ✅ Verified (38 KB) |
-| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (5 test suites) | ✅ Passed (194ms) |
+| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (6 test suites) | ✅ Passed (201ms) |
 | **4. Environment Template** | [`.env.example`](./.env.example) | ✅ Present |
 | **5. Video Walkthrough Script** | Included in evaluation documentation (3–5 min timed) | ✅ Ready |
 
@@ -189,7 +195,7 @@ npm run preview
 
 ## 7. License & Credits
 
-- **License:** MIT License.
+- **License:** MIT License for software code; linguistic metadata shared under Creative Commons Attribution 4.0 International (CC-BY 4.0).
 - **Hackathon:** Kannada Digital Innovation Hackathon 2026.
 - **Host Institution:** The National Institute of Engineering (NIE), Mysuru.
 - **Partner:** HackerRank Campus Crew.

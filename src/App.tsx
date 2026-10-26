@@ -11,43 +11,52 @@ import { VoicePracticeModal } from './components/VoicePracticeModal';
 import { Footer } from './components/Footer';
 import { CommunityContribution, GlossaryWord, RegionId } from './types';
 
-// Initial sample community contributions
-const INITIAL_CONTRIBUTIONS: CommunityContribution[] = [
+// Initial sample community drafts stored locally
+const INITIAL_LOCAL_DRAFTS: CommunityContribution[] = [
   {
     id: 'c1',
     wordKannada: 'ಯಕ್ಕಾ',
     wordTransliteration: 'Yakka',
-    meaning: 'Elder sister or affectionate exclamation when addressing friends.',
+    meaning: 'Elder sister or affectionate exclamation when addressing close friends.',
     regionId: 'uttara-karnataka',
     district: 'Hubballi',
     usageExample: 'ಯಕ್ಕಾ, ಸ್ವಲ್ಪ ಈ ಕಡೆ ಬಂದು ನೋಡು!',
     contributorName: 'Basavaraj Patil',
+    attributionPreference: 'real-name',
+    licenseConsent: true,
     timestamp: '2 hours ago',
-    upvotes: 18,
+    status: 'contributor-submitted',
+    localNotes: 'Documented Hubli colloquialism',
   },
   {
     id: 'c2',
     wordKannada: 'ಕುಸುಂಬೆರೆ',
     wordTransliteration: 'Kusumbere',
-    meaning: 'Vegetable salad / Kosambari or general coastal meal accompaniment.',
+    meaning: 'Vegetable salad / seasoned pulse side dish (Coastal variant of Kosambari).',
     regionId: 'karavali',
     district: 'Kundapura',
     usageExample: 'ಇವತ್ತು ಊಟಕ್ಕೆ ಎಂತ ಕುಸುಂಬೆರೆ ಮಾಡ್ದೀರಿ ಮಾರ್ರೆ?',
     contributorName: 'Sujatha Hegde',
+    attributionPreference: 'real-name',
+    licenseConsent: true,
     timestamp: 'Yesterday',
-    upvotes: 24,
+    status: 'contributor-submitted',
+    localNotes: 'Documented Kundapura domestic usage',
   },
   {
     id: 'c3',
     wordKannada: 'ಏನ್ ಸಮಚಾರ',
     wordTransliteration: 'En Samachara',
-    meaning: 'What is the news / What\'s happening in town?',
+    meaning: 'What is the news / What is happening in your area?',
     regionId: 'mysuru-mandya',
     district: 'Mandya',
     usageExample: 'ಬನ್ನಿ ಸ್ವಾಮಿ, ಊರಲ್ಲಿ ಏನ್ ಹೊಸ ಸಮಚಾರ?',
     contributorName: 'Chetan Gowda',
+    attributionPreference: 'pseudonym',
+    licenseConsent: true,
     timestamp: '3 days ago',
-    upvotes: 31,
+    status: 'contributor-submitted',
+    localNotes: 'Documented Mandya street discourse',
   },
 ];
 
@@ -64,13 +73,23 @@ export function App() {
     meaning: '',
   });
 
-  // Community contributions stored in localStorage
+  // Local contributions stored in browser localStorage
   const [contributions, setContributions] = useState<CommunityContribution[]>(() => {
     try {
       const saved = localStorage.getItem('namma_kannada_contributions');
-      return saved ? JSON.parse(saved) : INITIAL_CONTRIBUTIONS;
+      return saved ? JSON.parse(saved) : INITIAL_LOCAL_DRAFTS;
     } catch {
-      return INITIAL_CONTRIBUTIONS;
+      return INITIAL_LOCAL_DRAFTS;
+    }
+  });
+
+  // Local bookmarks
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('namma_kannada_vault_bookmarks');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
     }
   });
 
@@ -82,13 +101,21 @@ export function App() {
     }
   }, [contributions]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem('namma_kannada_vault_bookmarks', JSON.stringify(bookmarkedIds));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [bookmarkedIds]);
+
   const handleAddContribution = (newEntry: CommunityContribution) => {
     setContributions(prev => [newEntry, ...prev]);
   };
 
-  const handleUpvoteContribution = (id: string) => {
-    setContributions(prev =>
-      prev.map(c => (c.id === id ? { ...c, upvotes: c.upvotes + 1 } : c))
+  const handleBookmarkContribution = (id: string) => {
+    setBookmarkedIds(prev =>
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
 
@@ -103,20 +130,28 @@ export function App() {
     setVoiceModalOpen(true);
   };
 
-  // Convert community contributions into glossary items
+  // Convert local community drafts into glossary items with transparent status
   const communityGlossaryWords: GlossaryWord[] = contributions.map(c => ({
     id: c.id,
     wordKannada: c.wordKannada,
     wordEnglish: c.wordTransliteration,
     regionId: c.regionId,
+    locality: c.district,
     meaning: c.meaning,
     usageKannada: c.usageExample || c.wordKannada,
     usageTransliteration: c.wordTransliteration,
     usageEnglish: c.meaning,
-    culturalOrigin: `Documented by community contributor ${c.contributorName} from ${c.district}.`,
-    tags: ['Community', c.district],
+    culturalOrigin: `Documented by contributor ${c.contributorName} (${c.attributionPreference}) from ${c.district}.`,
+    tags: ['Community Draft', c.district],
+    status: c.status,
+    source: {
+      title: `Community Field Submission (${c.district})`,
+      authorOrInstitution: c.contributorName,
+      year: '2026',
+      license: 'CC-BY-4.0',
+    },
     isCommunityContributed: true,
-    upvotes: c.upvotes,
+    attributionPreference: c.attributionPreference,
   }));
 
   return (
@@ -156,7 +191,8 @@ export function App() {
             <CommunityVault
               contributions={contributions}
               onOpenContributeModal={() => setIsContributeModalOpen(true)}
-              onUpvoteContribution={handleUpvoteContribution}
+              onBookmarkContribution={handleBookmarkContribution}
+              bookmarkedIds={bookmarkedIds}
             />
           )}
         </div>

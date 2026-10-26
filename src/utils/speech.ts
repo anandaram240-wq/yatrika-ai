@@ -1,11 +1,28 @@
+/**
+ * Speech Service: Client-side Browser Web Speech API Wrapper
+ * 
+ * LINGUISTIC HONESTY NOTICE:
+ * Pitch and rate controls available in browser speech synthesis alter playback speed and audio frequency.
+ * They DO NOT generate an authentic regional dialect, accent, or native phonetic articulation.
+ * All audio generated here is explicitly classified as "Synthetic Browser Speech" (ಕೃತಕ ಧ್ವನಿ).
+ */
+
+export interface SpeechDiagnostics {
+  isSupported: boolean;
+  hasKannadaVoice: boolean;
+  activeVoiceName: string | null;
+  activeVoiceLang: string | null;
+  isUsingFallback: boolean;
+}
+
 export interface SpeakOptions {
   kannadaText: string;
-  transliteration: string;
-  pitch?: number;
-  rate?: number;
-  onStart?: () => void;
+  transliteration?: string;
+  syntheticPitch?: number;
+  syntheticRate?: number;
+  onStart?: (diagnostics: SpeechDiagnostics) => void;
   onEnd?: () => void;
-  onError?: (err: any) => void;
+  onError?: (errorMessage: string) => void;
 }
 
 class SpeechService {
@@ -27,32 +44,65 @@ class SpeechService {
     this.isInitialized = true;
   }
 
-  public getAvailableVoices(): SpeechSynthesisVoice[] {
-    if (!this.isInitialized) this.initVoices();
-    return this.voices;
+  public getDiagnostics(): SpeechDiagnostics {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      return {
+        isSupported: false,
+        hasKannadaVoice: false,
+        activeVoiceName: null,
+        activeVoiceLang: null,
+        isUsingFallback: false,
+      };
+    }
+
+    if (!this.isInitialized || this.voices.length === 0) {
+      this.initVoices();
+    }
+
+    const kannadaVoice = this.voices.find(v => 
+      v.lang.toLowerCase().includes('kn') || 
+      v.name.toLowerCase().includes('kannada')
+    );
+
+    const indianVoice = this.voices.find(v => 
+      v.lang.toLowerCase().includes('en-in') || 
+      v.lang.toLowerCase().includes('hi-in')
+    );
+
+    const activeVoice = kannadaVoice || indianVoice || this.voices[0] || null;
+
+    return {
+      isSupported: true,
+      hasKannadaVoice: Boolean(kannadaVoice),
+      activeVoiceName: activeVoice ? activeVoice.name : null,
+      activeVoiceLang: activeVoice ? activeVoice.lang : null,
+      isUsingFallback: !kannadaVoice,
+    };
   }
 
   public speak(options: SpeakOptions): boolean {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-      if (options.onError) options.onError('Speech synthesis not supported in this browser.');
+      if (options.onError) {
+        options.onError('Web Speech API is not supported in this browser environment.');
+      }
       return false;
     }
 
-    // Cancel any previous speech
+    // Cancel any active audio playback
     window.speechSynthesis.cancel();
 
     if (!this.isInitialized || this.voices.length === 0) {
       this.initVoices();
     }
 
-    // Attempt to locate a Kannada voice (kn-IN)
+    const diagnostics = this.getDiagnostics();
+
+    // Prefer native kn-IN voice
     const kannadaVoice = this.voices.find(v => 
       v.lang.toLowerCase().includes('kn') || 
-      v.lang.toLowerCase().includes('kannada') ||
       v.name.toLowerCase().includes('kannada')
     );
 
-    // Fallback Indian voice if kn is not present
     const indianVoice = this.voices.find(v => 
       v.lang.toLowerCase().includes('en-in') || 
       v.lang.toLowerCase().includes('hi-in')
@@ -61,10 +111,10 @@ class SpeechService {
     let textToSpeak = options.kannadaText;
     let voiceToUse = kannadaVoice;
 
-    // If no Kannada voice exists on this OS/browser, pronounce the transliterated English text
+    // Honest fallback: if client device lacks Kannada TTS voice, fall back to phonetic transliteration
     if (!kannadaVoice) {
-      textToSpeak = options.transliteration;
-      voiceToUse = indianVoice || this.voices[0];
+      textToSpeak = options.transliteration || options.kannadaText;
+      voiceToUse = indianVoice || this.voices[0] || undefined;
     }
 
     try {
@@ -73,11 +123,11 @@ class SpeechService {
         utterance.voice = voiceToUse;
       }
       
-      utterance.rate = options.rate ?? 0.95;
-      utterance.pitch = options.pitch ?? 1.0;
+      utterance.rate = options.syntheticRate ?? 0.95;
+      utterance.pitch = options.syntheticPitch ?? 1.0;
 
       utterance.onstart = () => {
-        if (options.onStart) options.onStart();
+        if (options.onStart) options.onStart(diagnostics);
       };
 
       utterance.onend = () => {
@@ -86,14 +136,18 @@ class SpeechService {
 
       utterance.onerror = (e) => {
         if (options.onEnd) options.onEnd();
-        if (options.onError) options.onError(e);
+        if (options.onError) {
+          options.onError(e.error ? `Speech synthesis error: ${e.error}` : 'Speech synthesis interrupted');
+        }
       };
 
       window.speechSynthesis.speak(utterance);
       return true;
-    } catch (err) {
+    } catch (err: any) {
       if (options.onEnd) options.onEnd();
-      if (options.onError) options.onError(err);
+      if (options.onError) {
+        options.onError(err?.message || 'Speech execution failed');
+      }
       return false;
     }
   }

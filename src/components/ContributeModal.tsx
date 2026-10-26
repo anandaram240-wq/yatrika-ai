@@ -21,13 +21,26 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
   const [district, setDistrict] = useState('');
   const [usageExample, setUsageExample] = useState('');
   const [contributorName, setContributorName] = useState('');
+  const [attributionPreference, setAttributionPreference] = useState<'real-name' | 'pseudonym' | 'anonymous'>('real-name');
+  const [licenseConsent, setLicenseConsent] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!wordKannada.trim() || !meaning.trim()) return;
+    setValidationError(null);
+
+    if (!wordKannada.trim() || !meaning.trim()) {
+      setValidationError('Please provide both the Kannada word and its English meaning.');
+      return;
+    }
+
+    if (!licenseConsent) {
+      setValidationError('You must consent to the open-source attribution license (CC-BY 4.0) to draft this entry.');
+      return;
+    }
 
     const newEntry: CommunityContribution = {
       id: `contrib-${Date.now()}`,
@@ -37,9 +50,12 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
       regionId,
       district: district.trim() || 'Karnataka',
       usageExample: usageExample.trim(),
-      contributorName: contributorName.trim() || 'Anonymous Kannadiga',
+      contributorName: contributorName.trim() || 'Anonymous Contributor',
+      attributionPreference,
+      licenseConsent: true,
       timestamp: 'Just now',
-      upvotes: 1,
+      status: 'contributor-submitted',
+      localNotes: 'Drafted on current client device via Community Vault form.',
     };
 
     onAddContribution(newEntry);
@@ -54,6 +70,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
       setDistrict('');
       setUsageExample('');
       setContributorName('');
+      setLicenseConsent(false);
     }, 1500);
   };
 
@@ -73,24 +90,30 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
               <CheckCircle className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-black text-stone-900">ಧನ್ಯವಾದಗಳು!</h3>
+            <h3 className="text-2xl font-black text-stone-900">ಧನ್ಯವಾದಗಳು! Entry Saved</h3>
             <p className="text-stone-600 text-sm">
-              Your regional word has been added to the Community Dialect Vault!
+              Your contribution draft is stored in your local browser vault and ready for JSON research export!
             </p>
           </div>
         ) : (
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="p-2 rounded-xl bg-red-100 text-red-700">
+              <span className="p-2 rounded-xl bg-purple-100 text-purple-700">
                 <PlusCircle className="w-5 h-5" />
               </span>
               <div>
-                <h3 className="text-xl font-black text-stone-900">Document a Regional Word</h3>
-                <p className="text-xs text-stone-500">Contribute regional vocabulary from your hometown</p>
+                <h3 className="text-xl font-black text-stone-900">Document a Regional Expression</h3>
+                <p className="text-xs text-stone-500">Draft a hometown vocabulary record stored locally on this device</p>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            {validationError && (
+              <div className="mt-3 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-semibold">
+                {validationError}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="mt-4 space-y-3.5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
@@ -108,7 +131,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Transliteration (English) *
+                    Phonetic Transliteration *
                   </label>
                   <input
                     type="text"
@@ -123,7 +146,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-stone-700 mb-1">
-                  Meaning & Emotional Context *
+                  Meaning & Conversational Context *
                 </label>
                 <input
                   type="text"
@@ -138,7 +161,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Regional Zone *
+                    Regional Exploration Zone *
                   </label>
                   <select
                     value={regionId}
@@ -155,11 +178,11 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Hometown / District
+                    Hometown / Taluk
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Dharwad, Kundapura, Mandya"
+                    placeholder="e.g. Byndoor, Sirsi, Channapatna"
                     value={district}
                     onChange={(e) => setDistrict(e.target.value)}
                     className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -169,7 +192,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-stone-700 mb-1">
-                  Sample Sentence (Usage Example)
+                  Sample Sentence (Authentic Usage)
                 </label>
                 <input
                   type="text"
@@ -180,17 +203,49 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">
-                  Your Name / Handle
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">
+                    Your Name or Handle
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Vinayaka K / Kundapura"
+                    value={contributorName}
+                    onChange={(e) => setContributorName(e.target.value)}
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">
+                    Attribution Preference
+                  </label>
+                  <select
+                    value={attributionPreference}
+                    onChange={(e) => setAttributionPreference(e.target.value as any)}
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+                  >
+                    <option value="real-name">Use Real Name</option>
+                    <option value="pseudonym">Use Pseudonym</option>
+                    <option value="anonymous">Keep Anonymous</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Licensing & Consent Checkbox */}
+              <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-700 space-y-1">
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={licenseConsent}
+                    onChange={(e) => setLicenseConsent(e.target.checked)}
+                    className="mt-0.5 rounded border-stone-300 text-amber-600 focus:ring-amber-500"
+                  />
+                  <span className="leading-tight">
+                    I confirm this phrase represents genuine documented regional usage. I consent to sharing this data under the <strong>Creative Commons Attribution 4.0 (CC-BY 4.0)</strong> license for open linguistic research.
+                  </span>
                 </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Ananya Rao / Mysore Kannadiga"
-                  value={contributorName}
-                  onChange={(e) => setContributorName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                />
               </div>
 
               <div className="pt-2">
@@ -198,7 +253,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                   type="submit"
                   className="w-full py-3 rounded-2xl bg-linear-to-r from-red-600 to-amber-600 text-white font-bold shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer text-sm"
                 >
-                  Publish to Community Vault
+                  Save to Local Device Vault
                 </button>
               </div>
             </form>

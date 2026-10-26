@@ -4,7 +4,7 @@ import { REGIONS } from '../data/regions';
 import { RegionId } from '../types';
 import { speechService } from '../utils/speech';
 import confetti from 'canvas-confetti';
-import { Award, Volume2, CheckCircle, XCircle, ArrowRight, RotateCcw, Sparkles } from 'lucide-react';
+import { Award, Volume2, CheckCircle, XCircle, ArrowRight, RotateCcw, Sparkles, BookOpen } from 'lucide-react';
 
 export const DialectGuesser: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -74,14 +74,14 @@ export const DialectGuesser: React.FC = () => {
   if (quizFinished) {
     const percentage = Math.round((score / QUIZ_QUESTIONS.length) * 100);
     let title = 'Karnataka Explorer';
-    let message = 'Good effort! Exploring the dialects makes you appreciate the diversity.';
+    let message = 'Good effort! Exploring these documented phrases deepens appreciation for Kannada diversity.';
 
     if (percentage >= 80) {
-      title = '👑 Asalu Kannada Naadu Pandita!';
-      message = 'Outstanding! You possess an extraordinary ear for Karnataka\'s regional dialects!';
+      title = '👑 Kannada Bhasha Premi!';
+      message = 'Outstanding! You demonstrated an excellent understanding of regional Kannada vocabulary!';
     } else if (percentage >= 50) {
-      title = '🌟 Chalo Kannada Premi';
-      message = 'Great score! You have solid knowledge of regional phrases across districts.';
+      title = '🌟 Chalo Kannada Vidyarthi';
+      message = 'Great score! You recognize regional expressions across several Karnataka zones.';
     }
 
     return (
@@ -91,7 +91,7 @@ export const DialectGuesser: React.FC = () => {
             <Award className="w-10 h-10" />
           </div>
 
-          <span className="text-xs uppercase font-extrabold tracking-wider text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+          <span className="text-xs uppercase font-extrabold tracking-wider text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
             Quiz Completed
           </span>
 
@@ -106,7 +106,7 @@ export const DialectGuesser: React.FC = () => {
             </div>
             <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200">
               <div className="text-3xl font-black text-amber-600">{percentage}%</div>
-              <div className="text-xs text-stone-500 font-semibold mt-1">Linguistic Accuracy</div>
+              <div className="text-xs text-stone-500 font-semibold mt-1">Lexical Accuracy</div>
             </div>
           </div>
 
@@ -115,7 +115,7 @@ export const DialectGuesser: React.FC = () => {
             className="flex items-center gap-2 mx-auto px-6 py-3.5 rounded-2xl bg-linear-to-r from-red-600 to-amber-600 text-white font-bold shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
-            <span>Play Again & Improve Score</span>
+            <span>Retake Regional Knowledge Quiz</span>
           </button>
         </div>
       </section>
@@ -126,16 +126,19 @@ export const DialectGuesser: React.FC = () => {
     <section className="py-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-100 text-indigo-800 text-xs font-bold mb-2">
             <Award className="w-3.5 h-3.5 text-indigo-700" />
-            <span>Kannada Dialect Guesser Challenge</span>
+            <span>Regional Language & Phrase Knowledge Quiz</span>
           </div>
           <h2 className="text-3xl font-extrabold text-stone-900">
-            Can You Guess the Region?
+            Match the Phrase to its Documented Region
           </h2>
           <p className="text-stone-600 mt-1 text-sm sm:text-base">
-            Listen or read the dialect phrase, identify its native home in Karnataka, and master local folklore.
+            Test your knowledge of regional idioms, vocabulary, and cultural contexts documented across Karnataka.
+          </p>
+          <p className="text-3xs text-stone-400 mt-1 italic">
+            Notice: Audio is synthetic text-to-speech for phrase guide purposes. This quiz tests lexical and grammatical knowledge.
           </p>
         </div>
 
@@ -178,7 +181,7 @@ export const DialectGuesser: React.FC = () => {
                 "{currentQ.phraseKannada}"
               </div>
               <div className="text-sm font-bold text-red-700">
-                {currentQ.transliteration}
+                /{currentQ.transliteration}/
               </div>
               <div className="text-xs text-stone-600 italic">
                 Meaning: "{currentQ.englishMeaning}"
@@ -194,7 +197,7 @@ export const DialectGuesser: React.FC = () => {
               }`}
             >
               <Volume2 className="w-4 h-4 text-amber-600" />
-              <span>{isPlayingAudio ? 'Listening...' : 'Play Audio'}</span>
+              <span>{isPlayingAudio ? 'Speaking...' : 'Play Synthetic Audio'}</span>
             </button>
           </div>
 
@@ -253,23 +256,29 @@ export const DialectGuesser: React.FC = () => {
                   {selectedOption === currentQ.correctRegionId ? (
                     <>
                       <CheckCircle className="w-4 h-4 text-emerald-600" />
-                      <span>Correct Answer! Bhesh!</span>
+                      <span>Correct! Documented in: {REGIONS.find(r => r.id === currentQ.correctRegionId)?.name.split(' (')[0]}</span>
                     </>
                   ) : (
                     <>
                       <XCircle className="w-4 h-4 text-red-600" />
-                      <span>Not quite! Correct: {REGIONS.find(r => r.id === currentQ.correctRegionId)?.name.split(' (')[0]}</span>
+                      <span>Documented Region: {REGIONS.find(r => r.id === currentQ.correctRegionId)?.name.split(' (')[0]}</span>
                     </>
                   )}
                 </div>
                 <p>{currentQ.explanation}</p>
+                
+                {/* Source Citation */}
+                <div className="mt-2 pt-2 border-t border-stone-200/50 flex items-center gap-1 text-2xs text-stone-600 font-mono">
+                  <BookOpen className="w-3 h-3 text-stone-500" />
+                  <span>Source: {currentQ.source.title} ({currentQ.source.authorOrInstitution})</span>
+                </div>
               </div>
 
               {/* Cultural Trivia Box */}
               <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs text-amber-950 flex items-start gap-2">
                 <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block font-semibold">Did You Know?</strong>
+                  <strong className="block font-semibold">Cultural Context & Background:</strong>
                   {currentQ.culturalTrivia}
                 </div>
               </div>

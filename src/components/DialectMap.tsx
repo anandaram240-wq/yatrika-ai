@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { REGIONS } from '../data/regions';
 import { RegionId } from '../types';
 import { speechService } from '../utils/speech';
-import { Volume2, MapPin, Sparkles, Compass, CheckCircle2 } from 'lucide-react';
+import { Volume2, MapPin, Sparkles, Compass, CheckCircle2, BookOpen, AlertCircle } from 'lucide-react';
 
 interface DialectMapProps {
   onSelectRegionForMatrix?: (regionId: RegionId) => void;
@@ -28,17 +28,28 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
     <section className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-red-100 text-red-800 text-xs font-bold mb-2">
               <Compass className="w-3.5 h-3.5 text-red-600" />
-              <span>Interactive Geographical Explorer</span>
+              <span>Educational Regional Taxonomy</span>
             </div>
             <h2 className="text-3xl font-extrabold text-stone-900">
-              The Linguistic Geography of Karnataka
+              Documented Regional Dialect Zones
             </h2>
             <p className="text-stone-600 mt-1 max-w-2xl text-sm sm:text-base">
-              Click on any region below to discover how tone, vocabulary, cadence, and cultural heritage transform across the land of Kannada.
+              Explore documented regional varieties of Kannada. Select a zone below to review phonological traits, local phrases, and source citations.
+            </p>
+          </div>
+        </div>
+
+        {/* Linguistic Continuum Clarification Alert */}
+        <div className="mb-6 p-4 rounded-2xl bg-amber-50/80 border border-amber-300 text-xs text-amber-950 flex items-start gap-3">
+          <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <strong className="block font-bold">Linguistic Continuum Notice:</strong>
+            <p className="text-stone-700 leading-relaxed">
+              In scholarly linguistics (CIIL, LDC-IL), Kannada spoken varieties exist along a continuous geographic gradient (*isoglosses*) with gradual transitions and community sub-dialects (e.g. Havyaka, Arebhashe, Kundagannada, Badaga). The six zones shown below are an educational organization chosen for this interactive atlas, not rigid administrative boundaries.
             </p>
           </div>
         </div>
@@ -79,7 +90,7 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-900 font-extrabold text-xs tracking-wider uppercase">
-                  {selectedRegion.districts.length} Districts Included
+                  Associated Areas: {selectedRegion.districtsAssociated.length} Districts
                 </span>
                 <h3 className="text-2xl sm:text-4xl font-black mt-2 text-white">
                   {selectedRegion.name}
@@ -87,8 +98,8 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
                 <p className="font-kannada text-lg sm:text-xl text-amber-300 font-bold mt-1">
                   {selectedRegion.kannadaName}
                 </p>
-                <p className="text-stone-300 mt-2 text-sm sm:text-base max-w-3xl italic">
-                  "{selectedRegion.tagline}"
+                <p className="text-stone-300 mt-2 text-xs sm:text-sm max-w-3xl italic">
+                  Taxonomy Note: {selectedRegion.taxonomyNote}
                 </p>
               </div>
 
@@ -106,25 +117,29 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
           <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left 2 Cols: Details & Signature Phrases */}
             <div className="lg:col-span-2 space-y-6">
-              {/* Description */}
+              {/* Description & Linguistic Isoglosses */}
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">
-                  Linguistic Profile & Overview
+                  Linguistic Profile & Regional Characteristics
                 </h4>
                 <p className="text-stone-700 leading-relaxed text-sm sm:text-base">
                   {selectedRegion.description}
                 </p>
+                <div className="mt-3 p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-600">
+                  <span className="font-bold text-stone-800">Isogloss & Dialect Continuum: </span>
+                  <span>{selectedRegion.isoglossNotes}</span>
+                </div>
               </div>
 
-              {/* Signature Audio Phrases */}
+              {/* Signature Audio Phrases with Sources */}
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400">
-                    Signature Expressions (Click to Listen)
+                    Documented Signature Phrases & Citations
                   </h4>
-                  <span className="text-xs text-amber-700 font-medium flex items-center gap-1">
+                  <span className="text-3xs text-stone-500 font-medium flex items-center gap-1">
                     <Volume2 className="w-3.5 h-3.5" />
-                    Web Audio Synthesis
+                    Synthetic Guide Audio
                   </span>
                 </div>
 
@@ -142,14 +157,23 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="space-y-1">
-                            <div className="font-kannada font-bold text-lg sm:text-xl text-stone-900">
-                              {phrase.kannada}
+                            <div className="flex items-center gap-2">
+                              <span className="font-kannada font-bold text-lg sm:text-xl text-stone-900">
+                                {phrase.kannada}
+                              </span>
+                              <span className="px-2 py-0.5 rounded-md text-3xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                                {phrase.status}
+                              </span>
                             </div>
                             <div className="text-sm font-semibold text-red-800">
-                              {phrase.transliteration}
+                              /{phrase.transliteration}/
                             </div>
                             <div className="text-xs text-stone-600">
                               Meaning: <span className="text-stone-800 font-medium">"{phrase.meaning}"</span>
+                            </div>
+                            <div className="pt-2 text-2xs text-stone-500 font-mono flex items-center gap-1">
+                              <BookOpen className="w-3 h-3 text-stone-400" />
+                              <span>Source: {phrase.source.title} ({phrase.source.authorOrInstitution})</span>
                             </div>
                           </div>
 
@@ -160,7 +184,7 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
                                 ? 'bg-amber-500 text-stone-950 animate-pulse scale-105'
                                 : 'bg-white text-stone-700 hover:bg-amber-100 hover:text-amber-800 border border-stone-300'
                             }`}
-                            title="Play pronunciation audio"
+                            title="Play synthetic speech guide"
                           >
                             <Volume2 className={`w-5 h-5 ${isPlaying ? 'text-stone-950' : 'text-amber-600'}`} />
                           </button>
@@ -189,24 +213,24 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
               <div className="bg-stone-50 p-5 rounded-2xl border border-stone-200 space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-amber-600" />
-                  <span>Linguistic Cadence & Grammar</span>
+                  <span>Phonological & Grammatical Traits</span>
                 </h4>
 
                 <div className="space-y-3 text-xs sm:text-sm">
                   <div>
-                    <span className="text-stone-500 font-medium block">Rhythm & Cadence:</span>
-                    <span className="font-bold text-stone-800">{selectedRegion.dialectFeatures.cadence}</span>
+                    <span className="text-stone-500 font-medium block">Vocal Cadence Traits:</span>
+                    <span className="font-semibold text-stone-800">{selectedRegion.dialectFeatures.cadenceDescription}</span>
                   </div>
 
                   <div>
-                    <span className="text-stone-500 font-medium block">Pronoun Nuances:</span>
+                    <span className="text-stone-500 font-medium block">Documented Pronouns:</span>
                     <span className="font-mono text-stone-800 bg-white px-2 py-1 rounded-md border border-stone-200 inline-block mt-0.5">
                       {selectedRegion.dialectFeatures.pronouns}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-stone-500 font-medium block">Notable Suffixes & Tags:</span>
+                    <span className="text-stone-500 font-medium block">Documented Suffixes & Particles:</span>
                     <span className="font-mono text-stone-800 bg-white px-2 py-1 rounded-md border border-stone-200 inline-block mt-0.5">
                       {selectedRegion.dialectFeatures.notableSuffixes}
                     </span>
@@ -214,15 +238,18 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
                 </div>
               </div>
 
-              {/* Districts Tag List */}
+              {/* Associated Districts Tag List */}
               <div className="bg-stone-50 p-5 rounded-2xl border border-stone-200">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5 mb-3">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5 mb-1">
                   <MapPin className="w-4 h-4 text-red-600" />
-                  <span>Districts in this Zone</span>
+                  <span>Broad Associated Districts</span>
                 </h4>
+                <p className="text-3xs text-stone-400 mb-3">
+                  Speakers in these areas frequently share these traits (subject to subregional variation).
+                </p>
 
                 <div className="flex flex-wrap gap-1.5">
-                  {selectedRegion.districts.map((district) => (
+                  {selectedRegion.districtsAssociated.map((district) => (
                     <span
                       key={district}
                       className="px-2.5 py-1 rounded-lg bg-white border border-stone-300 text-stone-800 text-xs font-semibold shadow-2xs"
@@ -236,7 +263,7 @@ export const DialectMap: React.FC<DialectMapProps> = ({ onSelectRegionForMatrix 
               {/* Key Characteristics Checklist */}
               <div className="bg-stone-50 p-5 rounded-2xl border border-stone-200">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3">
-                  Distinctive Dialect Traits
+                  Documented Linguistic Features
                 </h4>
                 <ul className="space-y-2">
                   {selectedRegion.characteristics.map((char, i) => (

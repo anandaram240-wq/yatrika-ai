@@ -3,6 +3,7 @@ import { Region } from '../types';
 export const REGIONS: Region[] = [
   {
     id: 'uttara-karnataka',
+    slotKey: 'kittur_karnataka',
     name: 'Uttara Karnataka (Northern Dialect Zone)',
     kannadaName: 'ಉತ್ತರ ಕರ್ನಾಟಕ ಪ್ರಾದೇಶಿಕ ರೂಪ',
     taxonomyNote: 'Educational exploration grouping. Northern Kannada encompasses diverse micro-variations across Belagavi, Dharwad, and the Krishna basin, with mutual influences from neighboring Marathi and Deccani speech communities.',
@@ -58,6 +59,7 @@ export const REGIONS: Region[] = [
   },
   {
     id: 'karavali',
+    slotKey: 'karavali_coastal',
     name: 'Karavali & Coastal Zone (Including Kundagannada)',
     kannadaName: 'ಕರಾವಳಿ ಮತ್ತು ಕುಂದಾಪ್ರ ಕನ್ನಡ',
     taxonomyNote: 'Educational exploration grouping. Coastal Karnataka is a trilingual contact zone where Kannada coexists with Tulu and Konkani. Kundagannada (Kundapura Kannada) preserves distinct archaic phonological and grammatical forms.',
@@ -112,6 +114,7 @@ export const REGIONS: Region[] = [
   },
   {
     id: 'mysuru-mandya',
+    slotKey: 'old_mysuru_southern',
     name: 'Mysuru & Mandya (Southern Dialect Zone)',
     kannadaName: 'ಮೈಸೂರು - ಮಂಡ್ಯ ಪ್ರಾದೇಶಿಕ ರೂಪ',
     taxonomyNote: 'Educational exploration grouping. Historically formed the basis for modern standardized Granthika Kannada, but retains distinct spoken colloquial varieties in rural Mandya and Mysore.',
@@ -166,6 +169,7 @@ export const REGIONS: Region[] = [
   },
   {
     id: 'kalyana-karnataka',
+    slotKey: 'kalyana_karnataka',
     name: 'Kalyana Karnataka (Northeastern Zone)',
     kannadaName: 'ಕಲ್ಯಾಣ ಕರ್ನಾಟಕ ಪ್ರಾದೇಶಿಕ ರೂಪ',
     taxonomyNote: 'Educational exploration grouping. Formerly referred to as Hyderabad-Karnataka. Shaped by medieval Vachana literature and historic linguistic contact with Marathi, Telugu, and Deccani Urdu.',
@@ -208,6 +212,7 @@ export const REGIONS: Region[] = [
   },
   {
     id: 'malenadu',
+    slotKey: 'malnad',
     name: 'Malenadu (Western Ghats Hill Zone)',
     kannadaName: 'ಮಲೆನಾಡು ಪ್ರಾದೇಶಿಕ ರೂಪ',
     taxonomyNote: 'Educational exploration grouping. A rugged geographic zone along the Sahyadri ranges. Includes rural plantation Kannada and transitions into Kodava and Havyaka linguistic enclaves.',
@@ -250,6 +255,7 @@ export const REGIONS: Region[] = [
   },
   {
     id: 'bengaluru-urban',
+    slotKey: 'central_border_cluster',
     name: 'Bengaluru Urban (Metropolitan Vernacular)',
     kannadaName: 'ನಮ್ಮ ಬೆಂಗಳೂರು (ನಗರ ಆಡುಭಾಷೆ)',
     taxonomyNote: 'Educational exploration grouping. Unlike historical rural dialects, Bengaluru Urban Kannada is a contemporary contact vernacular characterized by extensive code-mixing with English and Dravidian neighbor languages.',

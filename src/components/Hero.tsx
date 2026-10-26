@@ -65,9 +65,9 @@ export const Hero: React.FC<HeroProps> = ({ setActiveTab }) => {
             </div>
 
             <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-amber-200/80 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-amber-600">30+</div>
-              <div className="text-xs text-stone-600 font-semibold mt-1">Source-Attested Entries</div>
-              <div className="text-3xs text-stone-400 mt-0.5">Grounded in Literature</div>
+              <div className="text-2xl sm:text-3xl font-black text-amber-600">13</div>
+              <div className="text-xs text-stone-600 font-semibold mt-1">Candidate Entries</div>
+              <div className="text-3xs text-stone-400 mt-0.5">Across 5 Core Concepts</div>
             </div>
 
             <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-amber-200/80 shadow-xs text-center">

@@ -1,12 +1,17 @@
 import { describe, it, expect } from 'vitest';
+import Ajv2020 from 'ajv/dist/2020';
+import addFormats from 'ajv-formats';
+import atlasSchema from '../data/atlas-data.schema.json';
+import candidateData from '../data/atlas-evidence-candidates.json';
+import { ATLAS_DATASET, RECONCILED_METRICS, CONCEPTS, ALL_ENTRIES, REGION_SLOT_DEFINITIONS } from '../data/dataset';
+import { validateAtlasDataset } from '../utils/semanticValidator';
 import { REGIONS } from '../data/regions';
-import { DIALECT_PHRASES } from '../data/phrases';
 import { GLOSSARY_WORDS } from '../data/glossary';
 import { QUIZ_QUESTIONS } from '../data/quiz';
-import { RegionId } from '../types';
 import { speechService } from '../utils/speech';
+import { RegionId } from '../types';
 
-describe('Namma Kannada Forensic Audit & Data Integrity Suite', () => {
+describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification Suite', () => {
   const EXPECTED_REGIONS: RegionId[] = [
     'uttara-karnataka',
     'karavali',
@@ -16,126 +21,141 @@ describe('Namma Kannada Forensic Audit & Data Integrity Suite', () => {
     'bengaluru-urban',
   ];
 
-  it('verifies all 6 linguistic exploration zones include honest taxonomy & isogloss notes', () => {
-    expect(REGIONS).toHaveLength(6);
-    const regionIds = REGIONS.map(r => r.id);
-    EXPECTED_REGIONS.forEach(id => {
-      expect(regionIds).toContain(id);
+  it('1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors', () => {
+    const ajv = new Ajv2020({ allErrors: true });
+    addFormats(ajv);
+    const validate = ajv.compile(atlasSchema);
+    const valid = validate(candidateData);
+    
+    if (!valid) {
+      console.error('Ajv Schema Validation Errors:', validate.errors);
+    }
+    expect(valid).toBe(true);
+    expect(validate.errors).toBeNull();
+  });
+
+  it('2. Enforces all 6 Semantic Validation Rules via validateAtlasDataset', () => {
+    const result = validateAtlasDataset(ATLAS_DATASET);
+    if (!result.valid) {
+      console.error('Semantic Validation Errors:', result.errors);
+    }
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+    expect(result.reconciledCounts.concepts).toBe(5);
+    expect(result.reconciledCounts.entries).toBe(13);
+  });
+
+  it('3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts (resolving Argon report 12 vs 13)', () => {
+    expect(RECONCILED_METRICS.conceptCount).toBe(5);
+    expect(RECONCILED_METRICS.entryCount).toBe(13);
+    expect(CONCEPTS).toHaveLength(5);
+    expect(ALL_ENTRIES).toHaveLength(13);
+
+    // Concept 2 ("What are you doing?") has 4 documented entries:
+    // std, kittur, kalyana, coastal-malnad
+    const concept2 = CONCEPTS.find(c => c.concept_id === 'concept-what-are-you-doing');
+    expect(concept2).toBeDefined();
+    expect(concept2?.documented_entry_ids).toHaveLength(4);
+
+    // Concepts 1, 3, 4, 5: 3 + 2 + 2 + 2 = 9 entries. Total = 4 + 9 = 13 entries.
+    const totalDocumentedInConcepts = CONCEPTS.reduce(
+      (sum, c) => sum + c.documented_entry_ids.length,
+      0
+    );
+    expect(totalDocumentedInConcepts).toBe(13);
+  });
+
+  it('4. Enforces provisional status and null locators on candidate entries (no invented citations)', () => {
+    ALL_ENTRIES.forEach((entry) => {
+      // Must be provisional with E4 phrase and E2 pattern evidence
+      expect(entry.evidence_status).toBe('provisional');
+      expect(entry.evidence_level).toBe('E4');
+      expect(entry.pattern_evidence_level).toBe('E2');
+
+      // Citation locator must be null until physically inspected
+      expect(entry.citation.locator).toBeNull();
+
+      // Review record must be null until live speaker review is performed
+      expect(entry.review_record).toBeNull();
+
+      // Must have limitation explaining provisional locator status
+      expect(entry.limitations.length).toBeGreaterThanOrEqual(1);
     });
+  });
 
-    REGIONS.forEach(region => {
-      expect(region.name).toBeTruthy();
-      expect(region.kannadaName).toBeTruthy();
-      expect(region.taxonomyNote).toBeTruthy();
-      expect(region.isoglossNotes).toBeTruthy();
-      expect(region.districtsAssociated.length).toBeGreaterThan(0);
-      expect(region.signaturePhrases.length).toBeGreaterThanOrEqual(1);
+  it('5. Enforces per-entry licensing metadata and top-level license policy', () => {
+    expect(ATLAS_DATASET.license_policy).toBeTruthy();
+    expect(ATLAS_DATASET.license_policy).toContain('Per-entry source and license metadata required');
 
-      region.signaturePhrases.forEach(sig => {
-        expect(sig.kannada).toBeTruthy();
-        expect(sig.transliteration).toBeTruthy();
-        expect(sig.source.title).toBeTruthy();
-        expect(['source-attested', 'provisional', 'native-speaker-reviewed']).toContain(sig.status);
+    ALL_ENTRIES.forEach((entry) => {
+      expect(['approved_for_planned_use', 'restricted_or_permission_required', 'license_unclear_do_not_redistribute']).toContain(
+        entry.license_status
+      );
+    });
+  });
+
+  it('6. Verifies sparse 6-region matrix states include shared-form and honest missing-data handling', () => {
+    const requiredSlots = [
+      'old_mysuru_southern',
+      'kittur_karnataka',
+      'kalyana_karnataka',
+      'karavali_coastal',
+      'malnad',
+      'central_border_cluster',
+    ];
+
+    CONCEPTS.forEach((concept) => {
+      requiredSlots.forEach((slot) => {
+        const slotState = (concept.region_matrix_states as any)[slot];
+        expect(slotState).toBeDefined();
+        expect([
+          'distinct_regional_variant',
+          'documented_multi_region',
+          'shared_with_standard',
+          'no_verified_distinct_variant',
+          'provisional_candidate',
+        ]).toContain(slotState.status);
+        expect(slotState.note.length).toBeGreaterThanOrEqual(5);
+
+        if (slotState.status === 'no_verified_distinct_variant') {
+          expect(slotState.entry_id).toBeNull();
+        } else {
+          expect(slotState.entry_id).toBeTruthy();
+        }
       });
-
-      expect(region.dialectFeatures.cadenceDescription).toBeTruthy();
-      expect(region.dialectFeatures.pronouns).toBeTruthy();
-      expect(region.dialectFeatures.notableSuffixes).toBeTruthy();
     });
+
+    // Check slot definitions
+    expect(Object.keys(REGION_SLOT_DEFINITIONS)).toHaveLength(6);
   });
 
-  it('verifies every dialect phrase contains explicit source citations and honest non-forced variations', () => {
-    expect(DIALECT_PHRASES.length).toBeGreaterThanOrEqual(5);
-
-    DIALECT_PHRASES.forEach(phrase => {
-      expect(phrase.english).toBeTruthy();
-      expect(phrase.standardKannada.kannada).toBeTruthy();
-      expect(phrase.standardKannada.transliteration).toBeTruthy();
-
-      const variations = Object.values(phrase.variations);
-      expect(variations.length).toBeGreaterThan(0);
-
-      variations.forEach(variation => {
-        if (!variation) return;
-        expect(variation.kannada.length).toBeGreaterThan(0);
-        expect(variation.transliteration.length).toBeGreaterThan(0);
-        expect(variation.nuance.length).toBeGreaterThan(0);
-        expect(variation.source.title).toBeTruthy();
-        expect(variation.contextOfUse).toBeTruthy();
-        expect(['source-attested', 'native-speaker-reviewed', 'provisional']).toContain(variation.status);
-      });
-    });
-  });
-
-  it('verifies the Namma Shabda Kosha glossary entries have verifiable sources and localities', () => {
-    expect(GLOSSARY_WORDS.length).toBeGreaterThanOrEqual(15);
-
-    const sourceAttestedWords = GLOSSARY_WORDS.filter(w => w.status === 'source-attested');
-    const provisionalWords = GLOSSARY_WORDS.filter(w => w.status === 'provisional');
-
-    // Ensure we have a dominant majority of source-attested entries
-    expect(sourceAttestedWords.length).toBeGreaterThanOrEqual(12);
-    expect(provisionalWords.length).toBeGreaterThanOrEqual(2);
-
-    GLOSSARY_WORDS.forEach(word => {
-      expect(word.wordKannada).toBeTruthy();
-      expect(word.wordEnglish).toBeTruthy();
-      expect(EXPECTED_REGIONS).toContain(word.regionId);
-      expect(word.meaning).toBeTruthy();
-      expect(word.culturalOrigin).toBeTruthy();
-      expect(word.source.title).toBeTruthy();
-      expect(word.tags.length).toBeGreaterThan(0);
-    });
-  });
-
-  it('verifies quiz questions have unique options, valid correct answers, and citations', () => {
-    expect(QUIZ_QUESTIONS.length).toBeGreaterThanOrEqual(8);
-
-    QUIZ_QUESTIONS.forEach(q => {
-      expect(q.options.length).toBe(4);
-      expect(q.options).toContain(q.correctRegionId);
-      expect(new Set(q.options).size).toBe(4); // No duplicate options
-      expect(q.explanation).toBeTruthy();
-      expect(q.culturalTrivia).toBeTruthy();
-      expect(q.source.title).toBeTruthy();
-      expect(['source-attested', 'provisional']).toContain(q.status);
-    });
-  });
-
-  it('verifies speech service provides honest diagnostics and does not pretend synthetic pitch is human recording', () => {
+  it('7. Verifies speech service provides honest diagnostics and rejects simulated accents', () => {
     const diag = speechService.getDiagnostics();
     expect(typeof diag.isSupported).toBe('boolean');
     expect(typeof diag.hasKannadaVoice).toBe('boolean');
-    expect(typeof diag.isUsingFallback).toBe('boolean');
+    expect(typeof diag.notice).toBe('string');
   });
 
-  it('verifies search and filter logic by locality, status, and keyword', () => {
-    // Search by word
-    const haudlaResult = GLOSSARY_WORDS.filter(w => 
-      w.wordEnglish.toLowerCase().includes('haudla') || 
-      w.wordKannada.includes('ಹೌದ್ಲಾ')
-    );
-    expect(haudlaResult.length).toBe(1);
-    expect(haudlaResult[0].status).toBe('source-attested');
-    expect(haudlaResult[0].locality).toContain('Dharwad');
-
-    // Filter by status
-    const attestedOnly = GLOSSARY_WORDS.filter(w => w.status === 'source-attested');
-    expect(attestedOnly.length).toBeGreaterThanOrEqual(12);
-
-    // Search by locality
-    const kundapuraWords = GLOSSARY_WORDS.filter(w => 
-      w.locality && w.locality.toLowerCase().includes('kundapura')
-    );
-    expect(kundapuraWords.length).toBeGreaterThanOrEqual(2);
+  it('8. Verifies educational macro-cluster taxonomy and isogloss notes for all 6 regions', () => {
+    expect(REGIONS).toHaveLength(6);
+    REGIONS.forEach((region) => {
+      expect(EXPECTED_REGIONS).toContain(region.id);
+      expect(region.taxonomyNote).toBeTruthy();
+      expect(region.isoglossNotes).toBeTruthy();
+      expect(region.slotKey).toBeTruthy();
+      expect(region.districtsAssociated.length).toBeGreaterThan(0);
+    });
   });
 
-  it('verifies absence of duplicate IDs across all primary datasets', () => {
+  it('9. Verifies absence of duplicate IDs across concepts, candidates, regions, glossary, and quiz', () => {
+    const conceptIds = CONCEPTS.map(c => c.concept_id);
+    expect(new Set(conceptIds).size).toBe(conceptIds.length);
+
+    const entryIds = ALL_ENTRIES.map(e => e.id);
+    expect(new Set(entryIds).size).toBe(entryIds.length);
+
     const regionIds = REGIONS.map(r => r.id);
     expect(new Set(regionIds).size).toBe(regionIds.length);
-
-    const phraseIds = DIALECT_PHRASES.map(p => p.id);
-    expect(new Set(phraseIds).size).toBe(phraseIds.length);
 
     const glossaryIds = GLOSSARY_WORDS.map(g => g.id);
     expect(new Set(glossaryIds).size).toBe(glossaryIds.length);
@@ -144,36 +164,26 @@ describe('Namma Kannada Forensic Audit & Data Integrity Suite', () => {
     expect(new Set(quizIds).size).toBe(quizIds.length);
   });
 
-  it('verifies JSON export schema compliance for research archive', () => {
-    const sampleContribution = {
-      id: 'test-1',
-      wordKannada: 'ಯಕ್ಕಾ',
-      wordTransliteration: 'Yakka',
-      meaning: 'Elder sister or affectionate exclamation',
-      regionId: 'uttara-karnataka' as RegionId,
-      district: 'Hubballi',
-      usageExample: 'ಯಕ್ಕಾ, ಸ್ವಲ್ಪ ಈ ಕಡೆ ಬಂದು ನೋಡು!',
-      contributorName: 'Basavaraj Patil',
-      attributionPreference: 'real-name' as const,
-      licenseConsent: true,
-      timestamp: '2 hours ago',
-      status: 'contributor-submitted' as const,
-    };
+  it('10. Verifies legacy glossary items are quarantined under unverified (E5) status', () => {
+    expect(GLOSSARY_WORDS).toHaveLength(15);
+    GLOSSARY_WORDS.forEach((word) => {
+      expect(word.evidence_status).toBe('unverified');
+      expect(word.evidence_level).toBe('E5');
+      // Ferdinand Kittel citation check: no Herman Kittel
+      if (word.source.authorOrInstitution.includes('Kittel')) {
+        expect(word.source.authorOrInstitution).toContain('Ferdinand Kittel');
+      }
+    });
+  });
 
-    const exportPayload = {
-      archiveTitle: 'Namma Kannada Local Community Contribution Drafts',
-      exportDate: new Date().toISOString(),
-      license: 'CC-BY-4.0 (Creative Commons Attribution 4.0 International)',
-      contributionsCount: 1,
-      contributions: [sampleContribution],
-    };
-
-    const serialized = JSON.stringify(exportPayload);
-    const parsed = JSON.parse(serialized);
-
-    expect(parsed.license).toContain('CC-BY-4.0');
-    expect(parsed.contributions).toHaveLength(1);
-    expect(parsed.contributions[0].licenseConsent).toBe(true);
-    expect(parsed.contributions[0].status).toBe('contributor-submitted');
+  it('11. Verifies quiz questions contain unique options and morphological mechanism notes', () => {
+    expect(QUIZ_QUESTIONS.length).toBeGreaterThanOrEqual(8);
+    QUIZ_QUESTIONS.forEach((q) => {
+      expect(q.options).toHaveLength(4);
+      expect(new Set(q.options).size).toBe(4);
+      expect(q.options).toContain(q.correctRegionId);
+      expect(q.morphological_note).toBeTruthy();
+      expect(q.source.title).toBeTruthy();
+    });
   });
 });

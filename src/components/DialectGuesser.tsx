@@ -197,7 +197,7 @@ export const DialectGuesser: React.FC = () => {
               }`}
             >
               <Volume2 className="w-4 h-4 text-amber-600" />
-              <span>{isPlayingAudio ? 'Speaking...' : 'Play Synthetic Audio'}</span>
+              <span>{isPlayingAudio ? 'Speaking...' : 'Synthetic kn-IN Readout'}</span>
             </button>
           </div>
 
@@ -266,11 +266,24 @@ export const DialectGuesser: React.FC = () => {
                   )}
                 </div>
                 <p>{currentQ.explanation}</p>
+
+                {/* Morphological Note */}
+                {currentQ.morphological_note && (
+                  <div className="mt-2 text-xs bg-white/80 p-2 rounded-xl border border-stone-200">
+                    <strong className="text-stone-800">Grammatical Mechanism: </strong>
+                    <span className="text-stone-700">{currentQ.morphological_note}</span>
+                  </div>
+                )}
                 
-                {/* Source Citation */}
-                <div className="mt-2 pt-2 border-t border-stone-200/50 flex items-center gap-1 text-2xs text-stone-600 font-mono">
-                  <BookOpen className="w-3 h-3 text-stone-500" />
-                  <span>Source: {currentQ.source.title} ({currentQ.source.authorOrInstitution})</span>
+                {/* Source Citation & Provenance */}
+                <div className="mt-2 pt-2 border-t border-stone-200/50 flex flex-wrap items-center justify-between gap-1 text-2xs text-stone-600 font-mono">
+                  <span className="flex items-center gap-1">
+                    <BookOpen className="w-3 h-3 text-stone-500" />
+                    <span>Source: {currentQ.source.title} ({currentQ.source.authorOrInstitution})</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 uppercase font-bold text-3xs">
+                    {currentQ.status}
+                  </span>
                 </div>
               </div>
 

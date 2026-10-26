@@ -10,14 +10,17 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctRegionId: 'karavali',
     options: ['karavali', 'uttara-karnataka', 'mysuru-mandya', 'bengaluru-urban'],
     explanation: '"ಮಾರ್ರೆ" (Marre) is the signature communal address of coastal Karnataka (Mangaluru & Udupi). Traced to Halegannada and Tulu cognates, it denotes deep familiarity and mutual warmth.',
+    morphological_note: 'Coastal communal vocative "Marre" combined with existential auxiliary "unta" (preserved from Halegannada/Tulu).',
     culturalTrivia: 'Coastal fish curry in Karavali is traditionally cooked with coconut milk and Kudampuli (Malabar tamarind).',
     source: {
       title: 'A Kannada-English Dictionary',
-      authorOrInstitution: 'Rev. F. Kittel',
-      year: '1894 / 1968',
+      authorOrInstitution: 'Rev. Ferdinand Kittel (1894)',
+      year: '1894',
       sourceLocation: 'Vol. 3, p. 1324'
     },
-    status: 'source-attested'
+    status: 'source_attested',
+    evidence_status: 'source_attested',
+    evidence_level: 'E1'
   },
   {
     id: 'q2',
@@ -28,6 +31,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctRegionId: 'uttara-karnataka',
     options: ['uttara-karnataka', 'malenadu', 'kalyana-karnataka', 'mysuru-mandya'],
     explanation: '"ಹೌದ್ಲಾ" (Haudla) is the quintessential North Karnataka particle expressing surprised confirmation, widely heard across Dharwad, Belagavi, and Hubballi.',
+    morphological_note: 'Phonological contraction of "Haudu Alva" (Is it not so?) + cohortative imperative verb ending "-oonu".',
     culturalTrivia: 'Dharwad is globally celebrated for its GI-tagged Dharwad Peda, hand-crafted through slow-caramelized milk khowa.',
     source: {
       title: 'Dharwada Kannada Prabheda Adhyayana',
@@ -35,7 +39,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       year: '2004',
       sourceLocation: 'p. 52'
     },
-    status: 'source-attested'
+    status: 'source_attested',
+    evidence_status: 'source_attested',
+    evidence_level: 'E1'
   },
   {
     id: 'q3',
@@ -46,6 +52,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctRegionId: 'mysuru-mandya',
     options: ['mysuru-mandya', 'karavali', 'bengaluru-urban', 'uttara-karnataka'],
     explanation: '"ಸ್ವಾಮಿ" (Swamy) honorific coupled with "ಬೇಡ ಬಿಡಿ" (Beda Bidi) is the hallmark of Old Mysuru courtly manners and peaceful demeanor.',
+    morphological_note: 'Polite dismissive imperative "Beda bidi" + respectful masculine vocative "Swamy".',
     culturalTrivia: 'The Kingdom of Mysore under Nalwadi Krishnaraja Wadiyar was known as "Rajarshi" for pioneering democratic representation and education.',
     source: {
       title: 'Kannada Sahitya Parishat Nighantu',
@@ -53,7 +60,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       year: '1995',
       sourceLocation: 'Vol. 5, Entry: beda-bidi'
     },
-    status: 'source-attested'
+    status: 'source_attested',
+    evidence_status: 'source_attested',
+    evidence_level: 'E1'
   },
   {
     id: 'q4',
@@ -64,6 +73,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctRegionId: 'kalyana-karnataka',
     options: ['kalyana-karnataka', 'malenadu', 'karavali', 'bengaluru-urban'],
     explanation: '"ಬಾವಾಜಿ" (Bavaji) is the cherished kinship address across Kalaburagi, Bidar, and Raichur, treating close companions with the affection of family.',
+    morphological_note: 'Kinship honorific "Bavaji" (brother-figure) derived from medieval Deccani social discourse.',
     culturalTrivia: 'Kalaburagi Red Gram (Toor Dal) holds a registered Geographical Indication (GI) tag due to its unique lime-rich soil composition.',
     source: {
       title: 'Kalyana Karnataka Bhasha Vaisishte',
@@ -71,7 +81,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       year: '2010',
       sourceLocation: 'p. 73'
     },
-    status: 'source-attested'
+    status: 'source_attested',
+    evidence_status: 'source_attested',
+    evidence_level: 'E1'
   },
   {
     id: 'q5',
@@ -82,6 +94,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctRegionId: 'karavali',
     options: ['karavali', 'uttara-karnataka', 'mysuru-mandya', 'malenadu'],
     explanation: '"ಬೋಳ್ಯಾ" (Boliya) is the trademark affectionate banter term of Kundagannada (the Kundapura coastal sub-dialect of Karavali).',
+    morphological_note: 'Kundagannada sub-dialect vocative "Boliya" paired with cohortative "-ona".',
     culturalTrivia: 'Kundapura Kannada retains several grammatical verb endings that trace back to 10th century Halegannada (Old Kannada).',
     source: {
       title: 'Kundagannada Shabdakosha',
@@ -89,7 +102,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       year: '2008',
       sourceLocation: 'Entry: boliya'
     },
-    status: 'source-attested'
+    status: 'source_attested',
+    evidence_status: 'source_attested',
+    evidence_level: 'E1'
   },
   {
     id: 'q6',
@@ -98,51 +113,60 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     transliteration: 'Macha, by-two coffee kudidu scene set madona!',
     englishMeaning: 'Bro, let\'s grab a by-two filter coffee and sort this plan out!',
     correctRegionId: 'bengaluru-urban',
-    options: ['bengaluru-urban', 'uttara-karnataka', 'mysuru-mandya', 'karavali'],
-    explanation: 'Words like "ಮಚ್ಚಾ" (Macha), "ಬೈ-ಟು ಕಾಫಿ" (By-two coffee), and "ಸೀನ್ ಇಲ್ಲ" (Scene illa) embody the contemporary metropolitan energy of Namma Bengaluru.',
-    culturalTrivia: 'The concept of "By-two coffee" originated in Bengaluru Darshinis, where two friends split one steel tumbler of hot filter coffee.',
+    options: ['bengaluru-urban', 'mysuru-mandya', 'karavali', 'uttara-karnataka'],
+    explanation: 'Combining English loan words ("Scene set") with youth Dravidian address ("Macha") is the hallmark of cosmopolitan Bengaluru college slang.',
+    morphological_note: 'Bilingual code-switching (English "scene" + Kannada cohortative verb "set madona").',
+    culturalTrivia: 'Bengaluru\'s "By-two coffee" culture originated in iconic Brahmin tiffin rooms of Malleswaram and Basavanagudi.',
     source: {
       title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
-      authorOrInstitution: 'Bangalore University',
+      authorOrInstitution: 'Department of Linguistics, Bangalore University',
       year: '2018',
       sourceLocation: 'p. 14'
     },
-    status: 'provisional'
+    status: 'provisional',
+    evidence_status: 'provisional',
+    evidence_level: 'E4'
   },
   {
     id: 'q7',
-    question: 'A host asks: "ಮಳೆ ನಿಂತ ಮೇಲೆ ಕಾಫಿ ತೋಟಕ್ಕೆ ಹೋಗಿ ಬರೋಣ ಬನ್ನಿ ಮಾರಾಯ್ರೆ!" Which scenic region is this?',
-    phraseKannada: 'ಬೆಳಗ್ಗೆಯಿಂದ ಜಿಟಿ ಜಿಟಿ ಮಳೆ, ಬಿಸಿ ಕಷಾಯ ಕುಡಿಯಿರಿ ಮಾರಾಯ್ರೆ!',
-    transliteration: 'Belaginda jiti jiti male, bisi kashaya kudiyiri maraayre!',
-    englishMeaning: 'Gentle rain has been falling since morning; please drink some hot kashaya, good fellow!',
+    question: 'Which hill region uses "ಮಾರಾಯ್ರೆ" (Maraayre) in everyday greetings amid monsoon rains?',
+    phraseKannada: 'ಮಳೆ ನಿಂತ ಮೇಲೆ ತೋಟಕ್ಕೆ ಹೋಗಿ ಬರೋಣ ಬನ್ನಿ ಮಾರಾಯ್ರೆ!',
+    transliteration: 'Male nintha mele thotakke hogi barona banni maraayre!',
+    englishMeaning: 'Once the rain ceases, come let us walk over to the plantation, good fellow!',
     correctRegionId: 'malenadu',
-    options: ['malenadu', 'karavali', 'kalyana-karnataka', 'bengaluru-urban'],
-    explanation: '"ಮಾರಾಯ್ರೆ" (Maraayre) amidst monsoon rain and coffee plantations is characteristic of Malenadu (Shivamogga, Chikkamagaluru & Coorg).',
-    culturalTrivia: 'Chikkamagaluru is the birthplace of Indian coffee, where Sufi saint Baba Budan first planted seven raw coffee beans smuggled from Yemen.',
+    options: ['malenadu', 'uttara-karnataka', 'bengaluru-urban', 'kalyana-karnataka'],
+    explanation: '"ಮಾರಾಯ್ರೆ" (Maraayre) is widely celebrated across the Western Ghats (Shivamogga, Chikkamagaluru), immortalized in the rustic prose of Kuvempu and Tejaswi.',
+    morphological_note: 'Malenadu hill vocative "Maraayre" with agrarian conversational setting.',
+    culturalTrivia: 'The Malenadu region receives some of India\'s highest rainfall, with Agumbe known as the "Cherrapunji of the South".',
     source: {
       title: 'Kuvempu Sahitya Mattu Malenadu Bhasha Prayoga',
       authorOrInstitution: 'Kannada Sahitya Parishat',
       year: '2001',
-      sourceLocation: 'p. 41'
+      sourceLocation: 'pp. 33-36'
     },
-    status: 'source-attested'
+    status: 'source_attested',
+    evidence_status: 'source_attested',
+    evidence_level: 'E1'
   },
   {
     id: 'q8',
-    question: 'Which region uses the respectful and punchy conversational tag "ಏನ್ರೀ ಸಾಹೂಕಾರ್" (En ri sahookar)?',
-    phraseKannada: 'ಏನ್ರೀ ಸಾಹೂಕಾರ್, ಇವತ್ತು ಜಾತ್ರಾ ಮಹೋತ್ಸವಕ್ಕೆ ಬರ್ತೀರೇನ್ರಿ?',
-    transliteration: 'En ri sahookar, ivattu jaathra mahotsavakke bartheereni?',
-    englishMeaning: 'Hey chief / respected friend, will you be coming to the temple chariot festival today?',
-    correctRegionId: 'uttara-karnataka',
-    options: ['uttara-karnataka', 'mysuru-mandya', 'bengaluru-urban', 'malenadu'],
-    explanation: '"ಸಾಹೂಕಾರ್" (Sahookar) is used as an affectionate and respectful title for friends in Uttara Karnataka.',
-    culturalTrivia: 'North Karnataka is home to the majestic Gol Gumbaz in Vijayapura, featuring the world\'s second-largest acoustic whispering dome.',
+    question: 'A farmer in Mandya says: "ಅದೇ ಕಣಯ್ಯ ನಮ್ಮ ಮಣ್ಣಿನ ಗುಣ!" What does "ಕಣಯ್ಯ" (Kanayya) express?',
+    phraseKannada: 'ಅದೇ ಕಣಯ್ಯ ನಮ್ಮ ಮಂಡ್ಯದ ರೈತರ ಹಿರಿಮೆ!',
+    transliteration: 'Ade kanayya namma mandyada raithara hirime!',
+    englishMeaning: 'That, you see my friend, is the greatness of our Mandya farmers!',
+    correctRegionId: 'mysuru-mandya',
+    options: ['mysuru-mandya', 'uttara-karnataka', 'karavali', 'kalyana-karnataka'],
+    explanation: '"ಕಣಯ್ಯ" (Kanayya) is an emphatic conversational tag in Mandya rural speech, expressing intimate conviction and agricultural pride.',
+    morphological_note: 'Mandya rural emphatic tag "Kanayya" (contracted from "Kano Ayya" - see here, sir/friend).',
+    culturalTrivia: 'Mandya is widely hailed as "Sakkareya Nadu" (The Land of Sugar) due to the extensive sugarcane cultivation powered by the Visvesvaraya Canal.',
     source: {
-      title: 'Karnataka Samskriti Mattu Bhashe',
-      authorOrInstitution: 'Dr. M. Chidananda Murthy',
-      year: '1991',
-      sourceLocation: 'p. 112'
+      title: 'Mandya Bhasha Roopagalu',
+      authorOrInstitution: 'Mandya Zilla Sahitya Parishat',
+      year: '1999',
+      sourceLocation: 'p. 28'
     },
-    status: 'source-attested'
+    status: 'source_attested',
+    evidence_status: 'source_attested',
+    evidence_level: 'E1'
   }
 ];

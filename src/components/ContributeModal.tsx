@@ -38,7 +38,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
     }
 
     if (!licenseConsent) {
-      setValidationError('You must consent to the open-source attribution license (CC-BY 4.0) to draft this entry.');
+      setValidationError('You must confirm the observation consent checkbox to save this local draft.');
       return;
     }
 
@@ -53,9 +53,12 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
       contributorName: contributorName.trim() || 'Anonymous Contributor',
       attributionPreference,
       licenseConsent: true,
+      license_status: 'approved_for_planned_use',
       timestamp: 'Just now',
-      status: 'contributor-submitted',
-      localNotes: 'Drafted on current client device via Community Vault form.',
+      status: 'contributor_pending',
+      evidence_status: 'contributor_pending',
+      evidence_level: 'E3',
+      localNotes: 'Drafted in Local Browser Fieldwork Notebook (localStorage).',
     };
 
     onAddContribution(newEntry);
@@ -80,7 +83,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-xl text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -90,9 +93,9 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
               <CheckCircle className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-black text-stone-900">ಧನ್ಯವಾದಗಳು! Entry Saved</h3>
+            <h3 className="text-2xl font-black text-stone-900">ಧನ್ಯವಾದಗಳು! Draft Stored</h3>
             <p className="text-stone-600 text-sm">
-              Your contribution draft is stored in your local browser vault and ready for JSON research export!
+              Your field observation is safely stored in your local browser notebook and ready for Schema-Validated JSON export!
             </p>
           </div>
         ) : (
@@ -102,8 +105,12 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                 <PlusCircle className="w-5 h-5" />
               </span>
               <div>
-                <h3 className="text-xl font-black text-stone-900">Document a Regional Expression</h3>
-                <p className="text-xs text-stone-500">Draft a hometown vocabulary record stored locally on this device</p>
+                <h3 className="text-xl font-black text-stone-900">
+                  Local Browser Fieldwork Notebook (localStorage)
+                </h3>
+                <p className="text-xs text-stone-500">
+                  Draft a regional vocabulary record stored privately in this browser
+                </p>
               </div>
             </div>
 
@@ -125,7 +132,8 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                     placeholder="e.g. ಹೌದ್ಲಾ, ಬೋಳ್ಯಾ, ಮಾರ್ರೆ"
                     value={wordKannada}
                     onChange={(e) => setWordKannada(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-kannada"
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-kannada leading-loose"
+                    lang="kn"
                   />
                 </div>
 
@@ -199,7 +207,8 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                   placeholder="e.g. ಹೌದ್ಲಾ! ನಾನ್ ಮೊದಲೇ ಹೇಳಿಲ್ವಾ?"
                   value={usageExample}
                   onChange={(e) => setUsageExample(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-kannada"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-kannada leading-loose"
+                  lang="kn"
                 />
               </div>
 
@@ -233,17 +242,17 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                 </div>
               </div>
 
-              {/* Licensing & Consent Checkbox */}
-              <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-700 space-y-1">
-                <label className="flex items-start gap-2 cursor-pointer">
+              {/* Mandatory Phase 2.5 Consent Checkbox */}
+              <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200 text-xs text-purple-950 space-y-1">
+                <label className="flex items-start gap-2.5 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={licenseConsent}
                     onChange={(e) => setLicenseConsent(e.target.checked)}
-                    className="mt-0.5 rounded border-stone-300 text-amber-600 focus:ring-amber-500"
+                    className="mt-0.5 rounded border-stone-300 text-purple-600 focus:ring-purple-500"
                   />
-                  <span className="leading-tight">
-                    I confirm this phrase represents genuine documented regional usage. I consent to sharing this data under the <strong>Creative Commons Attribution 4.0 (CC-BY 4.0)</strong> license for open linguistic research.
+                  <span className="leading-relaxed">
+                    I confirm this is my own observation and release this note under <strong>CC BY 4.0</strong> without personal identifying data.
                   </span>
                 </label>
               </div>
@@ -253,7 +262,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                   type="submit"
                   className="w-full py-3 rounded-2xl bg-linear-to-r from-red-600 to-amber-600 text-white font-bold shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer text-sm"
                 >
-                  Save to Local Device Vault
+                  Save Draft to Local Browser Notebook
                 </button>
               </div>
             </form>

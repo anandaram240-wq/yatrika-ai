@@ -1,0 +1,456 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://namma-kannada-atlas.example.org/schemas/atlas-data.schema.json",
+  "title": "Namma Kannada Atlas Evidence-Graded Dataset Schema",
+  "description": "Validates candidate and verified regional Kannada expressions, enforcing strict separation between primary source attestation (E1), scholarly pattern support (E2), native-speaker review (E3), reasoned hypotheses (E4), and unsupported data (E5).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "license_policy",
+    "concept_coverage_summary",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "dataset_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "license_policy": {
+      "type": "string",
+      "minLength": 20
+    },
+    "concept_coverage_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ConceptCoverage"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/AtlasEntry"
+      }
+    }
+  },
+  "$defs": {
+    "RegionSlotState": {
+      "type": "object",
+      "required": ["status", "entry_id", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "distinct_regional_variant",
+            "documented_multi_region",
+            "shared_with_standard",
+            "no_verified_distinct_variant",
+            "provisional_candidate",
+            "unverified_or_excluded"
+          ]
+        },
+        "entry_id": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 5
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["no_verified_distinct_variant", "unverified_or_excluded"]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "entry_id": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "distinct_regional_variant",
+                  "documented_multi_region",
+                  "shared_with_standard",
+                  "provisional_candidate"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "entry_id": { "type": "string" }
+            }
+          }
+        }
+      ]
+    },
+    "ConceptCoverage": {
+      "type": "object",
+      "required": [
+        "concept_id",
+        "concept_label",
+        "documented_entry_ids",
+        "region_matrix_states"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "concept_id": {
+          "type": "string",
+          "pattern": "^concept-[a-z0-9-]+$"
+        },
+        "concept_label": {
+          "type": "string",
+          "minLength": 5
+        },
+        "documented_entry_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          }
+        },
+        "region_matrix_states": {
+          "type": "object",
+          "required": [
+            "old_mysuru_southern",
+            "kittur_karnataka",
+            "kalyana_karnataka",
+            "karavali_coastal",
+            "malnad",
+            "central_border_cluster"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "old_mysuru_southern": { "$ref": "#/$defs/RegionSlotState" },
+            "kittur_karnataka": { "$ref": "#/$defs/RegionSlotState" },
+            "kalyana_karnataka": { "$ref": "#/$defs/RegionSlotState" },
+            "karavali_coastal": { "$ref": "#/$defs/RegionSlotState" },
+            "malnad": { "$ref": "#/$defs/RegionSlotState" },
+            "central_border_cluster": { "$ref": "#/$defs/RegionSlotState" }
+          }
+        }
+      }
+    },
+    "CitationRecord": {
+      "type": "object",
+      "required": [
+        "source_id",
+        "source_title",
+        "author_or_publisher",
+        "publication_year",
+        "locator",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "type": ["string", "null"],
+          "pattern": "^SRC-[A-Z0-9-]+$"
+        },
+        "source_title": {
+          "type": ["string", "null"],
+          "minLength": 3
+        },
+        "author_or_publisher": {
+          "type": ["string", "null"],
+          "minLength": 3
+        },
+        "publication_year": {
+          "type": ["integer", "null"],
+          "minimum": 1800,
+          "maximum": 2026
+        },
+        "locator": {
+          "type": ["string", "null"],
+          "minLength": 3,
+          "description": "Exact page number, headword entry, table number, or corpus file ID. Must NOT be a bare homepage URL."
+        },
+        "url": {
+          "type": ["string", "null"],
+          "format": "uri"
+        }
+      }
+    },
+    "SpeakerReviewRecord": {
+      "type": ["object", "null"],
+      "required": [
+        "reviewer_role_or_alias",
+        "reviewer_locality",
+        "reviewer_sub_variety",
+        "review_date",
+        "consent_recorded",
+        "review_notes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reviewer_role_or_alias": {
+          "type": "string",
+          "minLength": 2,
+          "description": "Non-PII identifier or consented name (e.g., 'Native Speaker Reviewer #1 - Dharwad')."
+        },
+        "reviewer_locality": {
+          "type": "string",
+          "minLength": 3
+        },
+        "reviewer_sub_variety": {
+          "type": "string",
+          "minLength": 3
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "consent_recorded": {
+          "type": "boolean",
+          "const": true
+        },
+        "review_notes": {
+          "type": "string",
+          "minLength": 5
+        }
+      }
+    },
+    "AtlasEntry": {
+      "type": "object",
+      "required": [
+        "id",
+        "concept_id",
+        "concept",
+        "meaning_en",
+        "language_code",
+        "kannada_script",
+        "transliteration",
+        "learner_phonetic_guide",
+        "context",
+        "register",
+        "region_or_locality",
+        "sub_variety",
+        "variant_type",
+        "variation_type",
+        "morphological_note",
+        "pattern_evidence_level",
+        "evidence_level",
+        "evidence_status",
+        "citation",
+        "review_record",
+        "license_status",
+        "limitations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^nka-[a-z0-9-]+$"
+        },
+        "concept_id": {
+          "type": "string",
+          "pattern": "^concept-[a-z0-9-]+$"
+        },
+        "concept": {
+          "type": "string",
+          "minLength": 3
+        },
+        "meaning_en": {
+          "type": "string",
+          "minLength": 10
+        },
+        "language_code": {
+          "type": "string",
+          "const": "kn",
+          "description": "Must be ISO 639-1 'kn' (Kannada). Distinct languages like Tulu ('tcy') or Kodava ('kfa') must not be stored as primary Kannada dialect entries."
+        },
+        "kannada_script": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": ".*[\u0C80-\u0CFF].*",
+          "description": "Must contain at least one Kannada Unicode character (U+0C80-U+0CFF), while permitting ZWNJ (U+200C), ZWJ (U+200D), punctuation, numerals, and contextual characters."
+        },
+        "transliteration": {
+          "type": ["string", "null"]
+        },
+        "learner_phonetic_guide": {
+          "type": ["string", "null"]
+        },
+        "context": {
+          "type": ["string", "null"]
+        },
+        "register": {
+          "type": ["string", "null"],
+          "enum": [
+            "formal_and_polite_spoken",
+            "formal_and_everyday_standard",
+            "polite_everyday_spoken",
+            "everyday_spoken",
+            "everyday_regional_and_community_spoken",
+            "informal_colloquial",
+            "agrarian_or_traditional",
+            "archaic_or_literary",
+            null
+          ]
+        },
+        "region_or_locality": {
+          "type": ["string", "null"]
+        },
+        "sub_variety": {
+          "type": ["string", "null"]
+        },
+        "variant_type": {
+          "type": ["string", "null"],
+          "enum": [
+            "distinct_regional_variant",
+            "documented_multi_region",
+            "shared_with_standard",
+            "no_verified_distinct_variant",
+            "provisional_candidate",
+            "unverified_or_excluded",
+            null
+          ]
+        },
+        "variation_type": {
+          "type": ["string", "null"],
+          "enum": [
+            "baseline_standard",
+            "phonological",
+            "morphological",
+            "lexical",
+            "phonological_and_morphological",
+            "lexical_and_morphological",
+            "language_contact_loan",
+            null
+          ]
+        },
+        "morphological_note": {
+          "type": ["string", "null"]
+        },
+        "pattern_evidence_level": {
+          "type": "string",
+          "enum": ["E1", "E2", "E3", "E4", "E5"]
+        },
+        "evidence_level": {
+          "type": "string",
+          "enum": ["E1", "E2", "E3", "E4", "E5"]
+        },
+        "evidence_status": {
+          "type": "string",
+          "enum": [
+            "source_attested",
+            "speaker_reviewed",
+            "contributor_pending",
+            "provisional",
+            "unverified"
+          ]
+        },
+        "citation": {
+          "$ref": "#/$defs/CitationRecord"
+        },
+        "review_record": {
+          "$ref": "#/$defs/SpeakerReviewRecord"
+        },
+        "license_status": {
+          "type": "string",
+          "enum": [
+            "approved_for_planned_use",
+            "restricted_or_permission_required",
+            "license_unclear_do_not_redistribute"
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 10
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "evidence_status": { "const": "source_attested" }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence_level": { "const": "E1" },
+              "citation": {
+                "type": "object",
+                "properties": {
+                  "source_id": { "type": "string" },
+                  "source_title": { "type": "string" },
+                  "author_or_publisher": { "type": "string" },
+                  "locator": {
+                    "type": "string",
+                    "not": { "pattern": "^https?://[^/]+/?$" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "evidence_status": { "const": "speaker_reviewed" }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence_level": { "enum": ["E1", "E3"] },
+              "review_record": { "type": "object" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "evidence_status": { "const": "contributor_pending" }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence_level": { "enum": ["E3", "E4"] },
+              "review_record": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "evidence_status": { "const": "unverified" }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence_level": { "const": "E5" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

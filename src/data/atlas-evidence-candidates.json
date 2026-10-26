@@ -1,0 +1,651 @@
+{
+  "schema_version": "1.1.0",
+  "dataset_id": "namma-kannada-atlas-seed",
+  "generated_at": "2026-10-26T10:00:00+05:30",
+  "license_policy": "Per-entry source and license metadata required. Original English explanations and structural metadata by the Namma Kannada Atlas team are released under CC BY 4.0; cited third-party lexical sources retain their respective rights and restrictions.",
+  "concept_coverage_summary": [
+    {
+      "concept_id": "concept-how-are-you",
+      "concept_label": "How are you? (Polite / everyday inquiry into well-being)",
+      "documented_entry_ids": [
+        "nka-how-are-you-std",
+        "nka-how-are-you-nk-shared",
+        "nka-how-are-you-coastal-kunda"
+      ],
+      "region_matrix_states": {
+        "old_mysuru_southern": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-how-are-you-std",
+          "note": "Uses standard polite form 'ನೀವು ಹೇಗಿದ್ದೀರಿ?' (or colloquial 'ಹೆಂಗಿದ್ದೀರಾ?')."
+        },
+        "kittur_karnataka": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-how-are-you-nk-shared",
+          "note": "Shares Northern form 'ಹ್ಯಾಂಗದೀರಿ?' (alongside lexical inquiry 'ಆರಾಮದೀರೇನು?')."
+        },
+        "kalyana_karnataka": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-how-are-you-nk-shared",
+          "note": "Shares Northern form 'ಹ್ಯಾಂಗದೀರಿ?' (alongside 'ಚೊಲೊ ಅದೀರೇನು?')."
+        },
+        "karavali_coastal": {
+          "status": "distinct_regional_variant",
+          "entry_id": "nka-how-are-you-coastal-kunda",
+          "note": "Attested in Kundagannada sub-variety; formal Mangaluru speech often uses standard 'ಹೇಗಿದ್ದೀರಿ?'."
+        },
+        "malnad": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "Uses colloquial 'ಹೆಂಗಿದ್ದೀರಾ?' or 'ಎಂತ ಸಮಾಚಾರ?'; no separate verified inflectional record in current seed."
+        },
+        "central_border_cluster": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "Transition zone between Southern '-iddīri' and Northern '-adīri'; awaiting speaker-reviewed field entry."
+        }
+      }
+    },
+    {
+      "concept_id": "concept-what-are-you-doing",
+      "concept_label": "What are you doing? (Present progressive inquiry)",
+      "documented_entry_ids": [
+        "nka-what-doing-std",
+        "nka-what-doing-kittur",
+        "nka-what-doing-kalyana",
+        "nka-what-doing-coastal-malnad"
+      ],
+      "region_matrix_states": {
+        "old_mysuru_southern": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-what-doing-std",
+          "note": "Standard literary 'ಏನು ಮಾಡುತ್ತಿದ್ದೀರಿ?' (colloquial spoken syncopated to 'ಏನ್ ಮಾಡ್ತಿದ್ದೀರಾ?')."
+        },
+        "kittur_karnataka": {
+          "status": "distinct_regional_variant",
+          "entry_id": "nka-what-doing-kittur",
+          "note": "Diagnostic Kittur progressive suffix '-ākattīri'."
+        },
+        "kalyana_karnataka": {
+          "status": "distinct_regional_variant",
+          "entry_id": "nka-what-doing-kalyana",
+          "note": "Diagnostic Kalyana dative-progressive suffix '-likkattīri'."
+        },
+        "karavali_coastal": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-what-doing-coastal-malnad",
+          "note": "Uses interrogative 'ಎಂತ' (enta) across Kundagannada and broader coastal/highland varieties."
+        },
+        "malnad": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-what-doing-coastal-malnad",
+          "note": "Shares interrogative 'ಎಂತ' (enta) with Karavali varieties."
+        },
+        "central_border_cluster": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "No separate verified entry in seed dataset."
+        }
+      }
+    },
+    {
+      "concept_id": "concept-where-setting-out",
+      "concept_label": "Where are you setting out / going to? (Allative directional question from root 'horaḍu')",
+      "documented_entry_ids": [
+        "nka-where-going-std",
+        "nka-where-going-nk-shared"
+      ],
+      "region_matrix_states": {
+        "old_mysuru_southern": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-where-going-std",
+          "note": "Uses standard stem 'ಹೊರಟಿದ್ದೀರಿ' (horaṭiddīri)."
+        },
+        "kittur_karnataka": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-where-going-nk-shared",
+          "note": "Assimilated stem 'ಹೊಂಟೀರಿ' (hoṇṭīri)."
+        },
+        "kalyana_karnataka": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-where-going-nk-shared",
+          "note": "Shares assimilated stem 'ಹೊಂಟೀರಿ' (hoṇṭīri) with Kittur Karnataka."
+        },
+        "karavali_coastal": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "Awaiting speaker review for local Kundagannada/Havyaka reflexes."
+        },
+        "malnad": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-where-going-std",
+          "note": "Commonly uses standard/colloquial 'ಎಲ್ಲಿಗೆ ಹೊರಟ್ರಿ?'."
+        },
+        "central_border_cluster": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "No separate verified entry in seed dataset."
+        }
+      }
+    },
+    {
+      "concept_id": "concept-good-fine",
+      "concept_label": "It is good / fine / nice (3rd-person singular neuter evaluative predicate)",
+      "documented_entry_ids": [
+        "nka-good-fine-std",
+        "nka-good-fine-kittur"
+      ],
+      "region_matrix_states": {
+        "old_mysuru_southern": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-good-fine-std",
+          "note": "Standard 'ಚೆನ್ನಾಗಿದೆ' (cennāgide)."
+        },
+        "kittur_karnataka": {
+          "status": "distinct_regional_variant",
+          "entry_id": "nka-good-fine-kittur",
+          "note": "Combines lexical stem 'ಚೊಲೊ' (cholo) with neuter copula 'ಐತಿ' (aiti)."
+        },
+        "kalyana_karnataka": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "Candidate 'ಚೊಲೊ ಅದ' (cholo ada) held in research backlog pending primary locator verification."
+        },
+        "karavali_coastal": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "Candidate 'ಲಾಯ್ಕ್ ಇತ್ತು / ಲಾಯ್ಕಾಗಿದೆ' held in research backlog pending primary locator verification."
+        },
+        "malnad": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-good-fine-std",
+          "note": "Uses 'ಚೆನ್ನಾಗಿದೆ' (alongside coastal contact 'ಲಾಯ್ಕಾಗಿದೆ')."
+        },
+        "central_border_cluster": {
+          "status": "no_verified_distinct_variant",
+          "entry_id": null,
+          "note": "No separate verified entry in seed dataset."
+        }
+      }
+    },
+    {
+      "concept_id": "concept-boy-youth",
+      "concept_label": "Boy / Young male youth (Everyday noun)",
+      "documented_entry_ids": [
+        "nka-boy-std",
+        "nka-boy-coastal-mani"
+      ],
+      "region_matrix_states": {
+        "old_mysuru_southern": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-boy-std",
+          "note": "Standard pan-Karnataka 'ಹುಡುಗ' (huḍuga)."
+        },
+        "kittur_karnataka": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-boy-std",
+          "note": "Uses 'ಹುಡುಗ' (huḍuga) as primary everyday term."
+        },
+        "kalyana_karnataka": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-boy-std",
+          "note": "Uses 'ಹುಡುಗ' (huḍuga); contact loan candidate 'ಪೋರ' (pōra) deferred pending locator check."
+        },
+        "karavali_coastal": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-boy-coastal-mani",
+          "note": "Regional lexical noun 'ಮಾಣಿ' (māṇi) used across Havyaka, Kundagannada, and broader Karavali speech alongside 'ಹುಡುಗ'."
+        },
+        "malnad": {
+          "status": "documented_multi_region",
+          "entry_id": "nka-boy-coastal-mani",
+          "note": "Used in Malnad Havyaka and coastal-adjacent highland communities alongside 'ಹುಡುಗ'."
+        },
+        "central_border_cluster": {
+          "status": "shared_with_standard",
+          "entry_id": "nka-boy-std",
+          "note": "Uses standard 'ಹುಡುಗ' (huḍuga)."
+        }
+      }
+    }
+  ],
+  "entries": [
+    {
+      "id": "nka-how-are-you-std",
+      "concept_id": "concept-how-are-you",
+      "concept": "How are you? (Polite inquiry into well-being)",
+      "meaning_en": "Polite or standard way to ask 'How are you?' when addressing an elder, stranger, or group.",
+      "language_code": "kn",
+      "kannada_script": "ನೀವು ಹೇಗಿದ್ದೀರಿ?",
+      "transliteration": "nīvu hēgiddīri?",
+      "learner_phonetic_guide": "nee-voo hay-gid-dee-ree",
+      "context": "Used in formal conversation, public media, and polite everyday interaction across Karnataka. In casual spoken Southern Kannada, the pronoun is often dropped and the verb phrased as 'ಹೇಗಿದ್ದೀರಾ?' (hēgiddīrā?) or 'ಹೆಂಗಿದ್ದೀರಾ?' (heṅgiddīrā?).",
+      "register": "formal_and_polite_spoken",
+      "region_or_locality": "Pan-Karnataka Standard / Old Mysuru & Bengaluru Urban",
+      "sub_variety": "Modern Standard Kannada",
+      "variant_type": "shared_with_standard",
+      "variation_type": "baseline_standard",
+      "morphological_note": "2nd-person plural/honorific pronoun 'ನೀವು' (nīvu) + manner interrogative 'ಹೇಗೆ' (hēge) + present plural/honorific copula 'ಇದ್ದೀರಿ' (iddīri, from root 'ir-' to be).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-UPADHYAYA-1976",
+        "source_title": "A Comparative Study of Kannada Dialects",
+        "author_or_publisher": "U. Padmanabha Upadhyaya / Prasaranga, University of Mysore",
+        "publication_year": 1976,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Exact page locator in Upadhyaya (1976) or standard grammar reference not inspected during offline audit; held at E4/provisional until locator is recorded.",
+        "Synthetic kn-IN TTS reads this standard orthographic form accurately at the word level but does not model conversational question intonation."
+      ]
+    },
+    {
+      "id": "nka-how-are-you-nk-shared",
+      "concept_id": "concept-how-are-you",
+      "concept": "How are you? (Polite inquiry into well-being)",
+      "meaning_en": "Polite Northern Karnataka expression meaning 'How are you?', used across everyday and respectful social interactions.",
+      "language_code": "kn",
+      "kannada_script": "ಹ್ಯಾಂಗದೀರಿ?",
+      "transliteration": "hyāṅgadīri?",
+      "learner_phonetic_guide": "hyaang-a-dee-ree",
+      "context": "Widely heard across Dharwad, Hubballi, Belagavi, Vijayapura, Bagalkot, and Kalaburagi. Often paired with or replaced by lexical health/peace inquiries such as 'ಆರಾಮದೀರೇನು?' (ārāmadīrēnu?).",
+      "register": "polite_everyday_spoken",
+      "region_or_locality": "Kittur Karnataka & Kalyana Karnataka (Multi-District Northern Macro-Regions)",
+      "sub_variety": "Northern Karnataka Spoken Kannada (Dharwad-Hubballi / Kalaburagi)",
+      "variant_type": "documented_multi_region",
+      "variation_type": "phonological_and_morphological",
+      "morphological_note": "Interrogative 'ಹ್ಯಾಂಗ' (hyāṅga, showing palatalization and vowel backing relative to standard 'hēge') + Northern 2nd-person plural/honorific present copula 'ಅದೀರಿ' (adīri, vs. Southern 'ಇದ್ದೀರಿ' iddīri).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-UPADHYAYA-1976",
+        "source_title": "A Comparative Study of Kannada Dialects",
+        "author_or_publisher": "U. Padmanabha Upadhyaya / Prasaranga, University of Mysore",
+        "publication_year": 1976,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Underlying phonological shift (hēge -> hyāṅga) and copula stem (ad-) are supported by E2 dialectology literature, but exact page locator in Upadhyaya (1976) was not inspected in this session.",
+        "Requires native-speaker review from both Dharwad and Kalaburagi to document subtle prosodic and vowel-length differences between Kittur and Kalyana speech."
+      ]
+    },
+    {
+      "id": "nka-how-are-you-coastal-kunda",
+      "concept_id": "concept-how-are-you",
+      "concept": "How are you? (Polite inquiry into well-being)",
+      "meaning_en": "Coastal Kannada (Kundagannada) inquiry meaning 'How are you?', featuring characteristic medial/final vowel shortening.",
+      "language_code": "kn",
+      "kannada_script": "ಹೆಂಗಿದ್ದಿರಿ?",
+      "transliteration": "heṅgiddiri?",
+      "learner_phonetic_guide": "heng-id-di-ree",
+      "context": "Used in everyday polite interaction in the Kundapura and Byndoor taluks of Udupi district. Note that the stem 'ಹೆಂಗೆ' (heṅge) also occurs widely in informal Southern and Malnad Kannada, while the shortened verb ending '-iddiri' is characteristic of coastal inflection.",
+      "register": "polite_everyday_spoken",
+      "region_or_locality": "Karavali / Coastal Karnataka (Udupi District - Kundapura & Byndoor Taluks)",
+      "sub_variety": "Kundagannada",
+      "variant_type": "distinct_regional_variant",
+      "variation_type": "phonological_and_morphological",
+      "morphological_note": "Colloquial/regional manner interrogative 'ಹೆಂಗೆ' (heṅge) + 2nd-person plural copula 'ಇದ್ದಿರಿ' (iddiri, with short penultimate vowel '-i-' compared to standard long '-ī-' in 'ಇದ್ದೀರಿ').",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-UPADHYAYA-1976",
+        "source_title": "A Comparative Study of Kannada Dialects",
+        "author_or_publisher": "U. Padmanabha Upadhyaya / Prasaranga, University of Mysore",
+        "publication_year": 1976,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Does not represent all of Karavali; speakers in Mangaluru urban contexts or Havyaka communities use different forms.",
+        "Requires Kundagannada native-speaker review (E3) or coastal dictionary locator lookup (E1) before promoting from provisional."
+      ]
+    },
+    {
+      "id": "nka-what-doing-std",
+      "concept_id": "concept-what-are-you-doing",
+      "concept": "What are you doing? (Present progressive inquiry)",
+      "meaning_en": "Standard polite question asking what action the addressee is currently performing.",
+      "language_code": "kn",
+      "kannada_script": "ಏನು ಮಾಡುತ್ತಿದ್ದೀರಿ?",
+      "transliteration": "ēnu māḍuttiddīri?",
+      "learner_phonetic_guide": "ay-noo maa-dut-tid-dee-ree",
+      "context": "Standard literary and formal spoken form across Karnataka. In rapid everyday Southern/Bengaluru speech, the medial vowels are syncopated to 'ಏನ್ ಮಾಡ್ತಿದ್ದೀರಾ?' (ēn māḍtiddīrā?).",
+      "register": "formal_and_polite_spoken",
+      "region_or_locality": "Pan-Karnataka Standard / Old Mysuru & Bengaluru Urban",
+      "sub_variety": "Modern Standard Kannada",
+      "variant_type": "shared_with_standard",
+      "variation_type": "baseline_standard",
+      "morphological_note": "Interrogative pronoun 'ಏನು' (ēnu, what) + verb root 'ಮಾಡು' (māḍu, to do) + present participle suffix '-ುತ್ತ' (-utta) + present plural/honorific auxiliary 'ಇದ್ದೀರಿ' (iddīri).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-UPADHYAYA-1976",
+        "source_title": "A Comparative Study of Kannada Dialects",
+        "author_or_publisher": "U. Padmanabha Upadhyaya / Prasaranga, University of Mysore",
+        "publication_year": 1976,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Held as provisional (E4) strictly because no physical grammar page locator was inspected during this offline session."
+      ]
+    },
+    {
+      "id": "nka-what-doing-kittur",
+      "concept_id": "concept-what-are-you-doing",
+      "concept": "What are you doing? (Present progressive inquiry)",
+      "meaning_en": "Kittur Karnataka (Dharwad/Hubballi/Belagavi) expression meaning 'What are you doing?', marked by the regional '-ākattīri' progressive construction.",
+      "language_code": "kn",
+      "kannada_script": "ಏನ್ ಮಾಡಾಕತ್ತೀರಿ?",
+      "transliteration": "ēn māḍākattīri?",
+      "learner_phonetic_guide": "ayn maa-daa-kat-tee-ree",
+      "context": "Standard everyday polite spoken form across Dharwad, Hubballi, Belagavi, Gadag, Haveri, and Bagalkot.",
+      "register": "polite_everyday_spoken",
+      "region_or_locality": "Kittur Karnataka (Dharwad, Hubballi, Belagavi, Gadag, Bagalkot)",
+      "sub_variety": "Kittur / Dharwad Kannada",
+      "variant_type": "distinct_regional_variant",
+      "variation_type": "morphological",
+      "morphological_note": "Apocopated interrogative 'ಏನ್' (ēn) + verb root 'ಮಾಡು' (māḍu) + Kittur progressive suffix '-ಆಕತ್ತೀರಿ' (-ākattīri, historically grammaticalized from purpose/infinitive marker '-āka' + auxiliary verb 'hattu' + 2nd-person plural '-īri').",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-UPADHYAYA-1976",
+        "source_title": "A Comparative Study of Kannada Dialects",
+        "author_or_publisher": "U. Padmanabha Upadhyaya / Prasaranga, University of Mysore",
+        "publication_year": 1976,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "The '-ākatt-' progressive construction is a primary E2 textbook example in Kannada dialectology, but the exact page locator in Upadhyaya (1976) must be entered by a human to upgrade to E1/source_attested.",
+        "Orthographic gemination varies in informal writing between 'ಮಾಡಾಕತ್ತೀರಿ' and 'ಮಾಡಾಕ್ಕತ್ತೀರಿ'."
+      ]
+    },
+    {
+      "id": "nka-what-doing-kalyana",
+      "concept_id": "concept-what-are-you-doing",
+      "concept": "What are you doing? (Present progressive inquiry)",
+      "meaning_en": "Kalyana Karnataka (Kalaburagi/Bidar/Raichur) expression meaning 'What are you doing?', using the dative-infinitive progressive marker '-likkattīri'.",
+      "language_code": "kn",
+      "kannada_script": "ಏನ್ ಮಾಡ್ಲಿಕ್ಕತ್ತೀರಿ?",
+      "transliteration": "ēn māḍlikkattīri?",
+      "learner_phonetic_guide": "ayn maad-lik-kat-tee-ree",
+      "context": "Used in everyday polite speech across Kalaburagi (Gulbarga), Bidar, Yadgir, and Raichur districts.",
+      "register": "polite_everyday_spoken",
+      "region_or_locality": "Kalyana Karnataka (Kalaburagi, Bidar, Yadgir, Raichur)",
+      "sub_variety": "Kalaburagi / Bidar Kannada",
+      "variant_type": "distinct_regional_variant",
+      "variation_type": "morphological",
+      "morphological_note": "Apocopated interrogative 'ಏನ್' (ēn) + verb root 'ಮಾಡು' (māḍu) + dative infinitive '-ಲಿಕ್ಕೆ' (-likke) + progressive auxiliary '-ಅತ್ತೀರಿ' (-attīri < root 'hattu'). Contrast with Kittur '-ākattīri' and Southern '-uttiddīri'.",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-UPADHYAYA-1976",
+        "source_title": "A Comparative Study of Kannada Dialects (Gulbarga Dialect Section)",
+        "author_or_publisher": "U. Padmanabha Upadhyaya / Prasaranga, University of Mysore",
+        "publication_year": 1976,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Upadhyaya (1976) explicitly surveys the Gulbarga (Kalaburagi) dialect where the '-likkatt-' progressive is documented (E2), but the exact page/table number could not be inspected in this offline session.",
+        "Requires native-speaker verification (E3) from Kalaburagi/Bidar."
+      ]
+    },
+    {
+      "id": "nka-what-doing-coastal-malnad",
+      "concept_id": "concept-what-are-you-doing",
+      "concept": "What are you doing? (Present progressive inquiry)",
+      "meaning_en": "Coastal and Malnad Kannada inquiry meaning 'What are you doing?', distinguished by the regional interrogative pronoun 'ಎಂತ' (enta).",
+      "language_code": "kn",
+      "kannada_script": "ಎಂತ ಮಾಡ್ತಾ ಇದ್ದಿರಿ?",
+      "transliteration": "enta māḍtā iddiri?",
+      "learner_phonetic_guide": "en-ta maad-taa id-di-ree",
+      "context": "Heard across coastal Udupi/Uttara Kannada and Malnad districts (Shivamogga, Chikkamagaluru), where 'ಎಂತ' (enta) or 'ಎಂಥ' (entha) replaces standard 'ಏನು' (ēnu) as the everyday word for 'what'.",
+      "register": "polite_everyday_spoken",
+      "region_or_locality": "Karavali (Coastal) & Malnad Highland Regions",
+      "sub_variety": "Kundagannada / Malnad Spoken Kannada",
+      "variant_type": "documented_multi_region",
+      "variation_type": "lexical_and_morphological",
+      "morphological_note": "Regional interrogative 'ಎಂತ' (enta, what) + colloquial progressive participle 'ಮಾಡ್ತಾ' (māḍtā) + 2nd-person plural auxiliary 'ಇದ್ದಿರಿ' (iddiri; in Malnad often 'ಮಾಡ್ತಿದ್ದೀರಾ' māḍtiddīrā).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-VENKATASUBBIAH-IGO",
+        "source_title": "Igo Kannada (ಇಗೋ ಕನ್ನಡ)",
+        "author_or_publisher": "G. Venkatasubbiah / Navakarnataka Publications",
+        "publication_year": null,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Auxiliary verb ending varies across sub-varieties within the Coast and Malnad (e.g., Kundagannada 'ಇದ್ದಿರಿ', Malnad 'ಇದ್ದೀರಾ', Havyaka 'ಇದ್ದೆ').",
+        "Exact volume and page locator in 'Igo Kannada' or Padakanaja not inspected in this session."
+      ]
+    },
+    {
+      "id": "nka-where-going-std",
+      "concept_id": "concept-where-setting-out",
+      "concept": "Where are you setting out / going to? (Directional question from root 'horaḍu')",
+      "meaning_en": "Polite standard question asking where someone is departing or heading toward ('Where have you set out for?').",
+      "language_code": "kn",
+      "kannada_script": "ಎಲ್ಲಿಗೆ ಹೊರಟಿದ್ದೀರಿ?",
+      "transliteration": "ellige horaṭiddīri?",
+      "learner_phonetic_guide": "el-li-ge ho-ra-tid-dee-ree",
+      "context": "Common polite greeting when meeting someone on the street or in transit. In casual Southern speech, often shortened to 'ಎಲ್ಲಿಗೆ ಹೊರಟ್ರಿ?' (ellige horaṭri?).",
+      "register": "formal_and_polite_spoken",
+      "region_or_locality": "Pan-Karnataka Standard / Old Mysuru & Malnad",
+      "sub_variety": "Modern Standard Kannada",
+      "variant_type": "shared_with_standard",
+      "variation_type": "baseline_standard",
+      "morphological_note": "Allative interrogative 'ಎಲ್ಲಿಗೆ' (ellige, to where) + past participle stem of 'ಹೊರಡು' (horaḍu -> horaṭ-, to set out) + auxiliary 'ಇದ್ದೀರಿ' (iddīri).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-VENKATASUBBIAH-IGO",
+        "source_title": "Igo Kannada (ಇಗೋ ಕನ್ನಡ)",
+        "author_or_publisher": "G. Venkatasubbiah / Navakarnataka Publications",
+        "publication_year": null,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Aligned specifically to the verb root 'ಹೊರಡು' (horaḍu) to provide an exact etymological match for Northern 'ಹೊಂಟೀರಿ' (hoṇṭīri).",
+        "Exact dictionary locator pending human inspection."
+      ]
+    },
+    {
+      "id": "nka-where-going-nk-shared",
+      "concept_id": "concept-where-setting-out",
+      "concept": "Where are you setting out / going to? (Directional question from root 'horaḍu')",
+      "meaning_en": "Northern Karnataka expression meaning 'Where are you heading / setting out to?', featuring phonological assimilation of 'horaṭu' to 'hoṇṭu'.",
+      "language_code": "kn",
+      "kannada_script": "ಎಲ್ಲಿಗೆ ಹೊಂಟೀರಿ?",
+      "transliteration": "ellige hoṇṭīri?",
+      "learner_phonetic_guide": "el-li-ge hon-tee-ree",
+      "context": "Ubiquitous polite street/neighborhood greeting and inquiry across both Kittur Karnataka and Kalyana Karnataka.",
+      "register": "polite_everyday_spoken",
+      "region_or_locality": "Kittur Karnataka & Kalyana Karnataka",
+      "sub_variety": "Northern Karnataka Spoken Kannada",
+      "variant_type": "documented_multi_region",
+      "variation_type": "phonological_and_morphological",
+      "morphological_note": "Allative interrogative 'ಎಲ್ಲಿಗೆ' (ellige) + Northern assimilated stem 'ಹೊಂಟು' (hoṇṭu, derived from 'ಹೊರಡು / ಹೊರಟು' horaḍu/horaṭu via medial vowel syncope and retroflex nasal-stop assimilation) + 2nd-person plural suffix '-ೀರಿ' (-īri).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-VENKATASUBBIAH-IGO",
+        "source_title": "Igo Kannada (ಇಗೋ ಕನ್ನಡ)",
+        "author_or_publisher": "G. Venkatasubbiah / Navakarnataka Publications",
+        "publication_year": null,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "The etymology of 'ಹೊಂಟು' (< ಹೊರಡು) is discussed in Kannada lexicography (E2), but the exact volume and page number in 'Igo Kannada' or Padakanaja must be verified by a human to promote to E1/source_attested."
+      ]
+    },
+    {
+      "id": "nka-good-fine-std",
+      "concept_id": "concept-good-fine",
+      "concept": "It is good / fine / nice (3rd-person singular neuter evaluative predicate)",
+      "meaning_en": "Standard expression meaning 'It is good', 'It is nice', or 'It is fine' (referring to an object, food, state of affairs, or health).",
+      "language_code": "kn",
+      "kannada_script": "ಚೆನ್ನಾಗಿದೆ",
+      "transliteration": "cennāgide",
+      "learner_phonetic_guide": "chen-naa-gi-de",
+      "context": "Used across all formal domains and throughout Southern and Central Karnataka in everyday speech.",
+      "register": "formal_and_everyday_standard",
+      "region_or_locality": "Pan-Karnataka Standard / Old Mysuru & Malnad",
+      "sub_variety": "Modern Standard Kannada",
+      "variant_type": "shared_with_standard",
+      "variation_type": "baseline_standard",
+      "morphological_note": "Evaluative adverb 'ಚೆನ್ನಾಗಿ' (cennāgi, well/nicely) + 3rd-person singular neuter present copula 'ಇದೆ' (ide, it is).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-KITTEL-1894",
+        "source_title": "A Kannada-English Dictionary",
+        "author_or_publisher": "Rev. Ferdinand Kittel / Basel Mission, Mangalore",
+        "publication_year": 1894,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Held at E4/provisional pending entry of exact headword locator from Alar, Padakanaja, or Kittel (1894)."
+      ]
+    },
+    {
+      "id": "nka-good-fine-kittur",
+      "concept_id": "concept-good-fine",
+      "concept": "It is good / fine / nice (3rd-person singular neuter evaluative predicate)",
+      "meaning_en": "Kittur Karnataka expression meaning 'It is good / fine / nice', combining the regional evaluative word 'cholo' with the neuter copula 'aiti'.",
+      "language_code": "kn",
+      "kannada_script": "ಚೊಲೊ ಐತಿ",
+      "transliteration": "cholo aiti",
+      "learner_phonetic_guide": "cho-lo ai-tee",
+      "context": "Everyday spoken expression in Dharwad, Hubballi, Belagavi, Bagalkot, Gadag, and Vijayapura. Also frequently heard with 'ಛಂದ ಐತಿ' (chanda aiti).",
+      "register": "everyday_spoken",
+      "region_or_locality": "Kittur Karnataka (Dharwad, Hubballi, Belagavi, Bagalkot, Gadag)",
+      "sub_variety": "Kittur / Dharwad Kannada",
+      "variant_type": "distinct_regional_variant",
+      "variation_type": "lexical_and_morphological",
+      "morphological_note": "Regional evaluative adjective/adverb 'ಚೊಲೊ' (cholo, good/fine, shared across the Northern Karnataka–Marathi/Indo-Aryan contact belt) + 3rd-person neuter singular present copula 'ಐತಿ' (aiti, vs. standard 'ಇದೆ' ide). Note that 'ಐತಿ/ಐತೆ' also occurs in rural Southern and Central Maidan with 'ಚೆನ್ನಾಗೈತೆ'.",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-UPADHYAYA-1976",
+        "source_title": "A Comparative Study of Kannada Dialects",
+        "author_or_publisher": "U. Padmanabha Upadhyaya / Prasaranga, University of Mysore",
+        "publication_year": 1976,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Neither 'ಚೊಲೊ' nor 'ಐತಿ' is exclusive to a single district; 'ಚೊಲೊ' extends into Kalyana Karnataka ('ಚೊಲೊ ಅದ') and 'ಐತಿ/ಐತೆ' extends into Central and rural Southern Karnataka.",
+        "Exact page locator in Upadhyaya (1976) or Venkatasubbiah ('Igo Kannada') must be verified by a human before upgrading to E1/source_attested."
+      ]
+    },
+    {
+      "id": "nka-boy-std",
+      "concept_id": "concept-boy-youth",
+      "concept": "Boy / Young male youth (Everyday noun)",
+      "meaning_en": "Standard pan-Karnataka word for a boy or young male.",
+      "language_code": "kn",
+      "kannada_script": "ಹುಡುಗ",
+      "transliteration": "huḍuga",
+      "learner_phonetic_guide": "hu-du-ga",
+      "context": "Used universally across all regions of Karnataka in both formal and informal registers.",
+      "register": "formal_and_everyday_standard",
+      "region_or_locality": "Pan-Karnataka Standard",
+      "sub_variety": "Modern Standard Kannada",
+      "variant_type": "shared_with_standard",
+      "variation_type": "baseline_standard",
+      "morphological_note": "Masculine singular noun 'ಹುಡುಗ' (huḍuga; feminine counterpart 'ಹುಡುಗಿ' huḍugi, plural 'ಹುಡುಗರು' huḍugaru).",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-KITTEL-1894",
+        "source_title": "A Kannada-English Dictionary",
+        "author_or_publisher": "Rev. Ferdinand Kittel / Basel Mission, Mangalore",
+        "publication_year": 1894,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Upgrades to E1/source_attested as soon as the exact page/column from Kittel (1894) or headword entry from Alar/Padakanaja is logged."
+      ]
+    },
+    {
+      "id": "nka-boy-coastal-mani",
+      "concept_id": "concept-boy-youth",
+      "concept": "Boy / Young male youth (Everyday noun)",
+      "meaning_en": "Regional noun used in Coastal and Malnad Kannada varieties meaning 'boy', 'young lad', or 'male youth'.",
+      "language_code": "kn",
+      "kannada_script": "ಮಾಣಿ",
+      "transliteration": "māṇi",
+      "learner_phonetic_guide": "maa-nee",
+      "context": "Widely used in Havyaka Kannada, Kundagannada, and broader Dakshina Kannada, Udupi, Uttara Kannada, and Shivamogga speech to refer to a boy or young man (alongside standard 'ಹುಡುಗ'). In urban hotel/restaurant contexts outside the home, it has also historically been used to address a young male server, so social context matters.",
+      "register": "everyday_regional_and_community_spoken",
+      "region_or_locality": "Karavali (Coastal) & Malnad (Dakshina Kannada, Udupi, Uttara Kannada, Shivamogga)",
+      "sub_variety": "Havyaka Kannada / Kundagannada / Karavali Regional Lexicon",
+      "variant_type": "documented_multi_region",
+      "variation_type": "lexical",
+      "morphological_note": "Noun 'ಮಾಣಿ' (māṇi, historically derived from Sanskrit/Prakrit 'māṇava / māṇavaka' meaning a young Vedic student or lad, preserved in Coastal/Malnad Kannada and neighboring Tulu as an everyday word for 'boy').",
+      "pattern_evidence_level": "E2",
+      "evidence_level": "E4",
+      "evidence_status": "provisional",
+      "citation": {
+        "source_id": "SRC-KITTEL-1894",
+        "source_title": "A Kannada-English Dictionary",
+        "author_or_publisher": "Rev. Ferdinand Kittel / Basel Mission, Mangalore",
+        "publication_year": 1894,
+        "locator": null,
+        "url": null
+      },
+      "review_record": null,
+      "license_status": "approved_for_planned_use",
+      "limitations": [
+        "Headword 'ಮಾಣಿ' is attested in Kittel (1894) and Venkatasubbiah ('Igo Kannada') (E2), but the exact page/column number was not inspected during this offline session; held at E4/provisional until locator is entered.",
+        "Usage spans multiple coastal/highland communities and also occurs in Tulu; must not be labeled as exclusive to a single district."
+      ]
+    }
+  ]
+}

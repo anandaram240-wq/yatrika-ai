@@ -2,9 +2,9 @@
  * Speech Service: Client-side Browser Web Speech API Wrapper
  * 
  * LINGUISTIC HONESTY NOTICE:
- * Pitch and rate controls available in browser speech synthesis alter playback speed and audio frequency.
- * They DO NOT generate an authentic regional dialect, accent, or native phonetic articulation.
- * All audio generated here is explicitly classified as "Synthetic Browser Speech" (ಕೃತಕ ಧ್ವನಿ).
+ * All audio generated here is explicitly classified as:
+ * "Synthetic Standard kn-IN Script Readout — Not a Native Regional Recording" (ಕೃತಕ ಪ್ರಮಾಣಿತ ಕನ್ನಡ ಧ್ವನಿ).
+ * Pitch and rate controls are standardized (pitch: 1.0, rate: 0.95) to prevent deceptive accent simulation.
  */
 
 export interface SpeechDiagnostics {
@@ -13,13 +13,12 @@ export interface SpeechDiagnostics {
   activeVoiceName: string | null;
   activeVoiceLang: string | null;
   isUsingFallback: boolean;
+  notice: string;
 }
 
 export interface SpeakOptions {
   kannadaText: string;
   transliteration?: string;
-  syntheticPitch?: number;
-  syntheticRate?: number;
   onStart?: (diagnostics: SpeechDiagnostics) => void;
   onEnd?: () => void;
   onError?: (errorMessage: string) => void;
@@ -52,6 +51,7 @@ class SpeechService {
         activeVoiceName: null,
         activeVoiceLang: null,
         isUsingFallback: false,
+        notice: 'Web Speech API is not supported in this browser.',
       };
     }
 
@@ -60,23 +60,19 @@ class SpeechService {
     }
 
     const kannadaVoice = this.voices.find(v => 
-      v.lang.toLowerCase().includes('kn') || 
+      v.lang.toLowerCase().startsWith('kn') || 
       v.name.toLowerCase().includes('kannada')
     );
-
-    const indianVoice = this.voices.find(v => 
-      v.lang.toLowerCase().includes('en-in') || 
-      v.lang.toLowerCase().includes('hi-in')
-    );
-
-    const activeVoice = kannadaVoice || indianVoice || this.voices[0] || null;
 
     return {
       isSupported: true,
       hasKannadaVoice: Boolean(kannadaVoice),
-      activeVoiceName: activeVoice ? activeVoice.name : null,
-      activeVoiceLang: activeVoice ? activeVoice.lang : null,
-      isUsingFallback: !kannadaVoice,
+      activeVoiceName: kannadaVoice ? kannadaVoice.name : null,
+      activeVoiceLang: kannadaVoice ? kannadaVoice.lang : null,
+      isUsingFallback: !Boolean(kannadaVoice),
+      notice: kannadaVoice 
+        ? 'Using Standard Kannada (kn-IN) synthetic OS voice'
+        : 'Standard Kannada TTS voice (kn-IN) is not installed on your current browser/OS.',
     };
   }
 
@@ -97,34 +93,26 @@ class SpeechService {
 
     const diagnostics = this.getDiagnostics();
 
-    // Prefer native kn-IN voice
+    // Check for kn-IN voice
     const kannadaVoice = this.voices.find(v => 
-      v.lang.toLowerCase().includes('kn') || 
+      v.lang.toLowerCase().startsWith('kn') || 
       v.name.toLowerCase().includes('kannada')
     );
 
-    const indianVoice = this.voices.find(v => 
-      v.lang.toLowerCase().includes('en-in') || 
-      v.lang.toLowerCase().includes('hi-in')
-    );
-
-    let textToSpeak = options.kannadaText;
-    let voiceToUse = kannadaVoice;
-
-    // Honest fallback: if client device lacks Kannada TTS voice, fall back to phonetic transliteration
     if (!kannadaVoice) {
-      textToSpeak = options.transliteration || options.kannadaText;
-      voiceToUse = indianVoice || this.voices[0] || undefined;
+      const msg = 'Standard Kannada TTS voice (kn-IN) is not installed on your current browser/OS. Synthetic readout requires a kn-IN system voice.';
+      if (options.onError) {
+        options.onError(msg);
+      }
+      return false;
     }
 
     try {
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      if (voiceToUse) {
-        utterance.voice = voiceToUse;
-      }
-      
-      utterance.rate = options.syntheticRate ?? 0.95;
-      utterance.pitch = options.syntheticPitch ?? 1.0;
+      const utterance = new SpeechSynthesisUtterance(options.kannadaText);
+      utterance.voice = kannadaVoice;
+      utterance.lang = 'kn-IN';
+      utterance.pitch = 1.0;
+      utterance.rate = 0.95;
 
       utterance.onstart = () => {
         if (options.onStart) options.onStart(diagnostics);

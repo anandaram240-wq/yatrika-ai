@@ -13,13 +13,14 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Is that so! Look, what you mentioned yesterday turned out to be completely true!',
     culturalOrigin: 'Phonetic contraction of "Haudu Alva" (Is it not so?). A fundamental conversational particle in Dharwad and Belagavi discourse.',
     tags: ['Particle', 'Everyday', 'North Karnataka', 'Confirmation'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Dharwada Kannada Prabheda Adhyayana',
       authorOrInstitution: 'Kannada University, Hampi',
       year: '2004',
-      sourceLocation: 'Lexical Survey of Northern Plain Dialects, p. 52',
-      url: 'https://kannadauniversity.org'
+      sourceLocation: 'Lexical Survey of Northern Plain Dialects, p. 52'
     }
   },
   {
@@ -34,13 +35,14 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Hey friend, are you heading towards the weekly market today?',
     culturalOrigin: 'Documented in classical Dravidian comparative lexicons. Traced from Halegannada and Tulu cognates indicating companion/fellow.',
     tags: ['Address', 'Kinship', 'Coastal', 'Iconic'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'A Kannada-English Dictionary',
-      authorOrInstitution: 'Rev. F. Kittel (Basel Mission Press / University of Madras reprint)',
-      year: '1894 / 1968',
-      sourceLocation: 'Vol. 3, Entry: marre / maraya (p. 1324)',
-      url: 'https://bharatavani.in/kannada/dictionaries'
+      authorOrInstitution: 'Rev. Ferdinand Kittel (1894)',
+      year: '1894',
+      sourceLocation: 'Vol. 3, Entry: marre / maraya (p. 1324)'
     }
   },
   {
@@ -55,7 +57,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'You playful rascal, don\'t wander off without informing us first!',
     culturalOrigin: 'Signature lexical identifier of Kundagannada (the regional dialect of Kundapura and Byndoor taluks).',
     tags: ['Banter', 'Kundagannada', 'Affectionate', 'Sub-dialect'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Kundagannada Shabdakosha',
       authorOrInstitution: 'A. S. Kedilaya / Kundapura Sahitya Vedike',
@@ -75,13 +79,14 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Leave it be, sir; why stress yourself over such a trivial matter?',
     culturalOrigin: 'Emblematic of the composed, courteous, unhurried conversational temperament characteristic of Old Mysuru discourse.',
     tags: ['Philosophy', 'Calm', 'Old Mysuru', 'Polite'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Kannada Sahitya Parishat Nighantu',
       authorOrInstitution: 'Kannada Sahitya Parishat, Bengaluru',
       year: '1995',
-      sourceLocation: 'Vol. 5, Entry: beda-bidi (colloquial usage)',
-      url: 'https://bharatavani.in/kannada/dictionaries'
+      sourceLocation: 'Vol. 5, Entry: beda-bidi (colloquial usage)'
     }
   },
   {
@@ -96,7 +101,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Hey boss / friend, what brings you to the bazaar today!',
     culturalOrigin: 'Derived from historical mercantile title "Sahukara" (merchant/patron); transformed in North Karnataka into an affectionate honorific for friends.',
     tags: ['Honorific', 'Respect', 'North Karnataka'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Karnataka Samskriti Mattu Bhashe',
       authorOrInstitution: 'Dr. M. Chidananda Murthy / Sapna Book House',
@@ -116,7 +123,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Hey brother, whenever you visit Kalaburagi, you must come over to our home!',
     culturalOrigin: 'Deeply ingrained in Gulbarga and Bidar social customs, addressing close peer companions with the respect and affection of family.',
     tags: ['Kinship', 'Warmth', 'Kalyana Karnataka', 'Deccan'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Kalyana Karnataka Bhasha Vaisishte',
       authorOrInstitution: 'Dr. Basavaraj Sabarad / Gulbarga University',
@@ -136,13 +145,14 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Will you pay cash in hand or make an online payment?',
     culturalOrigin: 'Classical commercial term attested in medieval Deccan trade documents and widely preserved in North Karnataka vernacular.',
     tags: ['Trade', 'Commerce', 'North Karnataka'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'A Kannada-English Dictionary',
-      authorOrInstitution: 'Rev. F. Kittel',
-      year: '1894 / 1968',
-      sourceLocation: 'Vol. 3, Entry: rokka (p. 1368)',
-      url: 'https://bharatavani.in/kannada/dictionaries'
+      authorOrInstitution: 'Rev. Ferdinand Kittel (1894)',
+      year: '1894',
+      sourceLocation: 'Vol. 3, Entry: rokka (p. 1368)'
     }
   },
   {
@@ -157,7 +167,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'What salad accompaniment have you prepared for today\'s festival meal, friend?',
     culturalOrigin: 'Documented coastal culinary lexical variant of classical Kannada "Kosambari".',
     tags: ['Culinary', 'Kundagannada', 'Coastal'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Kundagannada Shabdakosha',
       authorOrInstitution: 'A. S. Kedilaya / Kundapura Sahitya Vedike',
@@ -177,7 +189,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Tell me, good fellow, how did you find the cool Malenadu breeze?',
     culturalOrigin: 'Prevalent in the colloquial prose and character dialogue of Rashtrakavi Kuvempu and K.P. Poornachandra Tejaswi.',
     tags: ['Literature', 'Gentle', 'Malenadu', 'Vocative'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Kuvempu Sahitya Mattu Malenadu Bhasha Prayoga',
       authorOrInstitution: 'Kannada Sahitya Parishat',
@@ -197,7 +211,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'That is the warmth of our Mandya soil, you see; we welcome everyone with open love!',
     culturalOrigin: 'Signature discourse marker in Mandya agrarian speech, conveying conviction, rustic intimacy, and camaraderie.',
     tags: ['Emphatic', 'Mandya', 'Discourse Marker'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Mandya Bhasha Roopagalu',
       authorOrInstitution: 'K. V. Shankaregowda / Mandya Zilla Sahitya Parishat',
@@ -217,7 +233,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'The spicy peanut chutney powder tingled fiercely on the palate!',
     culturalOrigin: 'Onomatopoeic sensory descriptor recorded across North Karnataka culinary traditions and oral descriptions.',
     tags: ['Culinary', 'Sensory', 'Onomatopoeia', 'North Karnataka'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Kannada Nighantu (Parishat Onomatopoeia Section)',
       authorOrInstitution: 'Kannada Sahitya Parishat, Bengaluru',
@@ -237,7 +255,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Do not relent, brother; keep courage in your chest and march ahead!',
     culturalOrigin: 'Historical lexical loan from Persian/Deccani "dam" (breath/life/courage), integrated into northeastern Karnataka vernacular.',
     tags: ['Courage', 'Deccani Loan', 'Kalyana Karnataka'],
-    status: 'source-attested',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Karnataka Samskritiya Poorva Peetike',
       authorOrInstitution: 'Sham. Ba. Joshi / Samaja Pustakalaya, Dharwad',
@@ -257,7 +277,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Bro, once this event concludes today, let\'s head towards MG Road!',
     culturalOrigin: 'Dravidian inter-city metropolitan slang widely adopted across South Indian urban centers, ubiquitous in Bengaluru colleges.',
     tags: ['Youth Slang', 'Metropolitan', 'Colloquial'],
-    status: 'provisional',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
       authorOrInstitution: 'Department of Linguistics, Bangalore University',
@@ -277,7 +299,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'Today that restaurant\'s Masala Dosa was truly top-tier (bombat)!',
     culturalOrigin: 'Popularized through 20th-century urban cinema and theater; common across southern and urban Karnataka.',
     tags: ['Appreciation', 'Popular Slang', 'Urban'],
-    status: 'provisional',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Contemporary Spoken Kannada Lexicon',
       authorOrInstitution: 'Kannada Adhyayana Samsthe / Mysore University',
@@ -297,7 +321,9 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     usageEnglish: 'No tension bro, we will deploy the project comfortably before the deadline!',
     culturalOrigin: 'Bilingual code-mixing adapting the English theatrical term "scene" as a metaphor for complications or conflict.',
     tags: ['Code-mixing', 'Urban Slang', 'Bilingual'],
-    status: 'provisional',
+    status: 'unverified',
+    evidence_status: 'unverified',
+    evidence_level: 'E5',
     source: {
       title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
       authorOrInstitution: 'Department of Linguistics, Bangalore University',

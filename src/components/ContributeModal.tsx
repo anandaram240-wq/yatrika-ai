@@ -57,7 +57,7 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
       timestamp: 'Just now',
       status: 'contributor_pending',
       evidence_status: 'contributor_pending',
-      evidence_level: 'E3',
+      evidence_level: 'E4',
       localNotes: 'Drafted in Local Browser Fieldwork Notebook (localStorage).',
     };
 
@@ -242,8 +242,11 @@ export const ContributeModal: React.FC<ContributeModalProps> = ({
                 </div>
               </div>
 
-              {/* Mandatory Phase 2.5 Consent Checkbox */}
-              <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200 text-xs text-purple-950 space-y-1">
+              {/* Mandatory Phase 2.5 / Phase 4 Consent Checkbox */}
+              <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200 text-xs text-purple-950 space-y-1.5">
+                <div className="text-3xs font-mono font-bold text-purple-700 uppercase">
+                  Storage Notice: Saved to Your Browser's Local Storage (localStorage) — Not Uploaded to a Shared Server
+                </div>
                 <label className="flex items-start gap-2.5 cursor-pointer">
                   <input
                     type="checkbox"

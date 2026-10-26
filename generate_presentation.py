@@ -92,7 +92,7 @@ def create_presentation():
     p3.font.color.rgb = RGBColor(251, 191, 36)
 
     p4 = tf1.add_paragraph()
-    p4.text = "Problem Statement 04: Regional Language Explorer • Phase 5 Flagship Innovation\n13 Enriched Candidates • 5 Communicative Concepts • 25 Automated Vitest Tests • Strict Bibliographic Provenance"
+    p4.text = "Problem Statement 04: Regional Language Explorer • Phase 4 & Phase 5 Integration\n13 Enriched Candidates • 5 Communicative Concepts • 28 Automated Vitest Tests • 10 Verified Sources (v4.0.0)"
     p4.font.size = Pt(13)
     p4.font.color.rgb = RGBColor(214, 211, 209)
     p4.space_before = Pt(18)
@@ -155,7 +155,7 @@ def create_presentation():
     p.font.bold = True
     p.font.color.rgb = DARK_RED
     p2 = tf.add_paragraph()
-    p2.text = "• JSON Schema Draft 2020-12: Full schema validation via Ajv with zero errors.\n\n• 6 Semantic Validation Rules: Bibliographic registry checks, locator verification, regional attribution, register validation, Unicode Kannada range, and speaker consent.\n\n• Closed Source Registry: Exactly 5 vetted sources in VERIFIED_SOURCE_REGISTRY.json."
+    p2.text = "• JSON Schema Draft 2020-12: Full schema validation via Ajv with zero errors.\n\n• 6 Semantic Validation Rules: Bibliographic registry checks, locator verification, regional attribution, register validation, Unicode Kannada range, and speaker consent.\n\n• Closed Source Registry v4.0.0: Exactly 10 vetted primary sources (Upadhyaya 1976, Kittel 1894, Bhat 1971, Bright 1958, Hiremath 1961, Venkatasubbiah, LDC-IL, Alar, Padakanaja, KSP)."
     p2.font.size = Pt(12)
     p2.font.color.rgb = DARK_STONE
     p2.space_before = Pt(12)
@@ -232,11 +232,11 @@ def create_presentation():
     slide4 = prs.slides.add_slide(blank_layout)
     add_header(slide4, "Regional Knowledge-Gap View & Citizen Fieldwork", "Section 03 • Epistemic UI & Fieldwork")
 
-    t_shape = slide4.shapes.add_table(5, 3, Inches(0.8), Inches(1.8), Inches(11.7), Inches(4.8))
+    t_shape = slide4.shapes.add_table(7, 3, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.1))
     table = t_shape.table
-    table.columns[0].width = Inches(2.6)
+    table.columns[0].width = Inches(2.7)
     table.columns[1].width = Inches(4.5)
-    table.columns[2].width = Inches(4.6)
+    table.columns[2].width = Inches(4.5)
 
     headers = ["Regional Matrix State", "Visual Treatment & Rendering", "Linguistic Reality & Fieldwork"]
     for col_idx, text in enumerate(headers):
@@ -246,14 +246,16 @@ def create_presentation():
       p = cell.text_frame.paragraphs[0]
       p.text = text
       p.font.bold = True
-      p.font.size = Pt(13)
+      p.font.size = Pt(12)
       p.font.color.rgb = WHITE
 
     rows_data = [
-      ("distinct_regional_variant", "Emerald badge, full Kannada script, ISO transliteration, Morpheme X-Ray, and sub-variety tag.", "Verified distinct regional reflex (e.g. Kittur '-akattiri', Coastal 'enta')."),
-      ("documented_multi_region", "Blue badge 'Multi-Region (e.g. Kittur & Kalyana)'.", "Reflects macro-regional isogloss sharing rather than falsely isolating a phrase to a single city."),
+      ("distinct_regional_variant", "Emerald badge, full Kannada script, ISO transliteration, Morpheme X-Ray.", "Verified distinct regional reflex (e.g. Kittur '-akattiri', Coastal 'enta')."),
+      ("documented_multi_region", "Blue badge 'Multi-Region (Kittur & Kalyana)'.", "Reflects macro-regional isogloss sharing rather than falsely isolating phrases."),
+      ("borrowed_contact_variant", "Purple badge 'Language Contact / Areal'.", "Documented borderland contact loans (e.g. Kittur 'ಚೊಲೊ' < Marathi चांगला/चोख)."),
       ("shared_with_standard", "Muted stone badge 'Standard Baseline'.", "Honors the reality that many regions use standard forms in everyday social interactions."),
-      ("no_verified_distinct_variant (Knowledge Gap)", "Amber dashed card with 'Log Fieldwork' action button.", "Turns missing data into an open invitation for verified citizen linguistics rather than fabricating fake entries.")
+      ("no_verified_distinct_variant", "Amber dashed card with 'Log Fieldwork' action button.", "Turns missing data into an open invitation for verified citizen linguistics."),
+      ("sub_regional_vernacular", "Indigo badge with community quarantine notice.", "Local community drafts stored strictly in browser localStorage with E4 pending tag.")
     ]
 
     for row_idx, row in enumerate(rows_data, start=1):
@@ -263,7 +265,7 @@ def create_presentation():
         cell.fill.fore_color.rgb = CARD_BG if row_idx % 2 == 1 else WHITE
         p = cell.text_frame.paragraphs[0]
         p.text = text
-        p.font.size = Pt(11)
+        p.font.size = Pt(10)
         p.font.color.rgb = DARK_STONE
 
     # -------------------------------------------------------------
@@ -359,10 +361,10 @@ def create_presentation():
       p2.space_before = Pt(2)
 
     # -------------------------------------------------------------
-    # SLIDE 7: Technical Quality & Vitest Suite (25 Tests)
+    # SLIDE 7: Technical Quality & Vitest Suite (28 Tests)
     # -------------------------------------------------------------
     slide7 = prs.slides.add_slide(blank_layout)
-    add_header(slide7, "Technical Stack & 25 Automated Acceptance Tests", "Section 06 • Implementation & Quality")
+    add_header(slide7, "Technical Stack & 28 Automated Acceptance Tests", "Section 06 • Implementation & Quality")
 
     arch_box = slide7.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.1))
     arch_box.fill.solid()
@@ -372,7 +374,7 @@ def create_presentation():
     tf.word_wrap = True
 
     p = tf.paragraphs[0]
-    p.text = "AUTOMATED VITEST ACCEPTANCE SUITE (25 PASSING TESTS)"
+    p.text = "AUTOMATED VITEST ACCEPTANCE SUITE (28 PASSING TESTS)"
     p.font.bold = True
     p.font.size = Pt(15)
     p.font.color.rgb = GOLD_AMBER
@@ -380,11 +382,11 @@ def create_presentation():
     p2 = tf.add_paragraph()
     p2.text = """
 1. FULL STATIC TYPE SAFETY & SCHEMA VALIDATION:
-   • React 19 + TypeScript 5.7: Strict verification types (E1-E5, MorphemeSlot, EvidenceDimensions, LicenseStatus).
+   • React 19 + TypeScript 5.7: Strict verification types (E1-E5, MorphemeSlot, RightsAndProvenance, ComparisonCellState).
    • Ajv Draft 2020-12: Full JSON schema validation wired into Vitest automated tests.
-   • Semantic Validator: Evaluates 6 linguistic rules (bibliographic registry, locator, script, register, consent).
+   • Semantic Validator: Evaluates 6 linguistic rules (10-source bibliographic registry v4.0.0, locator, script, register, consent).
 
-2. 25 AUTOMATED VITEST TESTS (100% PASS IN ~280ms):
+2. 28 AUTOMATED VITEST TESTS (100% PASS IN ~230ms):
    • Tests 1-6: Schema Draft 2020-12, 6 Semantic Rules, 13 reconciled entries, provisional null locators, licensing, sparse matrix.
    • Tests 7-11: Speech diagnostics, 6-region taxonomy, zero duplicate IDs, E5 quarantined backlog, quiz options uniqueness.
    • Tests 12-15: Zero forbidden synthetic titles in active data, validator rejection of fake titles, zero ungrounded source claims.
@@ -392,17 +394,21 @@ def create_presentation():
    • Tests 20-25 (Phase 5 Flagship):
      - TEST-01: Morpheme X-Ray concatenation and invariant root integrity across all 13 candidates.
      - TEST-02: Phrase Passport 5-dimension evidence gate (enforcing null locators & null reviews on E4).
-     - TEST-03: Closed bibliography check via VERIFIED_SOURCE_REGISTRY.json (confirming exactly 5 vetted sources).
+     - TEST-03: Closed bibliography check via VERIFIED_SOURCE_REGISTRY.json v4.0.0 (confirming exactly 10 vetted sources).
      - TEST-04: Knowledge-gap sparse matrix honesty (at least 5 open empty states preserved across 6 regions).
      - TEST-05: Composite licensing & CC BY 4.0 / Fair Dealing compliance.
      - TEST-06: Synthetic TTS neutrality and fallback diagnostics.
+   • Tests 26-28 (Phase 4 Rights, Provenance & ODbL Gates):
+     - TEST-26: Phase 4 Artifact D rights_and_provenance schema & ODbL database compliance.
+     - TEST-27: Phase 4 7-state comparison_cell_state taxonomy verified across all 13 candidates.
+     - TEST-28: Strict E1 human verification gate (all locators null, preventing premature E1 promotion).
 
 3. KANNADA TYPOGRAPHY & PRODUCTION BUILD:
    • Strict lang="kn" and line-height: 1.65 (leading-loose) across script containers to prevent ottakshara clipping.
-   • Production build via Vite 6 in 1.3s with zero TypeScript errors."""
-    p2.font.size = Pt(10.5)
+   • Production build via Vite 6 in 1.35s with zero TypeScript errors."""
+    p2.font.size = Pt(9.5)
     p2.font.color.rgb = DARK_STONE
-    p2.space_before = Pt(6)
+    p2.space_before = Pt(4)
 
     # -------------------------------------------------------------
     # SLIDE 8: Hackathon Submission Readiness
@@ -445,11 +451,11 @@ def create_presentation():
     p.font.size = Pt(17)
     p.font.color.rgb = DARK_RED
     p2 = tf2.add_paragraph()
-    p2.text = """• Deadline: Saturday, 31 October 2026, 10:00 PM IST (~130 hours remaining).
+    p2.text = """• Deadline: Saturday, 31 October 2026, 10:00 PM IST (~129 hours remaining).
 
 • Repository: Clean Git history with semantic checkpoints and zero private keys or synthetic metadata.
 
-• Test Suite: 25 passing Vitest tests verifying schema, semantics, morphemes, and provenance.
+• Test Suite: 28 passing Vitest tests verifying schema, semantics, morphemes, licensing, and 10-source provenance.
 
 • Presentation: 8-slide widescreen PPTX generated directly from verified codebase metrics.
 

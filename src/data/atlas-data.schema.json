@@ -434,6 +434,48 @@
             "exact_sentence_locator": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] },
             "native_speaker_review": { "type": ["string", "null"], "enum": ["E1", "E2", "E3", "E4", "E5", null] }
           }
+        },
+        "comparison_cell_state": {
+          "type": "string",
+          "enum": [
+            "directly_attested_regional_form",
+            "pattern_supported_regional_form",
+            "shared_with_standard_or_multi_region",
+            "candidate_awaiting_documentary_verification",
+            "no_distinct_regional_equivalent_established",
+            "community_reported_unverified",
+            "language_contact_or_borrowed_form"
+          ]
+        },
+        "rights_and_provenance": {
+          "type": "object",
+          "required": [
+            "explanatory_text_origin",
+            "explanatory_text_license",
+            "lexical_source_id",
+            "lexical_source_rights_type",
+            "verbatim_third_party_text_copied",
+            "redistribution_tier",
+            "attribution_notice"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "explanatory_text_origin": { "type": "string" },
+            "explanatory_text_license": { "type": "string" },
+            "lexical_source_id": { "type": "string" },
+            "lexical_source_rights_type": {
+              "type": "string",
+              "enum": [
+                "public_domain_source",
+                "odbl_1_0_database_source",
+                "copyrighted_reference_factual_citation_only",
+                "consented_contributor_observation"
+              ]
+            },
+            "verbatim_third_party_text_copied": { "type": "boolean" },
+            "redistribution_tier": { "type": "string" },
+            "attribution_notice": { "type": "string" }
+          }
         }
       },
       "allOf": [

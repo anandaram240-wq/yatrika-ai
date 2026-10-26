@@ -30,6 +30,30 @@ export const APPROVED_BIBLIOGRAPHY_REGISTRY: Record<string, { title: string; aut
     title: 'Kannada Sahitya Parishat Nighantu (Vols 1–8)',
     author: 'Kannada Sahitya Parishat, Bangalore',
   },
+  'SRC-ALAR': {
+    title: 'Alar: V. Krishna\'s Kannada-English Dictionary',
+    author: 'V. Krishna / Kailash Nadh & Zerodha Tech',
+  },
+  'SRC-PADAKANAJA': {
+    title: 'Padakanaja — Karnataka Government Open Dictionary Portal (ಪದಕಣಜ)',
+    author: 'Dept. of Kannada and Culture, Govt. of Karnataka',
+  },
+  'SRC-BHAT-1971': {
+    title: 'An Outline Grammar of Havyaka',
+    author: 'D. N. Shankara Bhat / Deccan College, Pune',
+  },
+  'SRC-BRIGHT-1958': {
+    title: 'An Outline of Colloquial Kannada',
+    author: 'William Bright / Deccan College, Pune',
+  },
+  'SRC-HIREMATH-1961': {
+    title: 'The Structure of Kannada',
+    author: 'R. C. Hiremath / Karnatak University, Dharwad',
+  },
+  'SRC-LDCIL-DOC': {
+    title: 'LDC-IL Release Documentation & Kannada Corpus Standards',
+    author: 'LDC-IL, CIIL, Mysuru',
+  },
 };
 
 export const FORBIDDEN_SYNTHETIC_TITLES = [

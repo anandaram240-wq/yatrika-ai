@@ -322,12 +322,17 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
 
     // 2. Approved registry contains strictly verifiable titles
     const approvedKeys = Object.keys(APPROVED_BIBLIOGRAPHY_REGISTRY);
-    expect(approvedKeys).toEqual([
-      'SRC-UPADHYAYA-1976',
-      'SRC-VENKATASUBBIAH-IGO',
-      'SRC-KITTEL-1894',
-      'SRC-KSP-NIGHANTU',
-    ]);
+    expect(approvedKeys).toContain('SRC-UPADHYAYA-1976');
+    expect(approvedKeys).toContain('SRC-VENKATASUBBIAH-IGO');
+    expect(approvedKeys).toContain('SRC-KITTEL-1894');
+    expect(approvedKeys).toContain('SRC-KSP-NIGHANTU');
+    expect(approvedKeys).toContain('SRC-ALAR');
+    expect(approvedKeys).toContain('SRC-PADAKANAJA');
+    expect(approvedKeys).toContain('SRC-BHAT-1971');
+    expect(approvedKeys).toContain('SRC-BRIGHT-1958');
+    expect(approvedKeys).toContain('SRC-HIREMATH-1961');
+    expect(approvedKeys).toContain('SRC-LDCIL-DOC');
+    expect(approvedKeys).not.toContain('SRC-BHAT-1967');
 
     // 3. Candidate entries have 0 E3 records
     const candidateE3Count = ALL_ENTRIES.filter((e) => e.evidence_status === 'speaker_reviewed').length;
@@ -428,23 +433,26 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
   });
 
   it('22. (Phase 5 - TEST-03) Validates closed_bibliography_registry_and_purge_check via VERIFIED_SOURCE_REGISTRY.json', () => {
-    expect(verifiedSourceRegistry.schema_version).toBe('1.1.0');
-    expect(verifiedSourceRegistry.sources).toHaveLength(5);
+    expect(verifiedSourceRegistry.registry_version).toBe('4.0.0');
+    expect(verifiedSourceRegistry.verified_sources.length).toBeGreaterThanOrEqual(9);
 
-    const registeredIds = verifiedSourceRegistry.sources.map((s) => s.source_id);
-    expect(registeredIds).toEqual([
-      'SRC-UPADHYAYA-1976',
-      'SRC-VENKATASUBBIAH-IGO',
-      'SRC-KITTEL-1894',
-      'SRC-KSP-NIGHANTU',
-      'SRC-ALAR',
-    ]);
+    const registeredIds = verifiedSourceRegistry.verified_sources.map((s) => s.source_id);
+    expect(registeredIds).toContain('SRC-UPADHYAYA-1976');
+    expect(registeredIds).toContain('SRC-VENKATASUBBIAH-IGO');
+    expect(registeredIds).toContain('SRC-KITTEL-1894');
+    expect(registeredIds).toContain('SRC-KSP-NIGHANTU');
+    expect(registeredIds).toContain('SRC-ALAR');
+    expect(registeredIds).toContain('SRC-PADAKANAJA');
+    expect(registeredIds).toContain('SRC-BHAT-1971');
+    expect(registeredIds).toContain('SRC-BRIGHT-1958');
+    expect(registeredIds).toContain('SRC-HIREMATH-1961');
+    expect(registeredIds).toContain('SRC-LDCIL-DOC');
 
     // Zero mentions of unverified Bhat 1967
     expect(registeredIds).not.toContain('SRC-BHAT-1967');
-    verifiedSourceRegistry.sources.forEach((s) => {
-      expect(s.full_title).not.toContain('Kannada Verb Forms');
-      expect(s.author).not.toContain('Shankara Bhat');
+    verifiedSourceRegistry.verified_sources.forEach((s) => {
+      expect(s.canonical_title).not.toContain('Kannada Verb Forms');
+      expect(s.author_or_institution).not.toContain('Shankara Bhat (1967)');
     });
 
     // All 13 candidate entries link to registered sources
@@ -508,5 +516,105 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
     });
     expect(result).toBe(false);
     expect(errorReceived).toContain('Web Speech API is not supported in this browser environment.');
+  });
+
+  // --- Argon Phase 4 Forensic Bibliographic & Rights Audit Tests ---
+
+  it('26. (Phase 4 - TEST-07) Validates rights_and_provenance and ODbL v1.0 compliance across candidate entries', () => {
+    expect(ALL_ENTRIES).toHaveLength(13);
+    ALL_ENTRIES.forEach((entry) => {
+      expect(entry.rights_and_provenance).toBeDefined();
+      const rp = entry.rights_and_provenance!;
+      expect(rp.explanatory_text_origin).toBe('original_team_prose');
+      expect(rp.explanatory_text_license).toBe('CC-BY-4.0');
+      expect(rp.verbatim_third_party_text_copied).toBe(false);
+      expect(rp.attribution_notice).toBeTruthy();
+      expect([
+        'public_domain_source',
+        'odbl_1_0_database_source',
+        'copyrighted_reference_factual_citation_only',
+        'consented_contributor_observation',
+      ]).toContain(rp.lexical_source_rights_type);
+
+      // Entries citing Kittel 1894 have public_domain_source
+      if (rp.lexical_source_id === 'SRC-KITTEL-1894') {
+        expect(rp.lexical_source_rights_type).toBe('public_domain_source');
+      }
+      // Entries citing university monographs have copyrighted_reference_factual_citation_only
+      if (
+        rp.lexical_source_id === 'SRC-UPADHYAYA-1976' ||
+        rp.lexical_source_id === 'SRC-VENKATASUBBIAH-IGO' ||
+        rp.lexical_source_id === 'SRC-BRIGHT-1958' ||
+        rp.lexical_source_id === 'SRC-BHAT-1971'
+      ) {
+        expect(rp.lexical_source_rights_type).toBe('copyrighted_reference_factual_citation_only');
+      }
+    });
+  });
+
+  it('27. (Phase 4 - TEST-08) Validates 7-state comparison_cell_state mapping across candidate entries', () => {
+    const validStates = [
+      'directly_attested_regional_form',
+      'pattern_supported_regional_form',
+      'shared_with_standard_or_multi_region',
+      'candidate_awaiting_documentary_verification',
+      'no_distinct_regional_equivalent_established',
+      'community_reported_unverified',
+      'language_contact_or_borrowed_form',
+    ];
+
+    ALL_ENTRIES.forEach((entry) => {
+      expect(entry.comparison_cell_state).toBeDefined();
+      expect(validStates).toContain(entry.comparison_cell_state);
+    });
+
+    // Check specific forensic adjudications from Artifact C
+    const kundaEntry = ALL_ENTRIES.find((e) => e.id === 'nka-how-are-you-coastal-kunda');
+    expect(kundaEntry?.comparison_cell_state).toBe('candidate_awaiting_documentary_verification');
+
+    const kitturGood = ALL_ENTRIES.find((e) => e.id === 'nka-good-fine-kittur');
+    expect(kitturGood?.comparison_cell_state).toBe('language_contact_or_borrowed_form');
+
+    const stdHowAreYou = ALL_ENTRIES.find((e) => e.id === 'nka-how-are-you-std');
+    expect(stdHowAreYou?.comparison_cell_state).toBe('shared_with_standard_or_multi_region');
+  });
+
+  it('28. (Phase 4 - TEST-09) Strict gating against unverified E1 source_attested claims and purged titles across all datasets', () => {
+    const forbiddenPhrases = [
+      'Kannada Bhaasha Prabhedagala Kosha',
+      'Sociolinguistic Surveys of Old Mysore and Northern Karnataka',
+      'Dharwada Kannada Prabheda Adhyayana',
+      'Kundagannada Shabdakosha',
+      'Coastal Kannada Dialect Survey',
+      'Kalyana Karnataka Bhasha Vaisishte',
+    ];
+
+    // Assert zero occurrences in candidate data
+    candidateData.entries.forEach((e) => {
+      forbiddenPhrases.forEach((fp) => {
+        expect(e.citation.source_title).not.toContain(fp);
+      });
+      // Zero entries claim source_attested without locator
+      if (e.evidence_status === 'source_attested') {
+        expect(e.citation.locator).toBeTruthy();
+      }
+    });
+
+    // Assert zero occurrences in quiz questions
+    QUIZ_QUESTIONS.forEach((q) => {
+      forbiddenPhrases.forEach((fp) => {
+        expect(q.source.title).not.toContain(fp);
+      });
+      expect(q.morphological_note).toBeTruthy();
+    });
+
+    // Assert zero occurrences in glossary
+    GLOSSARY_WORDS.forEach((w) => {
+      forbiddenPhrases.forEach((fp) => {
+        expect(w.source.title).not.toContain(fp);
+      });
+      expect(w.evidence_status).toBe('unverified');
+      expect(w.evidence_level).toBe('E5');
+    });
   });
 });

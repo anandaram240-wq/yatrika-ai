@@ -284,6 +284,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "shared_with_standard_or_multi_region",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-KITTEL-1894",
+        "lexical_source_rights_type": "public_domain_source",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Lexical roots attested in Rev. Ferdinand Kittel (1894), A Kannada-English Dictionary; English explanation and morphological note original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -350,6 +360,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "pattern_supported_regional_form",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-UPADHYAYA-1976",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Phonological and copula patterns documented in U. P. Upadhyaya (1976), A Comparative Study of Kannada Dialects; English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -416,6 +436,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "candidate_awaiting_documentary_verification",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-UPADHYAYA-1976",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Manner interrogative pattern noted in Upadhyaya (1976); full Kundagannada conversational sentence is provisional (E4) pending headword lookup."
       }
     },
     {
@@ -503,6 +533,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "shared_with_standard_or_multi_region",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-BRIGHT-1958",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Standard progressive aspect documented in William Bright (1958) and standard grammars; English gloss original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -591,6 +631,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "pattern_supported_regional_form",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-UPADHYAYA-1976",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Kittur progressive suffix -ākattīri documented in U. P. Upadhyaya (1976) and R. C. Hiremath (1961); English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -679,6 +729,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "pattern_supported_regional_form",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-UPADHYAYA-1976",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Kalyana dative progressive -likkattīri documented in U. P. Upadhyaya (1976) Gulbarga survey; English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -767,6 +827,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "pattern_supported_regional_form",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-BHAT-1971",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Interrogative enta and coastal verb morphology documented in D. N. Shankara Bhat (1971) and Upadhyaya (1976); English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -844,6 +914,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "shared_with_standard_or_multi_region",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-KITTEL-1894",
+        "lexical_source_rights_type": "public_domain_source",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Root horaḍu attested in Rev. Ferdinand Kittel (1894); English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -920,6 +1000,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "pattern_supported_regional_form",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-VENKATASUBBIAH-IGO",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Stem shift horaṭu -> hoṇṭu documented in G. Venkatasubbiah (Igo Kannada) and Upadhyaya (1976); English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -985,6 +1075,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "shared_with_standard_or_multi_region",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-KITTEL-1894",
+        "lexical_source_rights_type": "public_domain_source",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Stem cennu attested in Rev. Ferdinand Kittel (1894); English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -1051,6 +1151,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "language_contact_or_borrowed_form",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-VENKATASUBBIAH-IGO",
+        "lexical_source_rights_type": "copyrighted_reference_factual_citation_only",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Northern contact word cholo and copula aiti documented in G. Venkatasubbiah and Upadhyaya (1976); English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -1105,6 +1215,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "shared_with_standard_or_multi_region",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-KITTEL-1894",
+        "lexical_source_rights_type": "public_domain_source",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Headword huḍuga attested in Rev. Ferdinand Kittel (1894) and Alar (ODbL 1.0); English gloss original to Namma Kannada Atlas (CC BY 4.0)."
       }
     },
     {
@@ -1160,6 +1280,16 @@
         "regional_distribution": "E2",
         "exact_sentence_locator": null,
         "native_speaker_review": null
+      },
+      "comparison_cell_state": "pattern_supported_regional_form",
+      "rights_and_provenance": {
+        "explanatory_text_origin": "original_team_prose",
+        "explanatory_text_license": "CC-BY-4.0",
+        "lexical_source_id": "SRC-KITTEL-1894",
+        "lexical_source_rights_type": "public_domain_source",
+        "verbatim_third_party_text_copied": false,
+        "redistribution_tier": "approved_for_open_export",
+        "attribution_notice": "Headword māṇi attested in Rev. Ferdinand Kittel (1894), Shankara Bhat (1971), and Venkatasubbiah; English explanation original to Namma Kannada Atlas (CC BY 4.0)."
       }
     }
   ]

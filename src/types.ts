@@ -36,7 +36,39 @@ export type VariantSlotType =
   | 'shared_with_standard'
   | 'no_verified_distinct_variant'
   | 'provisional_candidate'
-  | 'unverified_or_excluded';
+  | 'unverified_or_excluded'
+  | 'directly_attested_regional_form'
+  | 'pattern_supported_regional_form'
+  | 'shared_with_standard_or_multi_region'
+  | 'candidate_awaiting_documentary_verification'
+  | 'no_distinct_regional_equivalent_established'
+  | 'community_reported_unverified'
+  | 'language_contact_or_borrowed_form';
+
+export type ComparisonCellState =
+  | 'directly_attested_regional_form'
+  | 'pattern_supported_regional_form'
+  | 'shared_with_standard_or_multi_region'
+  | 'candidate_awaiting_documentary_verification'
+  | 'no_distinct_regional_equivalent_established'
+  | 'community_reported_unverified'
+  | 'language_contact_or_borrowed_form';
+
+export type LexicalSourceRightsType =
+  | 'public_domain_source'
+  | 'odbl_1_0_database_source'
+  | 'copyrighted_reference_factual_citation_only'
+  | 'consented_contributor_observation';
+
+export interface RightsAndProvenance {
+  explanatory_text_origin: string;
+  explanatory_text_license: string;
+  lexical_source_id: string;
+  lexical_source_rights_type: LexicalSourceRightsType;
+  verbatim_third_party_text_copied: boolean;
+  redistribution_tier: string;
+  attribution_notice: string;
+}
 
 export interface RegionSlotState {
   status: VariantSlotType;
@@ -115,6 +147,8 @@ export interface AtlasEntry {
   limitations: string[];
   morpheme_decomposition?: MorphemeSlot[];
   evidence_dimensions?: EvidenceDimensions;
+  rights_and_provenance?: RightsAndProvenance;
+  comparison_cell_state?: ComparisonCellState;
 }
 
 export interface AtlasDataset {

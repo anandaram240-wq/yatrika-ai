@@ -68,19 +68,63 @@ export const PhrasePassportDrawer: React.FC<PhrasePassportDrawerProps> = ({
     );
   };
 
+  const getComparisonCellBadge = (state?: string) => {
+    switch (state) {
+      case 'directly_attested_regional_form':
+        return (
+          <span className="px-2 py-0.5 rounded-md text-3xs font-black uppercase bg-emerald-100 text-emerald-900 border border-emerald-300">
+            Verified Regional Form (E1)
+          </span>
+        );
+      case 'pattern_supported_regional_form':
+        return (
+          <span className="px-2 py-0.5 rounded-md text-3xs font-black uppercase bg-indigo-100 text-indigo-900 border border-indigo-300">
+            Documented Pattern (E2 Grammar / E4 Phrase)
+          </span>
+        );
+      case 'shared_with_standard_or_multi_region':
+        return (
+          <span className="px-2 py-0.5 rounded-md text-3xs font-bold uppercase bg-stone-200 text-stone-800 border border-stone-300">
+            Shared / Multi-Region Form
+          </span>
+        );
+      case 'language_contact_or_borrowed_form':
+        return (
+          <span className="px-2 py-0.5 rounded-md text-3xs font-bold uppercase bg-amber-100 text-amber-900 border border-amber-300">
+            Language-Contact / Areal Form
+          </span>
+        );
+      case 'candidate_awaiting_documentary_verification':
+        return (
+          <span className="px-2 py-0.5 rounded-md text-3xs font-bold uppercase bg-yellow-100 text-yellow-900 border border-yellow-300">
+            Provisional Candidate (E4)
+          </span>
+        );
+      case 'no_distinct_regional_equivalent_established':
+        return (
+          <span className="px-2 py-0.5 rounded-md text-3xs font-bold uppercase bg-stone-100 text-stone-600 border border-stone-300">
+            No Distinct Variant Verified
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-stone-900/60 backdrop-blur-xs flex justify-end animate-in fade-in duration-200">
       <div className="w-full max-w-2xl bg-white h-full shadow-2xl flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250">
         {/* Header */}
         <div className="sticky top-0 z-10 bg-stone-900 text-white p-5 sm:p-6 border-b border-stone-800 flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-3xs font-black uppercase tracking-wider bg-amber-400 text-stone-950">
                 Official Phrase Passport
               </span>
               <span className="font-mono text-3xs text-stone-400">
                 ID: {entry.id}
               </span>
+              {getComparisonCellBadge(entry.comparison_cell_state)}
             </div>
             <h3
               className="text-2xl sm:text-3xl font-kannada font-black text-amber-300 mt-2 leading-loose"
@@ -165,6 +209,20 @@ export const PhrasePassportDrawer: React.FC<PhrasePassportDrawerProps> = ({
               <strong>CC BY 4.0</strong>. Underlying lexical entries are referenced under{' '}
               <strong>Fair Dealing (Section 52(1)(a), Indian Copyright Act)</strong> strictly for non-commercial educational linguistics and cultural documentation.
             </p>
+            {entry.rights_and_provenance && (
+              <div className="mt-2.5 p-2.5 rounded-xl bg-white/90 border border-stone-200 text-2xs space-y-1">
+                <div className="flex items-center justify-between text-3xs font-bold">
+                  <span className="text-stone-500">Rights Classification:</span>
+                  <span className="font-mono text-stone-800 uppercase bg-stone-100 px-1.5 py-0.5 rounded">
+                    {entry.rights_and_provenance.lexical_source_rights_type.replace(/_/g, ' ')}
+                  </span>
+                </div>
+                <div className="text-stone-700">
+                  <span className="font-bold text-stone-900">Attribution Notice: </span>
+                  <span>{entry.rights_and_provenance.attribution_notice}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Question 4: Source Provenance & Registry Verification */}

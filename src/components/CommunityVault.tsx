@@ -100,7 +100,7 @@ export const CommunityVault: React.FC<CommunityVaultProps> = ({
         variant_type: 'provisional_candidate',
         variation_type: 'lexical',
         morphological_note: c.localNotes || 'User observation logged via Local Browser Fieldwork Notebook.',
-        pattern_evidence_level: 'E3',
+        pattern_evidence_level: 'E4',
         evidence_level: 'E4',
         evidence_status: 'contributor_pending',
         citation: {

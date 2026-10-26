@@ -4,14 +4,14 @@
 > Organized by **HackerRank Campus Crew**, The National Institute of Engineering (NIE), Mysuru  
 > **Official Theme:** *Code. Create. Celebrate Kannada.*  
 > **Problem Statement Chosen:** **Problem Statement 04: Namma Kannada — Regional Language Explorer**  
-> **Architecture Level:** **Argon Phase 5 Flagship: The Phrase Passport & Morpheme-Shift X-Ray Explorer**
+> **Architecture Level:** **Argon Phase 4 & Phase 5 Integration: Phrase Passport, Morpheme X-Ray & Verified Bibliographic Provenance**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38b2ac.svg)](https://tailwindcss.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-Passing%20(25%2F25)-brightgreen.svg)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-Passing%20(28%2F28)-brightgreen.svg)](https://vitest.dev/)
 [![JSON Schema](https://img.shields.io/badge/JSON%20Schema-Draft%202020--12-blueviolet.svg)](https://json-schema.org/)
-[![License](https://img.shields.io/badge/License-MIT%20%2B%20CC--BY--4.0-amber.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT%20%2B%20CC--BY--4.0%20%2B%20ODbL-amber.svg)](LICENSE)
 
 ---
 
@@ -45,13 +45,18 @@ All 13 candidate seed entries hold **provisional (`E4` phrase / `E2` pattern)** 
 - **No Fabricated Locators:** We do not invent physical book page numbers or upgrade entries to `source_attested` (`E1`) until a human researcher inspects the physical book or live dictionary headword.
 - **No Fabricated Speaker Reviews:** Strictly 0 entries claim `speaker_reviewed` (`E3`) without an authenticated contributor protocol with recorded consent.
 - **Quarantined Legacy Backlog:** The 15 pre-existing repository glossary items are quarantined under **`unverified` (`E5`)** status with clear visual toggles and notices.
-- **Closed Bibliographic Registry:** Every candidate links to [`src/data/VERIFIED_SOURCE_REGISTRY.json`](./src/data/VERIFIED_SOURCE_REGISTRY.json), containing strictly vetted titles:
+- **Closed Bibliographic Registry (v4.0.0):** Every candidate links to [`src/data/VERIFIED_SOURCE_REGISTRY.json`](./src/data/VERIFIED_SOURCE_REGISTRY.json), containing strictly vetted primary sources verified against academic and library catalogues:
   1. `SRC-UPADHYAYA-1976` (Dr. U. P. Upadhyaya, *A Comparative Study of Kannada Dialects*, Univ of Mysore)
-  2. `SRC-VENKATASUBBIAH-IGO` (Prof. G. Venkatasubbiah, *Igo Kannada*, Navakarnataka)
-  3. `SRC-KITTEL-1894` (Rev. Ferdinand Kittel, *A Kannada-English Dictionary*, Basel Mission Press / DSAL)
-  4. `SRC-KSP-NIGHANTU` (*Kannada Sahitya Parishat Nighantu*, Vols 1–8)
-  5. `SRC-ALAR` (V. Krishna, *Alar Open Dictionary*, ODbL 1.0)
-  *(Uncataloged `SRC-BHAT-1967` completely audited and removed)*.
+  2. `SRC-KITTEL-1894` (Rev. Ferdinand Kittel, *A Kannada-English Dictionary*, Basel Mission Press / DSAL)
+  3. `SRC-VENKATASUBBIAH-IGO` (Prof. G. Venkatasubbiah, *Igo Kannada: Samajika Nighantu*, Navakarnataka)
+  4. `SRC-ALAR` (V. Krishna, *Alar Open Dictionary*, ODbL 1.0)
+  5. `SRC-PADAKANAJA` (Kannada Development Authority / DPAR, *Padakanaja Multilingual Online Dictionary*)
+  6. `SRC-BHAT-1971` (Dr. D. N. Shankara Bhat, *An Outline Grammar of Havyaka*, Deccan College Postgraduate and Research Institute)
+  7. `SRC-BRIGHT-1958` (Prof. William Bright, *An Outline of Colloquial Kannada*, Linguistic Society of India / Deccan College)
+  8. `SRC-HIREMATH-1961` (Dr. R. C. Hiremath, *The Structure of Kannada*, Karnatak University Dharwad)
+  9. `SRC-LDCIL-DOC` (Linguistic Data Consortium for Indian Languages / CIIL, Mysore)
+  10. `SRC-KSP-NIGHANTU` (*Kannada Sahitya Parishat Nighantu*, Vols 1–8)
+  *(Strictly purged 6 unverified synthetic titles: `Kannada Bhaasha Prabhedagala Kosha`, `Sociolinguistic Surveys of Old Mysore`, `Dharwada Kannada Prabheda Adhyayana`, `Kundagannada Shabdakosha`, `Coastal Kannada Dialect Survey`, `Kalyana Karnataka Bhasha Vaisishte`, plus uncataloged `SRC-BHAT-1967`)*.
 
 ---
 
@@ -74,19 +79,24 @@ All 13 candidate seed entries hold **provisional (`E4` phrase / `E2` pattern)** 
   4. `karavali_coastal`
   5. `malnad`
   6. `central_border_cluster`
-- Visual state badges:
-  - `distinct_regional_variant` (Emerald)
-  - `documented_multi_region` (Blue)
-  - `shared_with_standard` (Stone)
-  - `no_verified_distinct_variant` (Amber dashed Knowledge Gap)
+- **7-State Comparative Matrix Classification (Phase 4 Workstream E):**
+  - `distinct_regional_variant` (Emerald): Documented distinct regional reflex (e.g. Kittur `-ಆಕತ್ತೀರಿ`, Coastal `ಎಂತ`).
+  - `documented_multi_region` (Blue): Isogloss shared across northern regions (e.g. Kittur & Kalyana).
+  - `borrowed_contact_variant` (Purple): Borderland language contact loans (e.g. Kittur `ಚೊಲೊ` < Marathi चांगला/चोख).
+  - `shared_with_standard` (Stone): Formal or baseline standard reflex used across everyday social contexts.
+  - `no_verified_distinct_variant` (Amber dashed): Honest knowledge gap preserving open spaces rather than fabricating fake dialect words.
+  - `sub_regional_vernacular` (Indigo): Micro-local vernacular attested in dialect monographs.
+  - `quarantined_pending_fieldwork` (Slate): Unreviewed community contributions quarantined in local storage.
 - **Actionable Citizen Linguistics:** Open knowledge gaps feature a **"Log Fieldwork"** button that pre-populates the local contribution workflow to gather authenticated native-speaker observations.
 
 ### 🛂 3. Official Phrase Passport Drawer (`src/components/PhrasePassportDrawer.tsx`)
 - Deep slide-out drawer providing 8-pillar linguistic inspection for any candidate:
   1. **Meaning & Concept:** Detailed semantic definition and communicative register.
   2. **Pragmatic Context:** Sub-variety, target locality, and spoken registers.
-  3. **Public Legal Status:** CC BY 4.0 metadata + Fair Dealing (Sec. 52(1)(a) Indian Copyright Act).
-  4. **Primary Source Provenance:** Verified bibliographic record linked to registry with access rationale.
+  3. **Public Legal Status (Phase 4 Artifact D):** Transparent licensing via `rights_and_provenance`:
+     - ODbL v1.0 database terms explicitly declared.
+     - Entry-level rights: `open_database_odbl_v1`, `public_domain_source`, `copyrighted_reference_factual_citation_only` (Fair Dealing under Indian Copyright Act 1957, Section 52(1)(a)), and `community_open_cc_by_4`.
+  4. **Primary Source Provenance:** Verified bibliographic record linked to `VERIFIED_SOURCE_REGISTRY.json` v4.0.0 with access rationale.
   5. **5-Dimension Evidence Radar:** Invariant root, semantic equivalence, grammatical pattern, isogloss distribution, locator status, and speaker review status.
   6. **Morpheme-Shift Decomposition:** Slot-by-slot analysis of surface vs underlying forms.
   7. **Shared Regions & Isoglosses:** Regional distribution across Karnataka.
@@ -99,41 +109,45 @@ All 13 candidate seed entries hold **provisional (`E4` phrase / `E2` pattern)** 
 
 ---
 
-## 4. Automated Vitest Suite (25/25 Passing)
+## 4. Automated Vitest Suite (28/28 Passing)
 
-The project includes **25 automated Vitest unit and integration tests** executing in under 300ms:
+The project includes **28 automated Vitest unit and integration tests** executing in under 300ms:
 
 ```bash
-✓ src/__tests__/app.test.ts (25 tests) 74ms
-  ✓ 1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors 54ms
-  ✓ 2. Enforces all 6 Semantic Validation Rules via validateAtlasDataset 1ms
-  ✓ 3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts 0ms
-  ✓ 4. Enforces provisional status and null locators on candidate entries (no invented citations) 1ms
-  ✓ 5. Enforces per-entry licensing metadata and top-level license policy 1ms
-  ✓ 6. Verifies sparse 6-region matrix states include shared-form and honest missing-data handling 1ms
-  ✓ 7. Verifies speech service provides honest diagnostics and rejects simulated accents 0ms
-  ✓ 8. Verifies educational macro-cluster taxonomy and isogloss notes for all 6 regions 0ms
-  ✓ 9. Verifies absence of duplicate IDs across concepts, candidates, regions, glossary, and quiz 0ms
-  ✓ 10. Verifies legacy glossary items are quarantined under unverified (E5) status 0ms
-  ✓ 11. Verifies quiz questions contain unique options and morphological mechanism notes 1ms
-  ✓ 12. Actively asserts zero occurrences of forbidden synthetic titles across all active datasets 7ms
-  ✓ 13. Verifies semantic validator actively rejects blacklisted titles and unregistered source IDs 1ms
-  ✓ 14. Asserts no entry or question claims source_attested without physical locator and registered ID 0ms
-  ✓ 15. Validates licensing metadata completeness and fair dealing/ODbL disclosure compliance 0ms
-  ✓ 16. Verifies exact active 5 concepts: how-are-you, what-are-you-doing, where-setting-out, good-fine, boy-youth 1ms
-  ✓ 17. Verifies Kundagannada candidate nka-how-are-you-coastal-kunda ("ಹೆಂಗಿದ್ದಿರಿ?") provenance and limitations 0ms
-  ✓ 18. Enforces strictly 0 E3 records across datasets and confirms removal of unverified SRC-BHAT-1967 0ms
-  ✓ 19. Asserts zero pseudo-corpus or fake oral collection names in secondary source metadata 1ms
-  ✓ 20. (Phase 5 - TEST-01) Validates morpheme_xray_concatenation_and_slot_integrity across all 13 candidates 1ms
-  ✓ 21. (Phase 5 - TEST-02) Validates phrase_passport_five_dimension_evidence_gate 0ms
-  ✓ 22. (Phase 5 - TEST-03) Validates closed_bibliography_registry_and_purge_check via VERIFIED_SOURCE_REGISTRY.json 1ms
-  ✓ 23. (Phase 5 - TEST-04) Validates knowledge_gap_sparse_matrix_honesty across all 5 concepts and 6 macro-regions 0ms
-  ✓ 24. (Phase 5 - TEST-05) Validates composite_license_and_odbl_export_validation 0ms
-  ✓ 25. (Phase 5 - TEST-06) Validates synthetic_tts_neutrality_and_fallback diagnostics 0ms
+ ✓ src/__tests__/app.test.ts (28 tests) 92ms
+   ✓ Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification Suite (28)
+     ✓ 1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors 69ms
+     ✓ 2. Enforces all 6 Semantic Validation Rules via validateAtlasDataset 1ms
+     ✓ 3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts (resolving Argon report 12 vs 13) 0ms
+     ✓ 4. Enforces provisional status and null locators on candidate entries (no invented citations) 1ms
+     ✓ 5. Enforces per-entry licensing metadata and top-level license policy 1ms
+     ✓ 6. Verifies sparse 6-region matrix states include shared-form and honest missing-data handling 1ms
+     ✓ 7. Verifies speech service provides honest diagnostics and rejects simulated accents 0ms
+     ✓ 8. Verifies educational macro-cluster taxonomy and isogloss notes for all 6 regions 0ms
+     ✓ 9. Verifies absence of duplicate IDs across concepts, candidates, regions, glossary, and quiz 0ms
+     ✓ 10. Verifies legacy glossary items are quarantined under unverified (E5) status 0ms
+     ✓ 11. Verifies quiz questions contain unique options and morphological mechanism notes 0ms
+     ✓ 12. Actively asserts zero occurrences of forbidden synthetic titles across all active application datasets 7ms
+     ✓ 13. Verifies semantic validator actively rejects blacklisted titles and unregistered source IDs 1ms
+     ✓ 14. Asserts no entry or question claims source_attested without physical locator and registered source ID 1ms
+     ✓ 15. Validates licensing metadata completeness and fair dealing/ODbL disclosure compliance 0ms
+     ✓ 16. Verifies exact active 5 concepts: how-are-you, what-are-you-doing, where-setting-out, good-fine, boy-youth 1ms
+     ✓ 17. Verifies Kundagannada candidate nka-how-are-you-coastal-kunda ("ಹೆಂಗಿದ್ದಿರಿ?") provenance and limitations 0ms
+     ✓ 18. Enforces strictly 0 E3 records across datasets and confirms removal of unverified SRC-BHAT-1967 0ms
+     ✓ 19. Asserts zero pseudo-corpus or fake oral collection names in secondary source metadata 1ms
+     ✓ 20. (Phase 5 - TEST-01) Validates morpheme_xray_concatenation_and_slot_integrity across all 13 candidates 2ms
+     ✓ 21. (Phase 5 - TEST-02) Validates phrase_passport_five_dimension_evidence_gate 0ms
+     ✓ 22. (Phase 5 - TEST-03) Validates closed_bibliography_registry_and_purge_check via VERIFIED_SOURCE_REGISTRY.json 0ms
+     ✓ 23. (Phase 5 - TEST-04) Validates knowledge_gap_sparse_matrix_honesty across all 5 concepts and 6 macro-regions 0ms
+     ✓ 24. (Phase 5 - TEST-05) Validates composite_license_and_odbl_export_validation 0ms
+     ✓ 25. (Phase 5 - TEST-06) Validates synthetic_tts_neutrality_and_fallback diagnostics 0ms
+     ✓ 26. (Phase 4 - TEST-07) Validates rights_and_provenance and ODbL v1.0 compliance across candidate entries 1ms
+     ✓ 27. (Phase 4 - TEST-08) Validates 7-state comparison_cell_state mapping across candidate entries 0ms
+     ✓ 28. (Phase 4 - TEST-09) Strict gating against unverified E1 source_attested claims and purged titles across all datasets 1ms
 
-Test Files  1 passed (1)
-     Tests  25 passed (25)
-  Duration  276ms
+ Test Files  1 passed (1)
+      Tests  28 passed (28)
+   Duration  274ms
 ```
 
 ---
@@ -213,10 +227,10 @@ npm run build
   > 
   > In our **Spoken Recall Check**, we replaced fake random scores with deterministic **Levenshtein character distance** against captured browser ASR transcripts, accompanied by permanent notices explaining standard ASR dialect limitations."
 
-### [3:20 - 3:50] 25 Passing Tests, Production Build & Conclusion
-- **Visual:** Show terminal executing `npm test` (all 25 passing) and show the 8-slide presentation deck.
+### [3:20 - 3:50] 28 Passing Tests, Production Build & Conclusion
+- **Visual:** Show terminal executing `npm test` (all 28 passing) and show the 8-slide presentation deck.
 - **Spoken Script:**
-  > "Under the hood, Namma Kannada Atlas passes **25 automated Vitest acceptance tests** in 280ms, validates against JSON Schema Draft 2020-12 via Ajv, compiles to a lightweight production bundle, and includes an 8-slide widescreen presentation deck.
+  > "Under the hood, Namma Kannada Atlas passes **28 automated Vitest acceptance tests** in 274ms, validates against JSON Schema Draft 2020-12 via Ajv, compiles to a lightweight production bundle, and includes an 8-slide widescreen presentation deck.
   > 
   > Namma Kannada Atlas proves that technological innovation in Indian languages comes from linguistic truth, verifiable provenance, and deep structural insight.
   > 
@@ -230,11 +244,11 @@ npm run build
 | :--- | :--- | :---: |
 | **1. Source Code Repository** | Standalone Git repo with complete commit history | ✅ Verified (`main`) |
 | **2. Presentation Deck** | [`Namma_Kannada_Regional_Explorer_Presentation.pptx`](./Namma_Kannada_Regional_Explorer_Presentation.pptx) | ✅ 8-Slide Widescreen Deck Generated |
-| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (25 tests) | ✅ 25/25 Passed (74ms) |
+| **3. Automated Test Suite** | [`src/__tests__/app.test.ts`](./src/__tests__/app.test.ts) (28 tests) | ✅ 28/28 Passed (92ms) |
 | **4. JSON Schema Draft 2020-12** | [`src/data/atlas-data.schema.json`](./src/data/atlas-data.schema.json) | ✅ Ajv 2020 Compliant |
-| **5. Seed Dataset (13 Entries)** | [`src/data/atlas-evidence-candidates.json`](./src/data/atlas-evidence-candidates.json) | ✅ Enriched with Morpheme & Evidence Metadata |
-| **6. Verified Source Registry** | [`src/data/VERIFIED_SOURCE_REGISTRY.json`](./src/data/VERIFIED_SOURCE_REGISTRY.json) | ✅ 5 Closed Vetted Titles |
-| **7. Production Build** | [`dist/`](./dist/) | ✅ Vite 6 / TS 5.7 (1.3s build) |
+| **5. Seed Dataset (13 Entries)** | [`src/data/atlas-evidence-candidates.json`](./src/data/atlas-evidence-candidates.json) | ✅ Enriched with Morpheme & Rights Metadata |
+| **6. Verified Source Registry** | [`src/data/VERIFIED_SOURCE_REGISTRY.json`](./src/data/VERIFIED_SOURCE_REGISTRY.json) | ✅ 10 Closed Vetted Titles (v4.0.0) |
+| **7. Production Build** | [`dist/`](./dist/) | ✅ Vite 6 / TS 5.7 (1.35s build) |
 | **8. Video Walkthrough Script** | Section 6 above (3:50 timed spoken script) | ✅ Ready to Record |
 
 ---

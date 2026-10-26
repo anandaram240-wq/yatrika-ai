@@ -340,13 +340,21 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                           {slotDef.name}
                         </span>
                         <span className={`px-2 py-0.5 rounded-md text-3xs font-bold uppercase tracking-wider ${
-                          isSharedWithStandard
+                          entry.comparison_cell_state === 'language_contact_or_borrowed_form'
+                            ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                            : isSharedWithStandard
                             ? 'bg-stone-200 text-stone-700'
                             : isDocumentedMultiRegion
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-emerald-100 text-emerald-800'
                         }`}>
-                          {isSharedWithStandard ? 'Standard Baseline' : isDocumentedMultiRegion ? 'Multi-Region' : 'Distinct Variant'}
+                          {entry.comparison_cell_state === 'language_contact_or_borrowed_form'
+                            ? 'Language Contact / Areal'
+                            : isSharedWithStandard
+                            ? 'Standard Baseline'
+                            : isDocumentedMultiRegion
+                            ? 'Multi-Region'
+                            : 'Distinct Variant'}
                         </span>
                       </div>
 

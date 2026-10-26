@@ -1,45 +1,605 @@
-@import "tailwindcss";
+/* src/index.css — NammaTrip AI Modern Daylight & Glassmorphic Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@500;600;700&display=swap');
 
 :root {
-  color-scheme: light only;
-  background-color: #fdfbf7;
-  color: #1c1917;
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-light: #e2e8f0;
+  --border-focus: #cbd5e1;
+  --brand-primary: #2563eb;
+  --brand-primary-Soft: #eff6ff;
+  --accent-saffron: #ea580c;
+  --accent-saffron-soft: #fff7ed;
+  --accent-emerald: #059669;
+  --accent-emerald-soft: #ecfdf5;
+  --accent-purple: #7c3aed;
+  --accent-purple-soft: #f5f3ff;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.14);
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
 }
 
-@layer base {
-  html {
-    color-scheme: light only;
-    background-color: #fdfbf7;
-    color: #1c1917;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+[lang="kn"] {
+  font-family: 'Noto Sans Kannada', 'Inter', sans-serif;
+  line-height: 1.5;
+}
+
+/* ================= SHELL LAYOUT ================= */
+.nt-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Top Glassmorphic Command Header */
+.nt-topbar {
+  height: 68px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  gap: 16px;
+  z-index: 30;
+  flex-shrink: 0;
+}
+
+.nt-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.nt-logo-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+}
+
+.nt-brand-title {
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nt-brand-subtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* AI Omni-Prompt Bar (Mindtrip Style) */
+.nt-omnibar {
+  flex: 1;
+  max-width: 580px;
+  display: flex;
+  align-items: center;
+  background: var(--bg-subtle);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 5px 6px 5px 16px;
+  transition: all 0.2s ease;
+}
+
+.nt-omnibar:focus-within {
+  background: #ffffff;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.nt-omnibar input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.nt-omnibar-btn {
+  background: var(--brand-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.nt-omnibar-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Header Right KPIs & Share */
+.nt-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nt-stat-pill {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nt-stat-pill strong {
+  color: var(--text-primary);
+}
+
+.nt-btn-outline {
+  background: #ffffff;
+  border: 1px solid var(--border-focus);
+  color: var(--text-primary);
+  padding: 7px 13px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.nt-btn-outline:hover {
+  background: var(--bg-subtle);
+  border-color: #94a3b8;
+}
+
+.nt-btn-primary {
+  background: var(--text-primary);
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ================= SPLIT-SCREEN WORKSPACE (WANDERLOG STYLE) ================= */
+.nt-workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 540px 1fr;
+  height: calc(100vh - 68px);
+  overflow: hidden;
+}
+
+@media (max-width: 1100px) {
+  .nt-workspace {
+    grid-template-columns: 440px 1fr;
   }
+}
 
-  body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: #fdfbf7;
-    color: #1c1917;
-  }
-
-  .font-kannada {
-    font-family: 'Noto Sans Kannada', sans-serif;
-  }
-
-  .font-heritage {
-    font-family: 'Cinzel', serif;
+@media (max-width: 768px) {
+  .nt-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: 52% 48%;
   }
 }
 
-/* Custom subtle scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Left Panel: Scrollable Itinerary & Intelligence Feed */
+.nt-left-feed {
+  height: 100%;
+  overflow-y: auto;
+  background: var(--bg-app);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
 }
-::-webkit-scrollbar-track {
-  background: #fef3c7;
+
+.nt-feed-sticky-controls {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: rgba(248, 250, 252, 0.96);
+  backdrop-filter: blur(10px);
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--border-light);
 }
-::-webkit-scrollbar-thumb {
-  background: #d97706;
-  border-radius: 4px;
+
+/* Circuit Preset Pills */
+.nt-preset-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #b45309;
+
+.nt-preset-pill {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nt-preset-pill.active {
+  background: var(--text-primary);
+  color: #ffffff;
+  border-color: var(--text-primary);
+}
+
+/* Sub-Nav Mode Switcher */
+.nt-mode-tabs {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.nt-mode-tab {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nt-mode-tab.active {
+  background: #ffffff;
+  color: var(--brand-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Itinerary Cards Container */
+.nt-feed-body {
+  padding: 18px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Stop Card (Layla / Airbnb Visual Card) */
+.nt-stop-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.nt-stop-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.nt-stop-card.selected {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12), var(--shadow-md);
+}
+
+.nt-stop-card-top {
+  display: grid;
+  grid-template-columns: 135px 1fr;
+  min-height: 132px;
+}
+
+.nt-stop-photo-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 132px;
+  background: #cbd5e1;
+}
+
+.nt-stop-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.nt-stop-number-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-saffron);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  border: 2px solid #ffffff;
+}
+
+.nt-stop-info {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.nt-stop-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.nt-stop-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.nt-stop-kn {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.nt-stop-summary {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 6px 0;
+}
+
+/* Badges Row inside Stop Card */
+.nt-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.nt-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nt-badge.blue { background: var(--brand-primary-Soft); color: #1d4ed8; }
+.nt-badge.emerald { background: var(--accent-emerald-soft); color: var(--accent-emerald); }
+.nt-badge.saffron { background: var(--accent-saffron-soft); color: var(--accent-saffron); }
+.nt-badge.purple { background: var(--accent-purple-soft); color: var(--accent-purple); }
+
+/* Embedded Kannada Voice & Transport Strip at bottom of card */
+.nt-stop-footer {
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border-light);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11.5px;
+}
+
+.nt-phrase-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.nt-voice-btn {
+  background: var(--brand-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nt-voice-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Wanderlog-style Drive / Train Connector Between Stops */
+.nt-leg-connector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 8px 24px;
+}
+
+.nt-leg-line {
+  width: 2px;
+  height: 34px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #94a3b8 0,
+    #94a3b8 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.nt-leg-pill {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ================= RIGHT PANEL: FULL-VIEWPORT MAPLIBRE CANVAS ================= */
+.nt-map-pane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #dbeafe;
+}
+
+/* Floating Glassmorphic Overlays on Map */
+.nt-map-top-bar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.nt-map-glass-pill {
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nt-map-floating-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 32px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nt-map-ctrl-btn {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nt-map-ctrl-btn:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Custom MapLibre HTML Marker Pin */
+.nt-custom-map-pin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: var(--text-primary);
+  padding: 4px 10px 4px 4px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.nt-custom-map-pin:hover,
+.nt-custom-map-pin.active {
+  transform: scale(1.1);
+  border-color: var(--brand-primary);
+  z-index: 25 !important;
+}
+
+.nt-custom-map-pin-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-saffron);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
 }

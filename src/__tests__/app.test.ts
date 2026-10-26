@@ -4,7 +4,7 @@ import addFormats from 'ajv-formats';
 import atlasSchema from '../data/atlas-data.schema.json';
 import candidateData from '../data/atlas-evidence-candidates.json';
 import { ATLAS_DATASET, RECONCILED_METRICS, CONCEPTS, ALL_ENTRIES, REGION_SLOT_DEFINITIONS } from '../data/dataset';
-import { validateAtlasDataset } from '../utils/semanticValidator';
+import { validateAtlasDataset, FORBIDDEN_SYNTHETIC_TITLES, APPROVED_BIBLIOGRAPHY_REGISTRY } from '../utils/semanticValidator';
 import { REGIONS } from '../data/regions';
 import { GLOSSARY_WORDS } from '../data/glossary';
 import { QUIZ_QUESTIONS } from '../data/quiz';
@@ -184,6 +184,101 @@ describe('Namma Kannada Atlas Phase 2.5 Evidence-Graded & Semantic Verification 
       expect(q.options).toContain(q.correctRegionId);
       expect(q.morphological_note).toBeTruthy();
       expect(q.source.title).toBeTruthy();
+    });
+  });
+
+  it('12. Actively asserts zero occurrences of forbidden synthetic titles across all active application datasets', () => {
+    // 1. Check ATLAS_DATASET entries
+    ALL_ENTRIES.forEach((entry) => {
+      FORBIDDEN_SYNTHETIC_TITLES.forEach((forbidden) => {
+        expect(entry.citation?.source_title || '').not.toContain(forbidden);
+        expect(entry.citation?.author_or_publisher || '').not.toContain(forbidden);
+      });
+    });
+
+    // 2. Check REGIONS signature phrases
+    REGIONS.forEach((region) => {
+      region.signaturePhrases.forEach((phrase) => {
+        FORBIDDEN_SYNTHETIC_TITLES.forEach((forbidden) => {
+          expect(phrase.source?.title || '').not.toContain(forbidden);
+          expect(phrase.source?.authorOrInstitution || '').not.toContain(forbidden);
+          expect(phrase.source?.sourceLocation || '').not.toContain(forbidden);
+        });
+      });
+    });
+
+    // 3. Check GLOSSARY_WORDS
+    GLOSSARY_WORDS.forEach((word) => {
+      FORBIDDEN_SYNTHETIC_TITLES.forEach((forbidden) => {
+        expect(word.source?.title || '').not.toContain(forbidden);
+        expect(word.source?.authorOrInstitution || '').not.toContain(forbidden);
+        expect(word.source?.sourceLocation || '').not.toContain(forbidden);
+      });
+    });
+
+    // 4. Check QUIZ_QUESTIONS
+    QUIZ_QUESTIONS.forEach((quiz) => {
+      FORBIDDEN_SYNTHETIC_TITLES.forEach((forbidden) => {
+        expect(quiz.source?.title || '').not.toContain(forbidden);
+        expect(quiz.source?.authorOrInstitution || '').not.toContain(forbidden);
+        expect(quiz.source?.sourceLocation || '').not.toContain(forbidden);
+      });
+    });
+  });
+
+  it('13. Verifies semantic validator actively rejects blacklisted titles and unregistered source IDs', () => {
+    // Create a mutant dataset with a blacklisted synthetic title
+    const mutantWithBlacklistedTitle = JSON.parse(JSON.stringify(ATLAS_DATASET));
+    mutantWithBlacklistedTitle.entries[0].citation.source_title = 'Kannada Bhaasha Prabhedagala Kosha';
+    const result1 = validateAtlasDataset(mutantWithBlacklistedTitle);
+    expect(result1.valid).toBe(false);
+    expect(result1.errors.some((e: string) => e.includes('forbidden synthetic title'))).toBe(true);
+
+    // Create a mutant dataset with an unregistered source ID
+    const mutantWithFakeSourceId = JSON.parse(JSON.stringify(ATLAS_DATASET));
+    mutantWithFakeSourceId.entries[0].citation.source_id = 'SRC-FAKE-UNREGISTERED-2026';
+    const result2 = validateAtlasDataset(mutantWithFakeSourceId);
+    expect(result2.valid).toBe(false);
+    expect(result2.errors.some((e: string) => e.includes('not in approved registry'))).toBe(true);
+  });
+
+  it('14. Asserts no entry or question claims source_attested without physical locator and registered source ID', () => {
+    // Check all candidates
+    ALL_ENTRIES.forEach((entry) => {
+      if (entry.evidence_status === 'source_attested') {
+        expect(entry.citation?.locator).toBeTruthy();
+        expect(entry.citation?.source_id).toBeTruthy();
+        expect(APPROVED_BIBLIOGRAPHY_REGISTRY[entry.citation.source_id!]).toBeDefined();
+      } else {
+        expect(['provisional', 'unverified', 'contributor_pending', 'speaker_reviewed']).toContain(entry.evidence_status);
+      }
+    });
+
+    // Check signature phrases
+    REGIONS.forEach((region) => {
+      region.signaturePhrases.forEach((phrase) => {
+        expect(['provisional', 'unverified']).toContain(phrase.status);
+      });
+    });
+
+    // Check quiz questions
+    QUIZ_QUESTIONS.forEach((q) => {
+      expect(['provisional', 'unverified']).toContain(q.evidence_status);
+      expect(q.evidence_level).toBe('E4');
+    });
+  });
+
+  it('15. Validates licensing metadata completeness and fair dealing/ODbL disclosure compliance', () => {
+    expect(ATLAS_DATASET.license_policy).toBeDefined();
+    expect(ATLAS_DATASET.license_policy.length).toBeGreaterThan(20);
+
+    ALL_ENTRIES.forEach((entry) => {
+      expect(entry.license_status).toBeDefined();
+      expect([
+        'approved_for_planned_use',
+        'restricted_or_permission_required',
+        'license_unclear_do_not_redistribute',
+      ]).toContain(entry.license_status);
     });
   });
 });

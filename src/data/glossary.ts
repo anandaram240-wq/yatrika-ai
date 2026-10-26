@@ -17,10 +17,10 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Dharwada Kannada Prabheda Adhyayana',
-      authorOrInstitution: 'Kannada University, Hampi',
-      year: '2004',
-      sourceLocation: 'Lexical Survey of Northern Plain Dialects, p. 52'
+      title: 'Colloquial North Karnataka Particle Corpus',
+      authorOrInstitution: 'Field observation & oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -39,10 +39,10 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'A Kannada-English Dictionary',
-      authorOrInstitution: 'Rev. Ferdinand Kittel (1894)',
-      year: '1894',
-      sourceLocation: 'Vol. 3, Entry: marre / maraya (p. 1324)'
+      title: 'Coastal Communal Address & Kinship Marker',
+      authorOrInstitution: 'Coastal community oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -61,10 +61,10 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kundagannada Shabdakosha',
-      authorOrInstitution: 'A. S. Kedilaya / Kundapura Sahitya Vedike',
-      year: '2008',
-      sourceLocation: 'Lexicon of Kundapura Regional Speech, Entry: boliya'
+      title: 'Kundagannada Sub-variety Banter Corpus',
+      authorOrInstitution: 'Kundapura community oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -73,20 +73,20 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordEnglish: 'Beda Bidi',
     regionId: 'mysuru-mandya',
     locality: 'Mysuru, Mandya, Chamarajanagar',
-    meaning: 'Let it be / Leave it alone / Don\'t trouble yourself over it.',
-    usageKannada: 'ಬೇಡ ಬಿಡಿ ಸ್ವಾಮಿ, ಚಿಕ್ಕ ವಿಷಯಕ್ಕೆ ಯಾಕೆ ತಲೆ ಕೆಡಿಸಿಕೊಳ್ತೀರಿ?',
-    usageTransliteration: 'Beda bidi swamy, chikka vishayakke yaake thale kedisikoltheeri?',
-    usageEnglish: 'Leave it be, sir; why stress yourself over such a trivial matter?',
+    meaning: 'Let it be / Leave it alone (Reflects Old Mysuru polite composure and avoidance of unnecessary confrontation).',
+    usageKannada: 'ಅದೇನ್ ದೊಡ್ಡ ವಿಷಯ ಅಂತ ತಲೆ ಕೆಡಿಸಿಕೊಳ್ತೀರಿ? ಬೇಡ ಬಿಡಿ ಸ್ವಾಮಿ!',
+    usageTransliteration: 'Aden dodd vishya antha thale kedisikoltheeri? Beda bidi swamy!',
+    usageEnglish: 'Why worry over such a small matter? Let it be, my good sir!',
     culturalOrigin: 'Emblematic of the composed, courteous, unhurried conversational temperament characteristic of Old Mysuru discourse.',
     tags: ['Philosophy', 'Calm', 'Old Mysuru', 'Polite'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kannada Sahitya Parishat Nighantu',
-      authorOrInstitution: 'Kannada Sahitya Parishat, Bengaluru',
-      year: '1995',
-      sourceLocation: 'Vol. 5, Entry: beda-bidi (colloquial usage)'
+      title: 'Old Mysuru Polite Conversational Idiom',
+      authorOrInstitution: 'Southern colloquial oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -94,21 +94,21 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordKannada: 'ಸಾಹೂಕಾರ್',
     wordEnglish: 'Sahookar',
     regionId: 'uttara-karnataka',
-    locality: 'Hubballi, Dharwad, Vijayapura',
-    meaning: 'Chieftain, boss, or respected friend (Colloquial honorific address).',
-    usageKannada: 'ಏನ್ರೀ ಸಾಹೂಕಾರ್, ಇವತ್ತು ಬಜಾರಲ್ಲಿ ಕಾಣಿಸಿಕೊಂಡಿದ್ದೀರಿ!',
-    usageTransliteration: 'En ri sahookar, ivattu bajaaralli kaanisikondiddeeri!',
-    usageEnglish: 'Hey boss / friend, what brings you to the bazaar today!',
+    locality: 'Belagavi, Bagalkote, Vijayapura',
+    meaning: 'Boss, chief, or respected friend (Affectionate honorific used widely in North Karnataka).',
+    usageKannada: 'ಬರ್ರಿ ಸಾಹೂಕಾರ್, ಇವತ್ತು ನಮ್ಮ ಮನ್ಯಾಗ ಚಹಾ ಕುಡಿದೇ ಹೋಗ್ಬೇಕು!',
+    usageTransliteration: 'Barri sahookar, ivattu namma manyaga chaha kudide hogbeku!',
+    usageEnglish: 'Welcome, chief! Today you must not leave without having tea at our home!',
     culturalOrigin: 'Derived from historical mercantile title "Sahukara" (merchant/patron); transformed in North Karnataka into an affectionate honorific for friends.',
     tags: ['Honorific', 'Respect', 'North Karnataka'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Karnataka Samskriti Mattu Bhashe',
-      authorOrInstitution: 'Dr. M. Chidananda Murthy / Sapna Book House',
-      year: '1991',
-      sourceLocation: 'Sociolinguistic Terminology of Northern Karnataka, pp. 112-114'
+      title: 'Northern Plains Conversational Honorific',
+      authorOrInstitution: 'Field observation & oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -116,21 +116,21 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordKannada: 'ಬಾವಾಜಿ',
     wordEnglish: 'Bavaji',
     regionId: 'kalyana-karnataka',
-    locality: 'Kalaburagi, Raichur, Bidar',
-    meaning: 'Brother-in-law or trusted brotherly friend (Deep communal kinship address).',
-    usageKannada: 'ಏನ್ ಬಾವಾಜಿ, ಕಲ್ಬುರ್ಗಿಗೆ ಬಂದ್ರೆ ನಮ್ಮನೆಗೆ ಬರಲೇಬೇಕು!',
-    usageTransliteration: 'En bavaji, Kalaburgige bandre nammanege barlebeku!',
-    usageEnglish: 'Hey brother, whenever you visit Kalaburagi, you must come over to our home!',
+    locality: 'Kalaburagi, Bidar, Yadgir',
+    meaning: 'Brother or dear friend (The signature intimate kinship address in Kalyana Karnataka).',
+    usageKannada: 'ಏನ್ ಬಾವಾಜಿ, ಬಹಳ ದಿನ ಆಯ್ತು ನಿಮ್ಮ ದರ್ಶನ ಇಲ್ಲ!',
+    usageTransliteration: 'En bavaji, bahala dina aaytu nimma darshana illa!',
+    usageEnglish: 'Hey dear brother, it has been so many days since we last met!',
     culturalOrigin: 'Deeply ingrained in Gulbarga and Bidar social customs, addressing close peer companions with the respect and affection of family.',
     tags: ['Kinship', 'Warmth', 'Kalyana Karnataka', 'Deccan'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kalyana Karnataka Bhasha Vaisishte',
-      authorOrInstitution: 'Dr. Basavaraj Sabarad / Gulbarga University',
-      year: '2010',
-      sourceLocation: 'Lexical Features of Hyderabad Karnataka, p. 73'
+      title: 'Kalyana Karnataka Kinship Address',
+      authorOrInstitution: 'Northeastern community oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -138,43 +138,43 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordKannada: 'ರೊಕ್ಕ',
     wordEnglish: 'Rokka',
     regionId: 'uttara-karnataka',
-    locality: 'Belagavi, Dharwad, Bagalkote',
-    meaning: 'Cash, currency, or ready money.',
-    usageKannada: 'ರೊಕ್ಕ ಕೈಯಲ್ಲೇ ಕೊಡ್ತೀರಾ ಅಥವಾ ಆನ್‌ಲೈನ್ ಪೇ ಮಾಡ್ತೀರಾ?',
-    usageTransliteration: 'Rokka kaiyalle kodtheera athava online pay madtheera?',
-    usageEnglish: 'Will you pay cash in hand or make an online payment?',
+    locality: 'Hubballi, Dharwad, Gadag, Haveri',
+    meaning: 'Cash, money, or currency (Standard colloquial term for money in North Karnataka).',
+    usageKannada: 'ಜೇಬಿನಲ್ಲಿ ರೊಕ್ಕ ಇದ್ರೆ ಜಗತ್ತೇ ನಮ್ಮ ಕೈಯಾಗ ಅಂತಾರ!',
+    usageTransliteration: 'Jebinalli rokka idre jagatthe namma kaiyaaga anthaara!',
+    usageEnglish: 'They say when there is cash in your pocket, the whole world is in your hands!',
     culturalOrigin: 'Classical commercial term attested in medieval Deccan trade documents and widely preserved in North Karnataka vernacular.',
     tags: ['Trade', 'Commerce', 'North Karnataka'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'A Kannada-English Dictionary',
-      authorOrInstitution: 'Rev. Ferdinand Kittel (1894)',
-      year: '1894',
-      sourceLocation: 'Vol. 3, Entry: rokka (p. 1368)'
+      title: 'Northern Commercial Vernacular Term',
+      authorOrInstitution: 'Field observation & oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
     id: 'kusumbere',
-    wordKannada: 'ಕುಸುಂಬೆರೆ',
+    wordKannada: 'ಕುಸುಂಬರೆ',
     wordEnglish: 'Kusumbere',
     regionId: 'karavali',
-    locality: 'Kundapura, Udupi',
-    meaning: 'Salad accompaniment or seasoned pulse side dish (Coastal variant of Kosambari).',
-    usageKannada: 'ಇವತ್ತು ಹಬ್ಬದ ಊಟಕ್ಕೆ ಎಂತ ಕುಸುಂಬೆರೆ ಮಾಡ್ದೀರಿ ಮಾರ್ರೆ?',
-    usageTransliteration: 'Ivattu habbada ootakke entha kusumbere maddeeri marre?',
-    usageEnglish: 'What salad accompaniment have you prepared for today\'s festival meal, friend?',
+    locality: 'Kundapura, Byndoor',
+    meaning: 'Salad / Kosambari made of soaked lentils and freshly grated coconut.',
+    usageKannada: 'ಹಬ್ಬದ ಊಟಕ್ಕೆ ಹೆಸರುಬೇಳೆ ಕುಸುಂಬರೆ ಕಡ್ಡಾಯ ಮಾರ್ರೆ!',
+    usageTransliteration: 'Habbada ootakke hesarubele kusumbere kaddaaya marre!',
+    usageEnglish: 'Moong dal kusumbere is an absolute must-have for festival meals, my friend!',
     culturalOrigin: 'Documented coastal culinary lexical variant of classical Kannada "Kosambari".',
     tags: ['Culinary', 'Kundagannada', 'Coastal'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kundagannada Shabdakosha',
-      authorOrInstitution: 'A. S. Kedilaya / Kundapura Sahitya Vedike',
-      year: '2008',
-      sourceLocation: 'Entry: kusumbere'
+      title: 'Kundagannada Culinary Vocabulary',
+      authorOrInstitution: 'Coastal community oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -183,20 +183,20 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordEnglish: 'Maraayre',
     regionId: 'malenadu',
     locality: 'Shivamogga, Chikkamagaluru, Thirthahalli',
-    meaning: 'Good fellow / Dear sir (Gentle regional vocative address).',
-    usageKannada: 'ಹೇಳಿ ಮಾರಾಯ್ರೆ, ಮಲೆನಾಡು ತಂಪಾದ ಗಾಳಿ ಹೇಗನಿಸ್ತು?',
-    usageTransliteration: 'Heli maraayre, malenadu thampaada gaali heganisthu?',
-    usageEnglish: 'Tell me, good fellow, how did you find the cool Malenadu breeze?',
+    meaning: 'Good sir, friend, or dear fellow (Gentle, affectionate vocative heard throughout the Western Ghats).',
+    usageKannada: 'ಅದೇನ್ ಮಾರಾಯ್ರೆ, ಮಳೆ ಬರ್ತಿದೆ ಅಂತ ಒಳಗೇ ಕೂತಿದ್ದೀರಾ?',
+    usageTransliteration: 'Aden maraayre, male bartide antha olage koothiddeera?',
+    usageEnglish: 'What is this, my good sir! Are you just sitting inside merely because it is raining?',
     culturalOrigin: 'Prevalent in the colloquial prose and character dialogue of Rashtrakavi Kuvempu and K.P. Poornachandra Tejaswi.',
     tags: ['Literature', 'Gentle', 'Malenadu', 'Vocative'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kuvempu Sahitya Mattu Malenadu Bhasha Prayoga',
-      authorOrInstitution: 'Kannada Sahitya Parishat',
-      year: '2001',
-      sourceLocation: 'Lexical Analysis of Kuvempu Regional Dialogue, pp. 41-43'
+      title: 'Malnad Western Ghats Colloquial Address',
+      authorOrInstitution: 'Western Ghats community oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -204,43 +204,43 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordKannada: 'ಕಣಯ್ಯ',
     wordEnglish: 'Kanayya',
     regionId: 'mysuru-mandya',
-    locality: 'Mandya, Rural Mysuru',
-    meaning: 'You see, my friend / my boy (Emphatic conversational tag).',
-    usageKannada: 'ಅದೇ ಕಣಯ್ಯ ನಮ್ಮ ಮಂಡ್ಯ ಮಣ್ಣಿನ ಗುಣ, ಪ್ರೀತಿಯಿಂದ ಎಲ್ಲಾರನ್ನೂ ಸ್ವಾಗತ ಮಾಡ್ತೀವಿ!',
-    usageTransliteration: 'Ade kanayya namma mandya mannina guna, preethiyinda ellaarannoo swaagatha maadtheevi!',
-    usageEnglish: 'That is the warmth of our Mandya soil, you see; we welcome everyone with open love!',
+    locality: 'Mandya, Maddur, Pandavapura',
+    meaning: 'See here, my friend! (Emphatic conversational marker ubiquitous in Mandya speech).',
+    usageKannada: 'ನಮ್ಮೂರಿನ ಕಬ್ಬಿನ ಬೆಳೆ ನೋಡು ಕಣಯ್ಯ, ಎಷ್ಟು ಸಮೃದ್ಧವಾಗಿದೆ!',
+    usageTransliteration: 'Nammoorina kabbina bele nodu kanayya, eshtu samriddhavaagide!',
+    usageEnglish: 'Look at the sugarcane crop of our village, my friend! Look how lush and bountiful it is!',
     culturalOrigin: 'Signature discourse marker in Mandya agrarian speech, conveying conviction, rustic intimacy, and camaraderie.',
     tags: ['Emphatic', 'Mandya', 'Discourse Marker'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Mandya Bhasha Roopagalu',
-      authorOrInstitution: 'K. V. Shankaregowda / Mandya Zilla Sahitya Parishat',
-      year: '1999',
-      sourceLocation: 'Folk Colloquial Syntax of Mandya District, p. 28'
+      title: 'Mandya Rural Conversational Tag',
+      authorOrInstitution: 'Mandya community oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
-    id: 'jhan-antha',
-    wordKannada: 'ಝಣ್ ಅಂತ',
-    wordEnglish: 'Jhan-antha',
+    id: 'jhan-jhana',
+    wordKannada: 'ಝಣ್-ಝಣಾ',
+    wordEnglish: 'Jhan-Jhana',
     regionId: 'uttara-karnataka',
-    locality: 'Dharwad, Vijayapura',
-    meaning: 'Electric, tingling sensation caused by zesty, fiery North Karnataka spices.',
-    usageKannada: 'ಶೇಂಗಾ ಚಟ್ನಿ ಪುಡಿ ಝಣ್ ಅಂತ ನಾಲಿಗೆ ಮೇಲೆ ನರ್ತನ ಮಾಡ್ತು!',
-    usageTransliteration: 'Shenga chatni pudi jhan antha naalige mele narthana maadthu!',
-    usageEnglish: 'The spicy peanut chutney powder tingled fiercely on the palate!',
+    locality: 'Vijayapura, Bagalkote, Dharwad',
+    meaning: 'Extremely spicy, fiery, or tingling to the palate (Describing authentic Shenga chutney or Mirchi bajji).',
+    usageKannada: 'ಆ ಖಾರದ ಚಟ್ನಿ ತಿಂದ್ರೆ ನಾಲಿಗೆ ಝಣ್-ಝಣಾ ಅಂತೈತಿ!',
+    usageTransliteration: 'Aa khaarada chutney thindre naalige jhan-jhana antheithi!',
+    usageEnglish: 'If you taste that fiery chili chutney, your tongue tingles with heat!',
     culturalOrigin: 'Onomatopoeic sensory descriptor recorded across North Karnataka culinary traditions and oral descriptions.',
     tags: ['Culinary', 'Sensory', 'Onomatopoeia', 'North Karnataka'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Kannada Nighantu (Parishat Onomatopoeia Section)',
-      authorOrInstitution: 'Kannada Sahitya Parishat, Bengaluru',
-      year: '1988',
-      sourceLocation: 'Entry: jhan-jhana / jhan-antha'
+      title: 'Northern Sensory Onomatopoeia',
+      authorOrInstitution: 'Field observation & oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -248,21 +248,21 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordKannada: 'ದಮ್ಮು',
     wordEnglish: 'Dammu',
     regionId: 'kalyana-karnataka',
-    locality: 'Kalaburagi, Raichur',
-    meaning: 'Inner stamina, courage, grit, or respiratory endurance.',
-    usageKannada: 'ಹಠ ಬಿಡಬೇಡ ಬಾವಾಜಿ, ಮನಸ್ಸಲ್ಲಿ ದಮ್ಮು ಇಟ್ಕೊಂಡು ಮುನ್ನುಗ್ಗು!',
-    usageTransliteration: 'Hatha bidabeda bavaji, manassalli dammu itkondu munnuggu!',
-    usageEnglish: 'Do not relent, brother; keep courage in your chest and march ahead!',
+    locality: 'Bidar, Kalaburagi, Raichur',
+    meaning: 'Courage, daring, guts, or inner stamina.',
+    usageKannada: 'ನ್ಯಾಯಕ್ಕಾಗಿ ನಿಲ್ಲೋಕೆ ಎದೆಯಲ್ಲಿ ದಮ್ಮು ಇರಬೇಕು!',
+    usageTransliteration: 'Nyaayakagi nilloke yedeyalli dammu irabeku!',
+    usageEnglish: 'To stand up firmly for justice, one needs real courage in their chest!',
     culturalOrigin: 'Historical lexical loan from Persian/Deccani "dam" (breath/life/courage), integrated into northeastern Karnataka vernacular.',
     tags: ['Courage', 'Deccani Loan', 'Kalyana Karnataka'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Karnataka Samskritiya Poorva Peetike',
-      authorOrInstitution: 'Sham. Ba. Joshi / Samaja Pustakalaya, Dharwad',
-      year: '1975',
-      sourceLocation: 'Deccan Linguistic Cross-Currents in Northern Kannada, p. 89'
+      title: 'Kalyana Karnataka Deccani Loan Vocabulary',
+      authorOrInstitution: 'Northeastern community oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -270,21 +270,21 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordKannada: 'ಮಚ್ಚಾ',
     wordEnglish: 'Macha',
     regionId: 'bengaluru-urban',
-    locality: 'Bengaluru Metropolitan Area',
-    meaning: 'Bro, buddy, or close peer (Omnipresent youth colloquialism).',
-    usageKannada: 'ಮಚ್ಚಾ, ಇವತ್ತು ಈವೆಂಟ್ ಮುಗಿಸಿ ಎಂ.ಜಿ. ರೋಡ್ ಕಡೆ ಹೋಗೋಣ!',
-    usageTransliteration: 'Macha, ivattu event mugisi MG Road kade hogona!',
-    usageEnglish: 'Bro, once this event concludes today, let\'s head towards MG Road!',
+    locality: 'Bengaluru Urban',
+    meaning: 'Bro, buddy, or close male friend (Everyday collegiate and informal peer address across Bengaluru).',
+    usageKannada: 'ಏನ್ ಮಚ್ಚಾ, ವೀಕೆಂಡ್ ಟ್ರಿಪ್ ಎಲ್ಲಿಗೆ ಪ್ಲಾನ್ ಮಾಡಿದ್ದೀಯ?',
+    usageTransliteration: 'En macha, weekend trip yellige plan maadiddeeya?',
+    usageEnglish: 'Hey bro, where have you planned the weekend road trip to?',
     culturalOrigin: 'Dravidian inter-city metropolitan slang widely adopted across South Indian urban centers, ubiquitous in Bengaluru colleges.',
     tags: ['Youth Slang', 'Metropolitan', 'Colloquial'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
-      authorOrInstitution: 'Department of Linguistics, Bangalore University',
-      year: '2018',
-      sourceLocation: 'Urban Slang and Code-Switching Corpus, p. 14'
+      title: 'Bengaluru Metropolitan Youth Slang',
+      authorOrInstitution: 'Urban collegiate oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -292,21 +292,21 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     wordKannada: 'ಬೊಂಬಾಟ್',
     wordEnglish: 'Bombat',
     regionId: 'bengaluru-urban',
-    locality: 'Bengaluru & South Karnataka',
-    meaning: 'Superb, explosive, top-tier, or fantastic!',
-    usageKannada: 'ಇವತ್ತು ಆ ಹೋಟೆಲ್ ಮಸಾಲೆ ದೋಸೆ ಬೊಂಬಾಟ್ ಆಗಿತ್ತು ಗುರು!',
-    usageTransliteration: 'Ivattu aa hotel masale dose bombat aagithu guru!',
-    usageEnglish: 'Today that restaurant\'s Masala Dosa was truly top-tier (bombat)!',
+    locality: 'Bengaluru, Mysuru',
+    meaning: 'Superb, fantastic, outstanding, or first-class.',
+    usageKannada: 'ಇವತ್ತು ದೋಸೆ ಕ್ಯಾಂಪ್ನಲ್ಲಿ ಮಸಾಲೆ ದೋಸೆ ಬೊಂಬಾಟಾಗಿತ್ತು ಗುರು!',
+    usageTransliteration: 'Ivattu Dosa Camp nalli masale dose bombataagittu guru!',
+    usageEnglish: 'The masala dose at Dosa Camp today was utterly fantastic, my friend!',
     culturalOrigin: 'Popularized through 20th-century urban cinema and theater; common across southern and urban Karnataka.',
     tags: ['Appreciation', 'Popular Slang', 'Urban'],
     status: 'unverified',
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Contemporary Spoken Kannada Lexicon',
-      authorOrInstitution: 'Kannada Adhyayana Samsthe / Mysore University',
-      year: '2005',
-      sourceLocation: 'Popular Idioms and Colloquial Vocabulary, p. 102'
+      title: 'Urban Colloquial Appreciation Slang',
+      authorOrInstitution: 'Urban colloquial oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   },
   {
@@ -325,10 +325,10 @@ export const GLOSSARY_WORDS: GlossaryWord[] = [
     evidence_status: 'unverified',
     evidence_level: 'E5',
     source: {
-      title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
-      authorOrInstitution: 'Department of Linguistics, Bangalore University',
-      year: '2018',
-      sourceLocation: 'Urban Slang and Code-Switching Corpus, p. 22'
+      title: 'Bengaluru Metropolitan Bilingual Code-Mixing',
+      authorOrInstitution: 'Urban conversational oral usage record',
+      year: null as any,
+      sourceLocation: 'Colloquial oral usage pending archival collation'
     }
   }
 ];

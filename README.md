@@ -94,8 +94,8 @@ All 13 candidate seed entries hold **provisional (`E4` phrase / `E2` pattern)** 
 
 The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Semantic Validation Rules**:
 
-1. **Rule 1 (Bibliographic Verification):** Validates `citation.source_id` against the approved Bibliography Registry (`SRC-UPADHYAYA-1976`, `SRC-VENKATASUBBIAH-IGO`, `SRC-KITTEL-1894`) and verifies publication years (`1800–2026`).
-2. **Rule 2 (Lexical Attestation):** Enforces that `source_attested` entries require non-empty physical locators (`citation.locator`), while `provisional` entries have `locator: null`.
+1. **Rule 1 (Bibliographic Verification):** Validates `citation.source_id` against the approved Bibliography Registry (`SRC-UPADHYAYA-1976`, `SRC-VENKATASUBBIAH-IGO`, `SRC-KITTEL-1894`, `SRC-KSP-NIGHANTU`, `SRC-BHAT-1967`), verifies publication years (`1800–2026`), and actively rejects forbidden synthetic titles.
+2. **Rule 2 (Lexical Attestation):** Enforces that `source_attested` entries require non-empty physical locators (`citation.locator`) and approved registry IDs, while `provisional` entries have `locator: null`.
 3. **Rule 3 (Regional Attribution):** Confirms all entries have populated `region_or_locality`, `sub_variety`, and `variant_type`, and match `concept_coverage_summary`.
 4. **Rule 4 (Meaning & Context):** Enforces allowed register enums (`formal_and_polite_spoken`, `everyday_spoken`, etc.) and semantic coherence within each concept.
 5. **Rule 5 (Transliteration & Kannada Unicode):** Checks character-by-character alignment and verifies Kannada Unicode block (`U+0C80–U+0CFF`), permitting `ZWNJ` (`U+200C`) and `ZWJ` (`U+200D`).
@@ -103,11 +103,11 @@ The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Sema
 
 ---
 
-## 5. Automated Vitest Suite (11/11 Passing)
+## 5. Automated Vitest Suite (15/15 Passing)
 
 ```bash
-✓ src/__tests__/app.test.ts (11 tests) 57ms
-  ✓ 1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors 50ms
+✓ src/__tests__/app.test.ts (15 tests) 74ms
+  ✓ 1. Validates candidate dataset against JSON Schema Draft 2020-12 with zero schema errors 59ms
   ✓ 2. Enforces all 6 Semantic Validation Rules via validateAtlasDataset 1ms
   ✓ 3. Reconciles dataset counts: confirms exactly 13 candidate entries across 5 concepts (resolving Argon report 12 vs 13) 0ms
   ✓ 4. Enforces provisional status and null locators on candidate entries (no invented citations) 1ms
@@ -118,10 +118,14 @@ The test suite enforces **JSON Schema Draft 2020-12** (via Ajv) and the **6 Sema
   ✓ 9. Verifies absence of duplicate IDs across concepts, candidates, regions, glossary, and quiz 0ms
   ✓ 10. Verifies legacy glossary items are quarantined under unverified (E5) status 0ms
   ✓ 11. Verifies quiz questions contain unique options and morphological mechanism notes 0ms
+  ✓ 12. Actively asserts zero occurrences of forbidden synthetic titles across all active application datasets 7ms
+  ✓ 13. Verifies semantic validator actively rejects blacklisted titles and unregistered source IDs 1ms
+  ✓ 14. Asserts no entry or question claims source_attested without physical locator and registered source ID 1ms
+  ✓ 15. Validates licensing metadata completeness and fair dealing/ODbL disclosure compliance 0ms
 
 Test Files  1 passed (1)
-     Tests  11 passed (11)
-  Duration  222ms
+     Tests  15 passed (15)
+  Duration  299ms
 ```
 
 ---

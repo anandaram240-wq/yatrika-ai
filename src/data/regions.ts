@@ -29,25 +29,24 @@ export const REGIONS: Region[] = [
         transliteration: 'En ri sahookar, aaram deereni?',
         meaning: 'How are you doing, chief / respected friend? Is everything well?',
         source: {
-          title: 'Dharwada Kannada Prabheda Adhyayana',
-          authorOrInstitution: 'Kannada University Hampi / CIIL Regional Surveys',
-          year: '2004',
-          sourceLocation: 'Lexical Survey of Northern Plain Dialects, pp. 45-48',
-          url: 'https://kannadauniversity.org'
+          title: 'Colloquial Northern Plain Address (Dharwad / Belagavi)',
+          authorOrInstitution: 'Field observation & oral usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       },
       {
         kannada: 'ಹೌದ್ಲಾ! ನಾನ್ ಮೊದಲೇ ಹೇಳಿಲ್ವಾ?',
         transliteration: 'Haudla! Naan modle helilva?',
         meaning: 'Is that so! Didn\'t I mention that to you earlier?',
         source: {
-          title: 'Kannada Bhaasha Prabhedagala Kosha',
-          authorOrInstitution: 'Central Institute of Indian Languages (CIIL), Mysuru',
-          year: '2012',
-          sourceLocation: 'Northern Particle Corpus, Entry: haudla'
+          title: 'Northern Conversational Particle Corpus',
+          authorOrInstitution: 'Field observation & oral usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       }
     ],
     culturalHighlights: 'Rich literary heritage encompassing Vachana literature, folk theatre (Bayalata), and classical Hindustani music lineages.',
@@ -85,24 +84,24 @@ export const REGIONS: Region[] = [
         transliteration: 'En marre, ivattu saukhya unta?',
         meaning: 'Hello my friend, is all well with you today?',
         source: {
-          title: 'Coastal Kannada Dialect Survey',
-          authorOrInstitution: 'Prof. U.P. Upadhyaya / Rashtrakavi Govinda Pai Samshodhana Kendra',
-          year: '1985',
-          sourceLocation: 'Coastal Dravidian Studies, p. 112'
+          title: 'Coastal Conversational Address & Existential Auxiliary',
+          authorOrInstitution: 'Coastal oral usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       },
       {
         kannada: 'ಬೋಳ್ಯಾ, ಎಲ್ಲಿದ್ಯ ಮಾರ್ರೆ ಇಷ್ಟೊತ್ತಿಗೆ?',
         transliteration: 'Boliya, yellidya marre ishtottige?',
         meaning: 'Hey buddy, where were you hiding all this time?',
         source: {
-          title: 'Kundagannada Shabdakosha',
-          authorOrInstitution: 'A.S. Kedilaya / Kundapura Sahitya Vedike',
-          year: '2008',
-          sourceLocation: 'Entry: boliya (colloquial affectionate address)'
+          title: 'Kundagannada Sub-variety Banter Corpus',
+          authorOrInstitution: 'Kundapura oral usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       }
     ],
     culturalHighlights: 'World-renowned Yakshagana theatrical heritage, coastal temple architecture, and maritime folk traditions.',
@@ -140,24 +139,24 @@ export const REGIONS: Region[] = [
         transliteration: 'Banni swamy, oota madkondu hoguviranthe!',
         meaning: 'Please come, Sir! Please do join us for lunch before leaving!',
         source: {
-          title: 'Southern Karnataka Dialect Documentation',
-          authorOrInstitution: 'Central Institute of Indian Languages (CIIL), Mysuru',
-          year: '1998',
-          sourceLocation: 'Sociolinguistic Survey of Old Mysore, pp. 78-82'
+          title: 'Southern Polite Register & Courtly Greeting',
+          authorOrInstitution: 'Old Mysuru oral usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       },
       {
         kannada: 'ಬೇಡ ಬಿಡಿ ಸ್ವಾಮಿ, ಅದೇನ್ ದೊಡ್ಡ ವಿಷ್ಯನಾ?',
         transliteration: 'Beda bidi swamy, aden dodd vishyena?',
         meaning: 'Let it be, friend! Is that really such a major issue?',
         source: {
-          title: 'Kannada Sahitya Parishat Nighantu',
-          authorOrInstitution: 'Kannada Sahitya Parishat, Bengaluru',
-          year: '1995',
-          sourceLocation: 'Vol. 5, Entry: beda-bidi'
+          title: 'Southern Conversational Idiom',
+          authorOrInstitution: 'Old Mysuru colloquial usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       }
     ],
     culturalHighlights: 'The royal Wadiyar heritage, world-famous Mysore Dasara festivities, and the cradle of modern Kannada prose.',
@@ -195,12 +194,12 @@ export const REGIONS: Region[] = [
         transliteration: 'En bavaji, yellige hontiri ivath?',
         meaning: 'Hey dear friend/brother, where are you headed today?',
         source: {
-          title: 'Kalyana Karnataka Bhasha Vaisishte',
-          authorOrInstitution: 'Dr. Basavaraj Sabarad / Gulbarga University',
-          year: '2010',
-          sourceLocation: 'Dialect Studies of the Gulbarga Division, p. 64'
+          title: 'Northeastern Kinship Address & Deccani Contact Register',
+          authorOrInstitution: 'Kalyana Karnataka oral usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       }
     ],
     culturalHighlights: '12th-century Sharana movement cradle, Basavakalyan, Hampi UNESCO monument corridors, and historic Bahmani architecture.',
@@ -238,12 +237,12 @@ export const REGIONS: Region[] = [
         transliteration: 'Male nintha mele kaapi thotakke hogi barona banni maraayre!',
         meaning: 'Once the rain subsides, come let us take a walk through the coffee estate, good fellow!',
         source: {
-          title: 'Kuvempu Sahitya Mattu Malenadu Bhasha Prayoga',
-          authorOrInstitution: 'Kannada Sahitya Parishat / Sahyadri Study Centre',
-          year: '2001',
-          sourceLocation: 'Lexical Analysis of Kuvempu Colloquial Prose, pp. 33-36'
+          title: 'Malnad Western Ghats Colloquial Address',
+          authorOrInstitution: 'Western Ghats oral usage record',
+          year: null as any,
+          sourceLocation: 'Oral field collection pending archival verification',
         },
-        status: 'source-attested'
+        status: 'provisional'
       }
     ],
     culturalHighlights: 'The Western Ghats UNESCO biodiversity hotspot, origin of rivers Tunga and Bhadra, and the cradle of Indian Arabica coffee.',
@@ -273,7 +272,7 @@ export const REGIONS: Region[] = [
       'Contemporary street & youth slang: "Macha", "Guru", "Scene illa", "Bombat"',
       'Seamless English-Kannada code-mixing in public transit and office domains',
       'Punchy, fast-paced conversational tempo',
-      'Documented in contemporary sociolinguistic surveys of Bangalore urban speech'
+      'Observed in contemporary Bengaluru urban youth and workplace speech'
     ],
     signaturePhrases: [
       {
@@ -281,10 +280,10 @@ export const REGIONS: Region[] = [
         transliteration: 'En macha, scene illa! Aaramagi set madana!',
         meaning: 'Hey bro, no problem at all! We will comfortably take care of it!',
         source: {
-          title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
-          authorOrInstitution: 'Department of Linguistics, Bangalore University',
-          year: '2018',
-          sourceLocation: 'Urban Slang and Code-Switching Corpus, pp. 19-22'
+          title: 'Contemporary Bengaluru Metropolitan Vernacular',
+          authorOrInstitution: 'Metropolitan youth code-switching corpus',
+          year: null as any,
+          sourceLocation: 'Urban oral usage pending archival verification',
         },
         status: 'provisional'
       }

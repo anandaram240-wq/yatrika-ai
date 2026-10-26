@@ -91,7 +91,7 @@ def create_presentation():
     p3.font.color.rgb = RGBColor(251, 191, 36)
 
     p4 = tf1.add_paragraph()
-    p4.text = "Problem Statement 04: Regional Language Explorer • Argon Phase 2.5 Implementation\n13 Seed Candidate Entries • 5 Core Communicative Concepts • Strict JSON Schema & Semantic Provenance"
+    p4.text = "Problem Statement 04: Regional Language Explorer • Phase 3 Release-Critical Remediation\n13 Seed Candidate Entries • 5 Core Communicative Concepts • Strict Bibliographic & Provenance Registry"
     p4.font.size = Pt(13)
     p4.font.color.rgb = RGBColor(214, 211, 209)
     p4.space_before = Pt(18)
@@ -258,7 +258,7 @@ def create_presentation():
    • Ajv Draft 2020-12: Full JSON schema validation wired into Vitest automated tests.
    • Semantic Validator: Evaluates all 6 linguistic rules (bibliographic registry, locator, script, register, consent).
 
-2. AUTOMATED VITEST SUITE (11 PASSING TESTS):
+2. AUTOMATED VITEST SUITE (15 PASSING TESTS):
    • Test 1: JSON Schema Draft 2020-12 compliance with zero validation errors.
    • Test 2: Enforces all 6 Semantic Validation Rules across entries.
    • Test 3: Reconciles counts: confirms exactly 13 candidate entries across 5 concepts.
@@ -270,6 +270,10 @@ def create_presentation():
    • Test 9: Zero duplicate IDs across concepts, candidates, regions, glossary, and quiz.
    • Test 10: Quarantined legacy glossary backlog verification (E5 unverified).
    • Test 11: Quiz questions options uniqueness & morphological mechanism notes.
+   • Test 12: Zero occurrences of forbidden synthetic titles across all datasets.
+   • Test 13: Semantic validator actively rejects blacklisted titles & unregistered source IDs.
+   • Test 14: Asserts no entry or question claims source_attested without physical locator.
+   • Test 15: Validates licensing metadata completeness and fair dealing/ODbL compliance.
 
 3. KANNADA TYPOGRAPHY & ACCESSIBILITY:
    • Strict lang="kn" and line-height: 1.65 (leading-loose) across script containers to prevent ottakshara clipping.

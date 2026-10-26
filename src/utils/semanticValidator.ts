@@ -26,7 +26,30 @@ export const APPROVED_BIBLIOGRAPHY_REGISTRY: Record<string, { title: string; aut
     title: 'A Kannada-English Dictionary',
     author: 'Rev. Ferdinand Kittel / Basel Mission, Mangalore',
   },
+  'SRC-KSP-NIGHANTU': {
+    title: 'Kannada Sahitya Parishat Nighantu (Vols 1–8)',
+    author: 'Kannada Sahitya Parishat, Bangalore',
+  },
+  'SRC-BHAT-1967': {
+    title: 'Kannada Verb Forms',
+    author: 'D. N. Shankara Bhat / Deccan College Postgraduate and Research Institute, Pune',
+  },
 };
+
+export const FORBIDDEN_SYNTHETIC_TITLES = [
+  'Kannada Bhaasha Prabhedagala Kosha',
+  'Sociolinguistic Surveys of Old Mysore and Northern Karnataka',
+  'Sociolinguistic Survey of Old Mysore',
+  'Sociolinguistic Survey of Urban Bengaluru Kannada',
+  'Sociolinguistic Terminology of Northern Karnataka',
+  'Sociolinguistic Survey of Coastal Taluks',
+  'Dharwada Kannada Prabheda Adhyayana',
+  'Kundagannada Shabdakosha',
+  'Coastal Kannada Dialect Survey',
+  'Kalyana Karnataka Bhasha Vaisishte',
+  'Kuvempu Sahitya Mattu Malenadu Bhasha Prayoga',
+  'Mandya Bhasha Roopagalu',
+] as const;
 
 export const ALLOWED_REGISTERS = [
   'formal_and_polite_spoken',
@@ -82,7 +105,10 @@ export function validateAtlasDataset(dataset: AtlasDataset): SemanticValidationR
     // Rule 1: Bibliographic Verification
     if (entry.citation) {
       if (entry.citation.source_id && !APPROVED_BIBLIOGRAPHY_REGISTRY[entry.citation.source_id]) {
-        warnings.push(`${prefix}: source_id "${entry.citation.source_id}" is not in approved registry.`);
+        errors.push(`${prefix}: source_id "${entry.citation.source_id}" is not in approved registry.`);
+      }
+      if (entry.citation.source_title && FORBIDDEN_SYNTHETIC_TITLES.some((f) => entry.citation.source_title!.includes(f))) {
+        errors.push(`${prefix}: Citation references forbidden synthetic title: "${entry.citation.source_title}".`);
       }
       if (entry.citation.publication_year !== null && entry.citation.publication_year !== undefined) {
         if (entry.citation.publication_year < 1800 || entry.citation.publication_year > 2026) {
@@ -100,6 +126,8 @@ export function validateAtlasDataset(dataset: AtlasDataset): SemanticValidationR
         errors.push(`${prefix}: evidence_status is "source_attested" but citation.locator is missing.`);
       } else if (/^https?:\/\/[^/]+\/?$/.test(entry.citation.locator)) {
         errors.push(`${prefix}: citation.locator must be an exact page/headword, not a bare domain URL.`);
+      } else if (!entry.citation.source_id || !APPROVED_BIBLIOGRAPHY_REGISTRY[entry.citation.source_id]) {
+        errors.push(`${prefix}: evidence_status is "source_attested" but source_id "${entry.citation.source_id}" is not in approved registry.`);
       }
     } else if (entry.evidence_status === 'provisional') {
       provisionalCount++;

@@ -144,34 +144,6 @@ export interface Region {
   };
 }
 
-export type PhraseCategory = 'greetings' | 'daily-life' | 'food-dining' | 'travel-auto' | 'humor-slang';
-
-export interface DialectTranslation {
-  kannada: string;
-  transliteration: string;
-  nuance: string;
-  status: VerificationStatus;
-  source: LinguisticSource;
-  locality?: string;
-  contextOfUse: string;
-  linguisticMechanism?: string;
-  socialRegister?: string;
-  syntheticAudioPitch?: number;
-  syntheticAudioRate?: number;
-}
-
-export interface DialectPhrase {
-  id: string;
-  english: string;
-  context: string;
-  category: PhraseCategory;
-  standardKannada: {
-    kannada: string;
-    transliteration: string;
-    grammaticalNote?: string;
-  };
-  variations: Partial<Record<RegionId, DialectTranslation>>;
-}
 
 export interface GlossaryWord {
   id: string;

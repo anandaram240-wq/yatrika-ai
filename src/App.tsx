@@ -119,6 +119,15 @@ export function App() {
     );
   };
 
+  const handleResetLocalData = () => {
+    if (window.confirm('Reset local community drafts to default verified sample entries? Any newly created drafts on this device will be cleared.')) {
+      localStorage.removeItem('namma_kannada_contributions');
+      localStorage.removeItem('namma_kannada_vault_bookmarks');
+      setContributions(INITIAL_LOCAL_DRAFTS);
+      setBookmarkedIds([]);
+    }
+  };
+
   const handleSelectRegionForMatrix = (regionId: RegionId) => {
     setMatrixInitialRegion(regionId);
     setActiveTab('matrix');
@@ -192,6 +201,7 @@ export function App() {
               contributions={contributions}
               onOpenContributeModal={() => setIsContributeModalOpen(true)}
               onBookmarkContribution={handleBookmarkContribution}
+              onResetLocalData={handleResetLocalData}
               bookmarkedIds={bookmarkedIds}
             />
           )}

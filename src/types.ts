@@ -63,6 +63,8 @@ export interface DialectTranslation {
   source: LinguisticSource;
   locality?: string; // Specific town/sub-region (e.g. Kundapura, Dharwad, Mandya)
   contextOfUse: string;
+  linguisticMechanism?: string; // e.g. 'Morphological Suffix', 'Lexical Replacement', 'Phonological Shift', 'Contact Loan'
+  socialRegister?: string;      // e.g. 'Agrarian / Rural', 'Informal Peer', 'Respectful Courtly', 'Urban Colloquial'
   syntheticAudioPitch?: number; // Labeled clearly as synthetic browser modulation
   syntheticAudioRate?: number;
 }

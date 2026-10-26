@@ -258,8 +258,24 @@ export const PhraseMatrix: React.FC<PhraseMatrixProps> = ({
                         /{variation.transliteration}/
                       </div>
 
+                      {/* Linguistic Mechanism & Register Chips */}
+                      {(variation.linguisticMechanism || variation.socialRegister) && (
+                        <div className="flex flex-wrap gap-1.5 mt-2.5 mb-2">
+                          {variation.linguisticMechanism && (
+                            <span className="px-2 py-0.5 rounded-md text-3xs font-semibold bg-stone-100 text-stone-700 border border-stone-200" title="Linguistic Mechanism">
+                              ⚙️ {variation.linguisticMechanism}
+                            </span>
+                          )}
+                          {variation.socialRegister && (
+                            <span className="px-2 py-0.5 rounded-md text-3xs font-semibold bg-amber-50 text-amber-900 border border-amber-200" title="Social Register">
+                              🏷️ {variation.socialRegister}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
                       {/* Nuance explanation */}
-                      <div className="mt-3 text-xs text-stone-600 bg-white/80 p-2.5 rounded-xl border border-stone-200/80">
+                      <div className="mt-2.5 text-xs text-stone-600 bg-white/80 p-2.5 rounded-xl border border-stone-200/80">
                         <span className="font-bold text-stone-700">Linguistic Nuance: </span>
                         <span>{variation.nuance}</span>
                       </div>

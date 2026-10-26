@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { CommunityContribution } from '../types';
 import { REGIONS } from '../data/regions';
 import { speechService } from '../utils/speech';
-import { MapPin, PlusCircle, Volume2, Download, Check, User, AlertCircle, Bookmark } from 'lucide-react';
+import { MapPin, PlusCircle, Volume2, Download, Check, User, AlertCircle, Bookmark, RotateCcw } from 'lucide-react';
 
 interface CommunityVaultProps {
   contributions: CommunityContribution[];
   onOpenContributeModal: () => void;
   onBookmarkContribution: (id: string) => void;
+  onResetLocalData?: () => void;
   bookmarkedIds?: string[];
 }
 
@@ -15,6 +16,7 @@ export const CommunityVault: React.FC<CommunityVaultProps> = ({
   contributions,
   onOpenContributeModal,
   onBookmarkContribution,
+  onResetLocalData,
   bookmarkedIds = [],
 }) => {
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -68,7 +70,18 @@ export const CommunityVault: React.FC<CommunityVaultProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {onResetLocalData && (
+              <button
+                onClick={onResetLocalData}
+                className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-600 text-xs font-semibold transition-all cursor-pointer"
+                title="Reset local drafts to default entries"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-stone-500" />
+                <span>Reset to Defaults</span>
+              </button>
+            )}
+
             <button
               onClick={handleExportJSON}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-300 bg-white hover:bg-stone-50 text-stone-700 text-sm font-semibold transition-all shadow-xs cursor-pointer"

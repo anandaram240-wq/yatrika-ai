@@ -19,6 +19,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Dharwad, Hubballi, Belagavi',
         contextOfUse: 'Informal yet respectful greeting between men in bazaars, tea stalls, and village squares.',
+        linguisticMechanism: 'Morphological Interrogative Suffix (-eni) & Vocative Honorific',
+        socialRegister: 'Informal Peer / Commercial',
         source: {
           title: 'Dharwada Kannada Prabheda Adhyayana',
           authorOrInstitution: 'Kannada University, Hampi',
@@ -35,6 +37,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Mangaluru, Udupi, Kundapura',
         contextOfUse: 'Warm greeting between community peers meeting on the road or at harbor/market stalls.',
+        linguisticMechanism: 'Archaic Existential Auxiliary (unta) & Coastal Vocative (marre)',
+        socialRegister: 'Communal / Familiar',
         source: {
           title: 'Coastal Kannada Dialect Survey',
           authorOrInstitution: 'Prof. U.P. Upadhyaya / Govinda Pai Research Centre',
@@ -51,6 +55,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Mysuru, Mandya, Nanjangud',
         contextOfUse: 'Traditional greeting used when welcoming guests or meeting neighborhood elders.',
+        linguisticMechanism: 'Honorific Particle (swamy) & Syntactic Politeness',
+        socialRegister: 'Respectful Courtly / Elder Address',
         source: {
           title: 'Southern Karnataka Dialect Documentation',
           authorOrInstitution: 'Central Institute of Indian Languages (CIIL), Mysuru',
@@ -67,6 +73,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Kalaburagi, Bidar, Yadgir',
         contextOfUse: 'Heartfelt greeting in rural and town settings throughout the northeastern districts.',
+        linguisticMechanism: 'Kinship Vocative (Bavaji) & Lexical Borrowing (samadana)',
+        socialRegister: 'Warm Rural / Kinship',
         source: {
           title: 'Kalyana Karnataka Bhasha Vaisishte',
           authorOrInstitution: 'Dr. Basavaraj Sabarad / Gulbarga University',
@@ -83,6 +91,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Shivamogga, Thirthahalli, Chikkamagaluru',
         contextOfUse: 'Rural plantation and village greetings between neighbors.',
+        linguisticMechanism: 'Phonological Contraction & Agrarian Conversational Frame',
+        socialRegister: 'Agrarian / Domestic Neighborhood',
         source: {
           title: 'Kuvempu Sahitya Mattu Malenadu Bhasha Prayoga',
           authorOrInstitution: 'Kannada Sahitya Parishat',
@@ -99,6 +109,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'provisional',
         locality: 'Bengaluru Metropolitan Area',
         contextOfUse: 'Casual greeting among youth, college students, and tech colleagues.',
+        linguisticMechanism: 'English-Dravidian Code-Mixing & Urban Slang Tag (guru)',
+        socialRegister: 'Youth / Collegiate',
         source: {
           title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
           authorOrInstitution: 'Bangalore University Department of Linguistics',
@@ -128,6 +140,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Dharwad, Belagavi, Vijayapura',
         contextOfUse: 'Host greeting a visitor entering a household or tea-shop.',
+        linguisticMechanism: 'Phonological Contraction (aatheni < aayithe-enu) & Diet Lexicon',
+        socialRegister: 'Domestic Hospitality',
         source: {
           title: 'Dharwada Kannada Prabheda Adhyayana',
           authorOrInstitution: 'Kannada University Hampi',
@@ -144,6 +158,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Udupi, Mangaluru, Kundapura',
         contextOfUse: 'Welcoming family or visitors home for afternoon dinner.',
+        linguisticMechanism: 'Terminal Vowel Elongation & Coastal Culinary Reference',
+        socialRegister: 'Domestic / Family',
         source: {
           title: 'Coastal Kannada Dialect Survey',
           authorOrInstitution: 'Prof. U.P. Upadhyaya / Govinda Pai Centre',
@@ -160,6 +176,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Mandya, Mysuru, Ramanagara',
         contextOfUse: 'Visiting any agricultural home in Old Mysore during mealtime.',
+        linguisticMechanism: 'Cohortative Imperative & Staple Grain Discourse',
+        socialRegister: 'Traditional Hospitality',
         source: {
           title: 'Southern Karnataka Dialect Documentation',
           authorOrInstitution: 'CIIL Mysuru',
@@ -176,6 +194,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Kalaburagi, Raichur',
         contextOfUse: 'Hospitality inquiry between friends meeting near home or workplace.',
+        linguisticMechanism: 'Echo-Word Reduplication (oota-geeta)',
+        socialRegister: 'Colloquial Peer Hospitality',
         source: {
           title: 'Kalyana Karnataka Bhasha Vaisishte',
           authorOrInstitution: 'Dr. Basavaraj Sabarad',
@@ -192,6 +212,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Chikkamagaluru, Shivamogga hills',
         contextOfUse: 'Visiting plantation households amidst cool monsoon or winter weather.',
+        linguisticMechanism: 'Vocative Affection (maraayre) & Beverage Offer Frame',
+        socialRegister: 'Plantation Domestic',
         source: {
           title: 'Kuvempu Sahitya Mattu Malenadu Bhasha Prayoga',
           authorOrInstitution: 'Kannada Sahitya Parishat',
@@ -221,6 +243,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Hubballi, Dharwad, Gadag',
         contextOfUse: 'Running into an acquaintance rushing through the market or bus stand.',
+        linguisticMechanism: 'Verb Stem Replacement (hontri < horatu)',
+        socialRegister: 'Public Transit / Market Encounters',
         source: {
           title: 'Dharwada Kannada Prabheda Adhyayana',
           authorOrInstitution: 'Kannada University Hampi',
@@ -237,6 +261,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Kundapura, Udupi',
         contextOfUse: 'Town market or jetty encounter between close village companions.',
+        linguisticMechanism: 'Archaic Noun Retention (payana) & Intimate Address (boliya)',
+        socialRegister: 'Village Peer / Harbor',
         source: {
           title: 'Kundagannada Shabdakosha',
           authorOrInstitution: 'A.S. Kedilaya',
@@ -253,6 +279,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Mysuru, Chamarajanagar',
         contextOfUse: 'Street encounter in residential agraharas or village lanes.',
+        linguisticMechanism: 'Honorific Interrogative & Courteous Stoppage Request',
+        socialRegister: 'Residential / Respectful Neighborhood',
         source: {
           title: 'Southern Karnataka Dialect Documentation',
           authorOrInstitution: 'CIIL Mysuru',
@@ -269,6 +297,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Kalaburagi, Bidar',
         contextOfUse: 'Crossroad interactions between neighboring families.',
+        linguisticMechanism: 'Vocalic Lengthening (honteerree) & Kinship Address',
+        socialRegister: 'Village Crossroad',
         source: {
           title: 'Kalyana Karnataka Bhasha Vaisishte',
           authorOrInstitution: 'Dr. Basavaraj Sabarad',
@@ -285,6 +315,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'provisional',
         locality: 'Bengaluru Tech & Metro Corridors',
         contextOfUse: 'Workplace or college campus departures.',
+        linguisticMechanism: 'Metaphorical Loan Translation (jump aagtidya)',
+        socialRegister: 'Metro Commuter / Collegiate',
         source: {
           title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
           authorOrInstitution: 'Bangalore University',
@@ -313,6 +345,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Vijayapura, Dharwad, Bagalkote',
         contextOfUse: 'Bargaining at weekly farmer markets (Santhe).',
+        linguisticMechanism: 'Lexical Loan (rokka) & Verbal Contraction (thakkotheevi)',
+        socialRegister: 'Marketplace / Farmer Bazaar',
         source: {
           title: 'Dharwada Kannada Prabheda Adhyayana',
           authorOrInstitution: 'Kannada University Hampi',
@@ -329,6 +363,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Mangaluru, Udupi',
         contextOfUse: 'Fish market or provision store trade.',
+        linguisticMechanism: 'Regional In-Group Appeal (nam kade janarige)',
+        socialRegister: 'Fish & Provision Trade',
         source: {
           title: 'Coastal Kannada Dialect Survey',
           authorOrInstitution: 'Prof. U.P. Upadhyaya',
@@ -345,6 +381,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Mysuru Devaraja Market, Mandya Santhe',
         contextOfUse: 'Heritage retail and fresh produce transactions.',
+        linguisticMechanism: 'Loyalty Contract Discourse (khaayam giraaki)',
+        socialRegister: 'Heritage Retail / Santhe',
         source: {
           title: 'Southern Karnataka Dialect Documentation',
           authorOrInstitution: 'CIIL Mysuru',
@@ -361,6 +399,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'provisional',
         locality: 'Bengaluru Auto Stands',
         contextOfUse: 'Haggling with auto-rickshaw drivers across transit hubs.',
+        linguisticMechanism: 'Hybrid Transit Jargon & Code-Switching (meter haaki boss)',
+        socialRegister: 'Transit & Auto Stand',
         source: {
           title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
           authorOrInstitution: 'Bangalore University',
@@ -389,6 +429,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Dharwad, Belagavi',
         contextOfUse: 'Peer solidarity in times of agricultural or financial hardship.',
+        linguisticMechanism: 'Deccani Loan (fikar) & Negative Imperative Suffix (-byaadri)',
+        socialRegister: 'Comradely Solidarity',
         source: {
           title: 'Dharwada Kannada Prabheda Adhyayana',
           authorOrInstitution: 'Kannada University Hampi',
@@ -405,6 +447,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Kundapura, Udupi',
         contextOfUse: 'Consoling a companion facing a personal setback.',
+        linguisticMechanism: 'Affectionate Diminutive (boliya) & Spiritual Consolation',
+        socialRegister: 'Intimate Peer Support',
         source: {
           title: 'Kundagannada Shabdakosha',
           authorOrInstitution: 'A.S. Kedilaya',
@@ -421,6 +465,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Mysuru, Mandya',
         contextOfUse: 'Calming an agitated elder or peer.',
+        linguisticMechanism: 'Pragmatic Dismissive Idiom (beda bidi swamy)',
+        socialRegister: 'Elder / Philosophical Solace',
         source: {
           title: 'Kannada Sahitya Parishat Nighantu',
           authorOrInstitution: 'Kannada Sahitya Parishat',
@@ -437,6 +483,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'source-attested',
         locality: 'Kalaburagi, Raichur',
         contextOfUse: 'Encouraging a fellow worker facing adversity.',
+        linguisticMechanism: 'Deccani Loan (dammu) & Future Dialect Suffix (-beeltaithi)',
+        socialRegister: 'Resilience / Blue-Collar Encouragement',
         source: {
           title: 'Kalyana Karnataka Bhasha Vaisishte',
           authorOrInstitution: 'Dr. Basavaraj Sabarad',
@@ -453,6 +501,8 @@ export const DIALECT_PHRASES: DialectPhrase[] = [
         status: 'provisional',
         locality: 'Bengaluru Tech & Campus Circles',
         contextOfUse: 'Informal reassurance among youth friends.',
+        linguisticMechanism: 'Tri-Lingual Slang Synthesis (chill maadu, scene illa)',
+        socialRegister: 'Youth / Peer Solidarity',
         source: {
           title: 'Sociolinguistic Survey of Urban Bengaluru Kannada',
           authorOrInstitution: 'Bangalore University',

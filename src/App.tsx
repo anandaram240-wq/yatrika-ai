@@ -180,7 +180,7 @@ export function App() {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col bg-amber-50/40 text-stone-900 selection:bg-amber-300">
+    <div className="min-h-screen flex flex-col bg-[#fdfbf7] text-stone-900 selection:bg-amber-300">
       {/* Navbar */}
       <Navbar
         activeTab={activeTab}
@@ -191,8 +191,8 @@ export function App() {
 
       {/* Main Content Area */}
       <main className="grow">
-        {/* Hero Section */}
-        <Hero setActiveTab={setActiveTab} />
+        {/* Hero Section (Displayed on Map Explorer) */}
+        {activeTab === 'map' && <Hero setActiveTab={setActiveTab} />}
 
         {/* Tab Content Panels */}
         <div className="transition-all duration-300">

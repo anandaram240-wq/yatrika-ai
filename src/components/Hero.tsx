@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, Sparkles, Volume2, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowDown, Layers, Award } from 'lucide-react';
 import { ActiveTab } from './Navbar';
 
 interface HeroProps {
@@ -8,84 +8,98 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ setActiveTab }) => {
   return (
-    <div className="relative overflow-hidden bg-linear-to-b from-amber-100/70 via-amber-50/40 to-transparent pt-10 pb-12 border-b border-amber-200/60">
+    <div className="relative overflow-hidden bg-amber-50 border-b border-amber-200 py-6 sm:py-8 shadow-xs">
       {/* Decorative Kannada Glyphs in Background */}
-      <div className="absolute top-2 right-8 text-amber-200/40 font-kannada font-black text-9xl select-none pointer-events-none">
+      <div 
+        className="absolute top-1 right-6 text-amber-200/50 font-kannada font-black text-7xl sm:text-9xl select-none pointer-events-none"
+        aria-hidden="true"
+      >
         ಕರ್ನಾಟಕ
       </div>
-      <div className="absolute -bottom-6 left-12 text-red-200/30 font-kannada font-black text-8xl select-none pointer-events-none">
+      <div 
+        className="absolute -bottom-4 left-6 text-red-200/40 font-kannada font-black text-6xl sm:text-8xl select-none pointer-events-none"
+        aria-hidden="true"
+      >
         ಕನ್ನಡ
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-linear-to-r from-red-600/10 to-amber-600/10 border border-red-300 text-red-800 text-xs font-bold uppercase tracking-wider mb-5 shadow-xs">
+          {/* Hackathon Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 border border-red-300 text-red-900 text-xs font-black uppercase tracking-wider mb-3 shadow-xs">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>HackerRank Campus Crew • NIE Mysuru Hackathon 2026</span>
+            <span>Kannada Digital Innovation Hackathon 2026 • Problem 04</span>
           </div>
 
-          {/* Main Title */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-tight">
-            Explore the Regional Varieties of <br className="hidden sm:inline" />
-            <span className="bg-linear-to-r from-red-600 via-amber-600 to-amber-500 bg-clip-text text-transparent">
-              Namma Kannada
+          {/* Main Title - High Contrast */}
+          <h1 
+            className="text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight leading-tight"
+            style={{ color: '#0c0a09' }}
+          >
+            Explore the Regional Varieties of{' '}
+            <span className="text-red-700 underline decoration-amber-500 decoration-4 underline-offset-4">
+              ನಮ್ಮ ಕನ್ನಡ (Namma Kannada)
             </span>
           </h1>
 
-          <p className="mt-4 text-base sm:text-lg text-stone-600 leading-relaxed font-normal">
-            From the crisp tempo of <strong>Dharwad</strong>, the coastal oceanic cadence of <strong>Kundapura & Karavali</strong>, the royal courtliness of <strong>Mysuru</strong>, to the contemporary code-mixing of <strong>Bengaluru</strong> — discover and compare documented regional phrases with authentic linguistic citations.
+          <p 
+            className="mt-3 text-sm sm:text-base text-stone-800 leading-relaxed font-medium max-w-2xl mx-auto"
+            style={{ color: '#292524' }}
+          >
+            From the crisp tempo of <strong>Dharwad & Kittur</strong>, the coastal cadence of <strong>Kundapura & Karavali</strong>, to the royal courtliness of <strong>Mysuru</strong> and the cosmopolitan energy of <strong>Bengaluru</strong> — discover how Kannada sounds and transforms across Karnataka!
           </p>
 
-          {/* CTA Buttons */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {/* Quick Action Navigation Bar */}
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+            <a
+              href="#karnataka-map-section"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold shadow-md active:scale-95 transition-all text-xs sm:text-sm cursor-pointer"
+            >
+              <ArrowDown className="w-4 h-4 text-amber-300 animate-bounce" />
+              <span>Explore Interactive Map Below</span>
+            </a>
+
             <button
               onClick={() => setActiveTab('matrix')}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-linear-to-r from-red-600 to-amber-600 text-white font-bold shadow-lg hover:shadow-xl hover:from-red-700 hover:to-amber-700 active:scale-95 transition-all text-sm sm:text-base cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-stone-300 text-stone-900 font-bold hover:bg-stone-50 active:scale-95 shadow-xs transition-all text-xs sm:text-sm cursor-pointer"
             >
-              <span>Explore Comparative Matrix</span>
-              <ArrowRight className="w-4 h-4" />
+              <Layers className="w-4 h-4 text-red-600" />
+              <span>Cross-Dialect Matrix</span>
             </button>
 
             <button
               onClick={() => setActiveTab('quiz')}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white border border-stone-300 text-stone-800 font-bold hover:bg-stone-50 active:scale-95 shadow-xs transition-all text-sm sm:text-base cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-stone-300 text-stone-900 font-bold hover:bg-stone-50 active:scale-95 shadow-xs transition-all text-xs sm:text-sm cursor-pointer"
             >
-              <Compass className="w-4 h-4 text-amber-600" />
-              <span>Take Phrase Knowledge Quiz</span>
+              <Award className="w-4 h-4 text-indigo-600" />
+              <span>Dialect Quiz</span>
             </button>
           </div>
 
-          {/* Stats Bar */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-amber-200/80 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-red-700">6</div>
-              <div className="text-xs text-stone-600 font-semibold mt-1">Exploration Zones</div>
-              <div className="text-3xs text-stone-400 mt-0.5">Educational Taxonomy</div>
+          {/* Clean 4-Metric Strip */}
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl mx-auto text-left">
+            <div className="bg-white p-2.5 rounded-xl border border-stone-300 shadow-2xs">
+              <div className="text-xl sm:text-2xl font-black text-red-700">6</div>
+              <div className="text-xs text-stone-900 font-bold">Cultural Regions</div>
+              <div className="text-3xs text-stone-500">Interactive Map</div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-amber-200/80 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-amber-600">13</div>
-              <div className="text-xs text-stone-600 font-semibold mt-1">Candidate Entries</div>
-              <div className="text-3xs text-stone-400 mt-0.5">Across 5 Core Concepts</div>
+            <div className="bg-white p-2.5 rounded-xl border border-stone-300 shadow-2xs">
+              <div className="text-xl sm:text-2xl font-black text-amber-600">13</div>
+              <div className="text-xs text-stone-900 font-bold">Candidate Phrases</div>
+              <div className="text-3xs text-stone-500">5 Everyday Concepts</div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-amber-200/80 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-teal-700 flex items-center justify-center gap-1">
-                <Volume2 className="w-5 h-5 text-teal-600" />
-                <span>Synthetic</span>
-              </div>
-              <div className="text-xs text-stone-600 font-semibold mt-1">Web Speech Synthesis</div>
-              <div className="text-3xs text-stone-400 mt-0.5">Phonetic Audio Guide</div>
+            <div className="bg-white p-2.5 rounded-xl border border-stone-300 shadow-2xs">
+              <div className="text-xl sm:text-2xl font-black text-teal-700">Audio 🔊</div>
+              <div className="text-xs text-stone-900 font-bold">Speech Pronunciation</div>
+              <div className="text-3xs text-stone-500">Native Web Voice</div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-amber-200/80 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-indigo-700 flex items-center justify-center gap-1">
-                <ShieldCheck className="w-5 h-5 text-indigo-600" />
-                <span>Verified</span>
-              </div>
-              <div className="text-xs text-stone-600 font-semibold mt-1">Structured Provenance</div>
-              <div className="text-3xs text-stone-400 mt-0.5">CIIL / Kittel / Parishat</div>
+            <div className="bg-white p-2.5 rounded-xl border border-stone-300 shadow-2xs">
+              <div className="text-xl sm:text-2xl font-black text-purple-700">100%</div>
+              <div className="text-xs text-stone-900 font-bold">Grounded Sources</div>
+              <div className="text-3xs text-stone-500">CIIL & Upadhyaya</div>
             </div>
           </div>
         </div>

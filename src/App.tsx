@@ -100,6 +100,31 @@ const POI_PHOTO_MAP: Record<string, string> = {
   'poi-devarayanadurga': 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80',
   'poi-madhugiri-fort': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
   'poi-sanganakallu': 'https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=600&q=80',
+  'poi-kudalasangama': 'https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=600&q=80',
+  'poi-anjanadri-hill': 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80',
+  'poi-sanapur-lake': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-banashankari': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+  'poi-kaginele': 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80',
+  'poi-vibhuti-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-apsarakonda': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+  'poi-honnavar-backwaters': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-karkala-gommateshwara': 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80',
+  'poi-moodabidri-thousand-pillars': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=600&q=80',
+  'poi-malpe-seawalk': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+  'poi-kaup-lighthouse': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+  'poi-omkareshwara-madikeri': 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=600&q=80',
+  'poi-mandalpatti': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+  'poi-chelavara-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-shettihalli-church': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+  'poi-manjarabad-fort': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+  'poi-bisle-ghat': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-chunchanakatte-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-tipu-summer-palace-blr': 'https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=600&q=80',
+  'poi-channapatna-craft': 'https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=600&q=80',
+  'poi-ulsoor-lake': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-nuggehalli': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=600&q=80',
+  'poi-begur-fort': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+  'poi-gundal-dam': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
   'food-mtr-bengaluru': 'https://images.unsplash.com/photo-1630383249896-424e482df921?auto=format&fit=crop&w=600&q=80',
   'food-davangere-benne-dose': 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80',
   'food-dharwad-pedha-jolada-rotti': 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80',
@@ -113,6 +138,25 @@ const POI_PHOTO_MAP: Record<string, string> = {
 
 const DEFAULT_PHOTO =
   'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80';
+
+export interface UserOriginOption {
+  id: string;
+  name: string;
+  nameKannada: string;
+  coordinates: [number, number]; // [lng, lat]
+}
+
+export const KARNATAKA_GATEWAY_ORIGINS: UserOriginOption[] = [
+  { id: 'origin-bengaluru', name: 'Bengaluru (KSR / Majestic)', nameKannada: 'ಬೆಂಗಳೂರು', coordinates: [77.5683, 12.9784] },
+  { id: 'origin-mysuru', name: 'Mysuru City', nameKannada: 'ಮೈಸೂರು', coordinates: [76.6498, 12.3145] },
+  { id: 'origin-mangaluru', name: 'Mangaluru Central', nameKannada: 'ಮಂಗಳೂರು', coordinates: [74.8560, 12.9141] },
+  { id: 'origin-hubballi', name: 'Hubballi Junction', nameKannada: 'ಹುಬ್ಬಳ್ಳಿ', coordinates: [75.1432, 15.3587] },
+  { id: 'origin-belagavi', name: 'Belagavi', nameKannada: 'ಬೆಳಗಾವಿ', coordinates: [74.5089, 15.8497] },
+  { id: 'origin-shivamogga', name: 'Shivamogga (Malnad Gateway)', nameKannada: 'ಶಿವಮೊಗ್ಗ', coordinates: [75.5681, 13.9299] },
+  { id: 'origin-kalaburagi', name: 'Kalaburagi (Gulbarga)', nameKannada: 'ಕಲಬುರಗಿ', coordinates: [76.8343, 17.3297] },
+  { id: 'origin-udupi', name: 'Udupi City', nameKannada: 'ಉಡುಪಿ', coordinates: [74.7473, 13.3409] },
+  { id: 'origin-hassan', name: 'Hassan', nameKannada: 'ಹಾಸನ', coordinates: [76.0967, 13.0033] },
+];
 
 export function App() {
   const initialTrip = useMemo(() => {
@@ -136,6 +180,13 @@ export function App() {
   const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState<boolean>(false);
 
+  // User starting location & interactive overview tour states
+  const [userOrigin, setUserOrigin] = useState<UserOriginOption>(KARNATAKA_GATEWAY_ORIGINS[0]);
+  const [isDetectingGps, setIsDetectingGps] = useState<boolean>(false);
+  const [isTourPlaying, setIsTourPlaying] = useState<boolean>(false);
+  const [tourStatusText, setTourStatusText] = useState<string | null>(null);
+  const tourTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // MapLibre WebGL refs
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -146,18 +197,50 @@ export function App() {
     [stopIds]
   );
 
-  const [route, setRoute] = useState<ComputedTripRoute>(() =>
-    buildFallbackRoadCorridor(itineraryStops)
+  const originPoi = useMemo<KarnatakaPOI>(() => ({
+    id: userOrigin.id,
+    name: userOrigin.name,
+    nameKannada: userOrigin.nameKannada,
+    category: 'railway_station',
+    district: 'Karnataka',
+    macroRegion: 'Old Mysuru',
+    coordinates: userOrigin.coordinates,
+    minZoomLevel: 5,
+    summary: `Trip origin starting point: ${userOrigin.name}`,
+    recommendedHours: 0.5,
+    bestTimeOfDay: 'Morning Departure',
+    entryFeeInr: { indianCitizen: 0, feeNote: 'Free starting origin / transit point' },
+    openingHours: 'Open 24 Hours',
+    sourceAttribution: 'User Origin Location Selection',
+    verifiedDate: '2026-10-29',
+    nearestRailwayId: 'rail-sbc',
+    nearestBusTerminalId: 'bus-majestic',
+    localPhrase: {
+      kannada: 'ಯಾತ್ರೆ ಶುರು ಮಾಡೋಣ!',
+      iast: 'Yātre śuru māḍōṇa!',
+      english: "Let's begin the journey!",
+      dialectLabel: 'Universal Kannada',
+      usageContext: 'Journey kickoff',
+    },
+  }), [userOrigin]);
+
+  const fullRouteStops = useMemo<KarnatakaPOI[]>(
+    () => [originPoi, ...itineraryStops],
+    [originPoi, itineraryStops]
   );
 
-  // Calculate live OSRM road route with automatic highway corridor fallback
+  const [route, setRoute] = useState<ComputedTripRoute>(() =>
+    buildFallbackRoadCorridor(fullRouteStops)
+  );
+
+  // Calculate live OSRM road route starting from user origin across all destinations
   useEffect(() => {
     const controller = new AbortController();
-    calculateMultiStopRoadRoute(itineraryStops, controller.signal)
+    calculateMultiStopRoadRoute(fullRouteStops, controller.signal)
       .then((res) => setRoute(res))
-      .catch(() => setRoute(buildFallbackRoadCorridor(itineraryStops)));
+      .catch(() => setRoute(buildFallbackRoadCorridor(fullRouteStops)));
     return () => controller.abort();
-  }, [itineraryStops]);
+  }, [fullRouteStops]);
 
   // Sync URL query string
   useEffect(() => {
@@ -281,6 +364,20 @@ export function App() {
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
+    // Mount distinct origin pin
+    const originEl = document.createElement('div');
+    originEl.className = 'nt-custom-map-pin-origin';
+    originEl.innerHTML = `
+      <span>📍 Start: ${userOrigin.name.split('(')[0].trim()}</span>
+    `;
+    originEl.addEventListener('click', () => {
+      map.flyTo({ center: userOrigin.coordinates, zoom: 12, duration: 750, essential: true });
+    });
+    const originMarker = new maplibregl.Marker({ element: originEl, anchor: 'bottom' })
+      .setLngLat(userOrigin.coordinates)
+      .addTo(map);
+    markersRef.current.push(originMarker);
+
     itineraryStops.forEach((stop, index) => {
       const el = document.createElement('div');
       el.className = `nt-custom-map-pin ${stop.id === selectedPoiId ? 'active' : ''}`;
@@ -297,7 +394,7 @@ export function App() {
         .addTo(map);
       markersRef.current.push(marker);
     });
-  }, [itineraryStops, route, selectedPoiId]);
+  }, [itineraryStops, route, selectedPoiId, userOrigin]);
 
   // Smooth flyTo when user clicks a card
   const handleFocusStop = (poi: KarnatakaPOI) => {
@@ -314,8 +411,121 @@ export function App() {
     const map = mapRef.current;
     if (!map || itineraryStops.length === 0) return;
     const bounds = new maplibregl.LngLatBounds();
+    bounds.extend(userOrigin.coordinates);
     itineraryStops.forEach((s) => bounds.extend(s.coordinates));
     map.fitBounds(bounds, { padding: 70, maxZoom: 11.5, duration: 650 });
+  };
+
+  const handleDetectCurrentLocation = () => {
+    if (typeof window === 'undefined' || !navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    setIsDetectingGps(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords: [number, number] = [pos.coords.longitude, pos.coords.latitude];
+        const detected: UserOriginOption = {
+          id: 'origin-gps',
+          name: `Current GPS (${pos.coords.latitude.toFixed(2)}°N, ${pos.coords.longitude.toFixed(2)}°E)`,
+          nameKannada: 'ನನ್ನ ಪ್ರಸ್ತುತ ಸ್ಥಳ',
+          coordinates: coords,
+        };
+        setUserOrigin(detected);
+        setIsDetectingGps(false);
+        setAiStatusBanner(
+          `📍 Origin updated to current GPS: ${pos.coords.latitude.toFixed(4)}°N, ${pos.coords.longitude.toFixed(4)}°E. Road route recalculated!`
+        );
+        mapRef.current?.flyTo({ center: coords, zoom: 12.5, duration: 900 });
+      },
+      (err) => {
+        setIsDetectingGps(false);
+        alert(`Could not detect GPS location: ${err.message}. Using ${userOrigin.name}.`);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  };
+
+  const handleStopTour = () => {
+    if (tourTimerRef.current) {
+      clearTimeout(tourTimerRef.current);
+      tourTimerRef.current = null;
+    }
+    setIsTourPlaying(false);
+    setTourStatusText(null);
+  };
+
+  const handleStartTour = () => {
+    const map = mapRef.current;
+    if (!map || itineraryStops.length === 0) return;
+
+    if (tourTimerRef.current) {
+      clearTimeout(tourTimerRef.current);
+      tourTimerRef.current = null;
+    }
+
+    setIsTourPlaying(true);
+
+    const tourWaypoints = [
+      {
+        coords: userOrigin.coordinates,
+        zoom: 12.5,
+        pitch: 45,
+        bearing: 30,
+        label: `📍 Stage 1: Journey departs from ${userOrigin.name}`,
+      },
+      ...itineraryStops.map((stop, i) => ({
+        coords: stop.coordinates,
+        zoom: 13,
+        pitch: 52,
+        bearing: ((i + 1) * 45) % 180,
+        label: `🚗 Leg ${i + 1}: Arriving at ${stop.name} (${stop.district})`,
+      })),
+    ];
+
+    let step = 0;
+
+    const runStep = () => {
+      if (step >= tourWaypoints.length) {
+        // Final overview of the complete trip
+        const bounds = new maplibregl.LngLatBounds();
+        bounds.extend(userOrigin.coordinates);
+        itineraryStops.forEach((s) => bounds.extend(s.coordinates));
+        map.fitBounds(bounds, { padding: 60, duration: 2200, pitch: 15, bearing: 0 });
+        setTourStatusText(
+          `✨ Complete Journey Overview: ${userOrigin.name} across ${itineraryStops.length} stops (${route.totalDistanceKm} km total)`
+        );
+        tourTimerRef.current = setTimeout(() => {
+          handleStopTour();
+        }, 4000);
+        return;
+      }
+
+      const current = tourWaypoints[step];
+      setTourStatusText(current.label);
+      map.flyTo({
+        center: current.coords,
+        zoom: current.zoom,
+        pitch: current.pitch,
+        bearing: current.bearing,
+        duration: 2500,
+        essential: true,
+      });
+
+      step += 1;
+      tourTimerRef.current = setTimeout(runStep, 3200);
+    };
+
+    runStep();
+  };
+
+  const handleToggleRouteTour = () => {
+    if (isTourPlaying) {
+      handleStopTour();
+      handleFitAllStops();
+    } else {
+      handleStartTour();
+    }
   };
 
   const handleSwitchStyle = (nextStyle: BasemapStyleId) => {
@@ -556,153 +766,210 @@ export function App() {
             )}
 
             {/* VIEW 1: VISUAL ITINERARY TIMELINE WITH PHOTO CARDS & DRIVE CONNECTORS */}
-            {activeTab === 'timeline' &&
-              itineraryStops.map((stop, idx) => {
-                const leg = route.legs[idx];
-                const compliance = getAranyaVihaaraCompliance(stop);
-                const seasonal = getSeasonalAdvisory(stop, season);
-                const nearestRail = getPoiById(stop.nearestRailwayId);
-                const nearestBus = getPoiById(stop.nearestBusTerminalId);
-                const photoUrl = POI_PHOTO_MAP[stop.id] || DEFAULT_PHOTO;
+            {activeTab === 'timeline' && (
+              <>
+                {/* Starting Origin Selector Card */}
+                <div className="nt-origin-card">
+                  <div className="nt-origin-info">
+                    <div className="nt-origin-icon">📍</div>
+                    <div className="nt-origin-details">
+                      <span className="nt-origin-label">Starting Location</span>
+                      <select
+                        className="nt-origin-select"
+                        value={userOrigin.id}
+                        onChange={(e) => {
+                          const opt = KARNATAKA_GATEWAY_ORIGINS.find((o) => o.id === e.target.value);
+                          if (opt) {
+                            setUserOrigin(opt);
+                            mapRef.current?.flyTo({ center: opt.coordinates, zoom: 11, duration: 800 });
+                          }
+                        }}
+                      >
+                        {KARNATAKA_GATEWAY_ORIGINS.map((orig) => (
+                          <option key={orig.id} value={orig.id}>
+                            {orig.name} ({orig.nameKannada})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
 
-                return (
-                  <React.Fragment key={stop.id}>
-                    <div
-                      className={`nt-stop-card ${selectedPoiId === stop.id ? 'selected' : ''}`}
-                      onClick={() => handleFocusStop(stop)}
-                    >
-                      <div className="nt-stop-card-top">
-                        <div className="nt-stop-photo-wrap">
-                          <img src={photoUrl} alt={stop.name} className="nt-stop-photo" loading="lazy" />
-                          <div className="nt-stop-number-badge">{idx + 1}</div>
-                        </div>
+                  <button
+                    type="button"
+                    className="nt-origin-gps-btn"
+                    onClick={handleDetectCurrentLocation}
+                    disabled={isDetectingGps}
+                  >
+                    {isDetectingGps ? '⏳ Locating...' : '🎯 Current GPS'}
+                  </button>
+                </div>
 
-                        <div className="nt-stop-info">
-                          <div>
-                            <div className="nt-stop-header-row">
-                              <div>
-                                <div className="nt-stop-title">{stop.name}</div>
-                                <div className="nt-stop-kn" lang="kn">
-                                  {stop.nameKannada} • {stop.district}
+                {/* Starting Leg Driving Connector from User Origin to First Stop */}
+                {itineraryStops.length > 0 && route.legs.length > 0 && (
+                  <div className="nt-leg-connector" style={{ marginBottom: 12 }}>
+                    <div className="nt-leg-line" />
+                    <div className="nt-leg-pill" style={{ background: '#f0fdf4', borderColor: '#86efac' }}>
+                      <span>🚗 {route.legs[0].distanceKm} km</span>
+                      <span>•</span>
+                      <span>
+                        {Math.floor(route.legs[0].durationMinutes / 60)}h {route.legs[0].durationMinutes % 60}m drive
+                      </span>
+                      <span>•</span>
+                      <span style={{ color: '#047857', fontWeight: 700 }}>
+                        Departing from {userOrigin.name.split('(')[0].trim()}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {itineraryStops.map((stop, idx) => {
+                  const leg = route.legs[idx + 1];
+                  const compliance = getAranyaVihaaraCompliance(stop);
+                  const seasonal = getSeasonalAdvisory(stop, season);
+                  const nearestRail = getPoiById(stop.nearestRailwayId);
+                  const nearestBus = getPoiById(stop.nearestBusTerminalId);
+                  const photoUrl = POI_PHOTO_MAP[stop.id] || DEFAULT_PHOTO;
+
+                  return (
+                    <React.Fragment key={stop.id}>
+                      <div
+                        className={`nt-stop-card ${selectedPoiId === stop.id ? 'selected' : ''}`}
+                        onClick={() => handleFocusStop(stop)}
+                      >
+                        <div className="nt-stop-card-top">
+                          <div className="nt-stop-photo-wrap">
+                            <img src={photoUrl} alt={stop.name} className="nt-stop-photo" loading="lazy" />
+                            <div className="nt-stop-number-badge">{idx + 1}</div>
+                          </div>
+
+                          <div className="nt-stop-info">
+                            <div>
+                              <div className="nt-stop-header-row">
+                                <div>
+                                  <div className="nt-stop-title">{stop.name}</div>
+                                  <div className="nt-stop-kn" lang="kn">
+                                    {stop.nameKannada} • {stop.district}
+                                  </div>
+                                </div>
+
+                                {/* Reorder / Remove controls */}
+                                <div
+                                  style={{ display: 'flex', gap: 4 }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveStop(idx, -1)}
+                                    disabled={idx === 0}
+                                    className="nt-btn-outline"
+                                    style={{ padding: '2px 7px', fontSize: 11 }}
+                                  >
+                                    ↑
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveStop(idx, 1)}
+                                    disabled={idx === itineraryStops.length - 1}
+                                    className="nt-btn-outline"
+                                    style={{ padding: '2px 7px', fontSize: 11 }}
+                                  >
+                                    ↓
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveStop(stop.id)}
+                                    disabled={itineraryStops.length <= 2}
+                                    className="nt-btn-outline"
+                                    style={{ padding: '2px 7px', fontSize: 11, color: '#dc2626' }}
+                                  >
+                                    ✕
+                                  </button>
                                 </div>
                               </div>
 
-                              {/* Reorder / Remove controls */}
-                              <div
-                                style={{ display: 'flex', gap: 4 }}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <button
-                                  type="button"
-                                  onClick={() => handleMoveStop(idx, -1)}
-                                  disabled={idx === 0}
-                                  className="nt-btn-outline"
-                                  style={{ padding: '2px 7px', fontSize: 11 }}
-                                >
-                                  ↑
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleMoveStop(idx, 1)}
-                                  disabled={idx === itineraryStops.length - 1}
-                                  className="nt-btn-outline"
-                                  style={{ padding: '2px 7px', fontSize: 11 }}
-                                >
-                                  ↓
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveStop(stop.id)}
-                                  disabled={itineraryStops.length <= 2}
-                                  className="nt-btn-outline"
-                                  style={{ padding: '2px 7px', fontSize: 11, color: '#dc2626' }}
-                                >
-                                  ✕
-                                </button>
-                              </div>
+                              <p className="nt-stop-summary">{stop.summary}</p>
                             </div>
 
-                            <p className="nt-stop-summary">{stop.summary}</p>
-                          </div>
-
-                          <div className="nt-badge-row">
-                            <span className="nt-badge blue">⏱ {stop.recommendedHours} hrs</span>
-                            <span className="nt-badge emerald">
-                              ₹{stop.entryFeeInr.indianCitizen} ({stop.entryFeeInr.feeNote.slice(0, 26)})
-                            </span>
-                            {nearestRail?.transportMeta && (
-                              <span className="nt-badge purple">
-                                🚆 Rail: {nearestRail.transportMeta.officialCode}
+                            <div className="nt-badge-row">
+                              <span className="nt-badge blue">⏱ {stop.recommendedHours} hrs</span>
+                              <span className="nt-badge emerald">
+                                ₹{stop.entryFeeInr.indianCitizen} ({stop.entryFeeInr.feeNote.slice(0, 26)})
                               </span>
-                            )}
-                            {compliance.requiresForestPermit && (
-                              <a
-                                href={compliance.officialPortalUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                                className="nt-badge saffron"
-                                style={{ textDecoration: 'none' }}
-                              >
-                                🌲 Aranya Vihaara Permit Req ↗
-                              </a>
-                            )}
+                              {nearestRail?.transportMeta && (
+                                <span className="nt-badge purple">
+                                  🚆 Rail: {nearestRail.transportMeta.officialCode}
+                                </span>
+                              )}
+                              {compliance.requiresForestPermit && (
+                                <a
+                                  href={compliance.officialPortalUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="nt-badge saffron"
+                                  style={{ textDecoration: 'none' }}
+                                >
+                                  🌲 Aranya Vihaara Permit Req ↗
+                                </a>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Bottom Bar: Authentic Local Kannada Audio + Booking Links */}
-                      <div className="nt-stop-footer" onClick={(e) => e.stopPropagation()}>
-                        <div className="nt-phrase-inline">
-                          <button
-                            type="button"
-                            className="nt-voice-btn"
-                            onClick={() => handleSpeakKannada(stop.localPhrase.kannada)}
-                          >
-                            🔊 Kannada
-                          </button>
-                          <span style={{ fontWeight: 700 }} lang="kn">
-                            {stop.localPhrase.kannada}
-                          </span>
-                          <span style={{ color: '#64748b' }}>— "{stop.localPhrase.english}"</span>
-                        </div>
+                        {/* Bottom Bar: Authentic Local Kannada Audio + Booking Links */}
+                        <div className="nt-stop-footer" onClick={(e) => e.stopPropagation()}>
+                          <div className="nt-phrase-inline">
+                            <button
+                              type="button"
+                              className="nt-voice-btn"
+                              onClick={() => handleSpeakKannada(stop.localPhrase.kannada)}
+                            >
+                              🔊 Kannada
+                            </button>
+                            <span style={{ fontWeight: 700 }} lang="kn">
+                              {stop.localPhrase.kannada}
+                            </span>
+                            <span style={{ color: '#64748b' }}>— "{stop.localPhrase.english}"</span>
+                          </div>
 
-                        {nearestBus?.transportMeta && (
-                          <a
-                            href="https://ksrtc.in"
-                            target="_blank"
-                            rel="noreferrer"
-                            style={{
-                              color: '#dc2626',
-                              fontWeight: 700,
-                              textDecoration: 'none',
-                              flexShrink: 0,
-                            }}
-                          >
-                            KSRTC ↗
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* WANDERLOG-STYLE TRANSIT CONNECTOR PILL BETWEEN STOPS */}
-                    {leg && (
-                      <div className="nt-leg-connector">
-                        <div className="nt-leg-line" />
-                        <div className="nt-leg-pill">
-                          <span>🚗 {leg.distanceKm} km</span>
-                          <span>•</span>
-                          <span>
-                            {Math.floor(leg.durationMinutes / 60)}h {leg.durationMinutes % 60}m drive
-                          </span>
-                          <span>•</span>
-                          <span style={{ color: '#2563eb' }}>{seasonal.ratingBadge.replace(/_/g, ' ')}</span>
+                          {nearestBus?.transportMeta && (
+                            <a
+                              href="https://ksrtc.in"
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                color: '#dc2626',
+                                fontWeight: 700,
+                                textDecoration: 'none',
+                                flexShrink: 0,
+                              }}
+                            >
+                              KSRTC ↗
+                            </a>
+                          )}
                         </div>
                       </div>
-                    )}
-                  </React.Fragment>
-                );
-              })}
+
+                      {/* WANDERLOG-STYLE TRANSIT CONNECTOR PILL BETWEEN STOPS */}
+                      {leg && (
+                        <div className="nt-leg-connector">
+                          <div className="nt-leg-line" />
+                          <div className="nt-leg-pill">
+                            <span>🚗 {leg.distanceKm} km</span>
+                            <span>•</span>
+                            <span>
+                              {Math.floor(leg.durationMinutes / 60)}h {leg.durationMinutes % 60}m drive
+                            </span>
+                            <span>•</span>
+                            <span style={{ color: '#2563eb' }}>{seasonal.ratingBadge.replace(/_/g, ' ')}</span>
+                          </div>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </>
+            )}
 
             {/* VIEW 2: VERIFIED TRAINS (VISTADOME / HAMPI EXP / VANDE BHARAT) & KSRTC */}
             {activeTab === 'trains' && (
@@ -902,6 +1169,21 @@ export function App() {
         <main className="nt-map-pane">
           <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
 
+          {/* Floating Route Overview Tour Progress Toast */}
+          {tourStatusText && (
+            <div className="nt-map-tour-banner">
+              <span className="nt-pulse-dot" />
+              <span>{tourStatusText}</span>
+              <button
+                type="button"
+                onClick={handleStopTour}
+                className="nt-btn-tour-close"
+              >
+                ✕ Stop Tour
+              </button>
+            </div>
+          )}
+
           {/* Top Floating Map Glass Bar: Season Selector & Basemap Switcher */}
           <div className="nt-map-top-bar">
             <div className="nt-map-glass-pill">
@@ -944,6 +1226,18 @@ export function App() {
 
           {/* Bottom-Right Camera Controls */}
           <div className="nt-map-floating-controls">
+            <button
+              type="button"
+              className="nt-map-ctrl-btn"
+              onClick={handleToggleRouteTour}
+              style={{
+                background: isTourPlaying ? '#dc2626' : '#1e3a8a',
+                color: '#ffffff',
+                border: 'none',
+              }}
+            >
+              {isTourPlaying ? '⏹ Stop Route Tour' : '▶️ Play Route Tour'}
+            </button>
             <button type="button" className="nt-map-ctrl-btn" onClick={() => mapRef.current?.zoomIn()}>
               + Zoom In
             </button>

@@ -11,4 +11,22 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['maplibre-gl'],
   },
+  server: {
+    proxy: {
+      // Proxy OSRM requests to bypass potential network latency / SNI issues
+      '/osrm-api': {
+        target: 'https://router.project-osrm.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/osrm-api/, ''),
+        secure: true,
+      },
+      // Proxy Wikipedia REST API for live POI enrichment
+      '/wiki-api': {
+        target: 'https://en.wikipedia.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/wiki-api/, ''),
+        secure: true,
+      },
+    },
+  },
 });

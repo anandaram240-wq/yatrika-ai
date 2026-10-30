@@ -153,8 +153,10 @@ export function buildFallbackRoadCorridor(stops: KarnatakaPOI[]): ComputedTripRo
 }
 
 /**
- * Queries live road geometry from OSRM (`router.project-osrm.org/route/v1/driving/...`)
- * with automatic fallback to `buildFallbackRoadCorridor` if offline or rate-limited.
+ * Queries live road geometry from OSRM via Vite dev proxy (/osrm-api → router.project-osrm.org)
+ * with an 8 second timeout and automatic fallback to buildFallbackRoadCorridor.
+ *
+ * Priority: Vite proxy → direct OSRM → geodesic fallback
  */
 export async function calculateMultiStopRoadRoute(
   stops: KarnatakaPOI[],
@@ -165,15 +167,36 @@ export async function calculateMultiStopRoadRoute(
   }
 
   const coordsParam = stops.map((s) => `${s.coordinates[0]},${s.coordinates[1]}`).join(';');
-  const url = `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?overview=full&geometries=geojson&steps=true&alternatives=true`;
+  const qs = 'overview=full&geometries=geojson&steps=true&alternatives=true';
+
+  // Try Vite dev-server proxy first (avoids browser SNI / timeout issues in dev)
+  // In production build, falls back directly to OSRM public endpoint
+  const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const primaryUrl = isDev
+    ? `/osrm-api/route/v1/driving/${coordsParam}?${qs}`
+    : `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?${qs}`;
+  const fallbackUrl = `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?${qs}`;
 
   const timeoutController = new AbortController();
-  const timeoutId = setTimeout(() => timeoutController.abort(), 4500);
+  const timeoutId = setTimeout(() => timeoutController.abort(), 8000);
 
   try {
-    const response = await fetch(url, {
-      signal: signal || timeoutController.signal,
-    });
+    // Try primary URL (dev proxy or direct)
+    let response: Response;
+    try {
+      response = await fetch(primaryUrl, {
+        signal: signal || timeoutController.signal,
+      });
+    } catch {
+      // If proxy fails or we're in prod, try direct OSRM
+      if (primaryUrl !== fallbackUrl) {
+        response = await fetch(fallbackUrl, {
+          signal: signal || timeoutController.signal,
+        });
+      } else {
+        throw new Error('OSRM unreachable');
+      }
+    }
     clearTimeout(timeoutId);
 
     if (!response.ok) {

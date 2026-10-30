@@ -25,7 +25,6 @@ import {
   serializeTripToQueryString,
 } from './services/tripPlannerEngine';
 import {
-  VERIFIED_TRAIN_CORRIDORS,
   getAranyaVihaaraCompliance,
   getSeasonalAdvisory,
   calculateShaktiSchemeSavings,
@@ -36,6 +35,15 @@ import {
 import { KannadaVoiceAssistantModal } from './features/voice-agent/components/KannadaVoiceAssistantModal';
 import { OfflineSurvivalModal } from './features/offline-travel/components/OfflineSurvivalModal';
 import { VoiceIntentResult } from './features/voice-agent/domain/types';
+import { LiveWeather, fetchLiveWeather, fetchWeatherForDestinations } from './services/liveWeatherService';
+import { WikiEnrichment, fetchWikiEnrichment } from './services/livePoiEnrichmentService';
+import {
+  KARNATAKA_TRAIN_SCHEDULES,
+  KSRTC_BUS_SERVICES,
+  getTrainsForOrigin,
+  getBusesForOrigin,
+  getNextDeparture,
+} from './services/liveTransitService';
 
 // High-resolution curated photography for each Karnataka POI
 const POI_PHOTO_MAP: Record<string, string> = {
@@ -227,6 +235,22 @@ export function App() {
   });
   const [isDetectingGps, setIsDetectingGps] = useState<boolean>(false);
 
+  // Live Weather & Environmental Intelligence States
+  const [originWeather, setOriginWeather] = useState<LiveWeather | null>(null);
+  const [stopsWeather, setStopsWeather] = useState<Map<string, LiveWeather>>(new Map());
+
+  // Live Wikipedia Lore & Historical Provenance Modal State
+  const [wikiEnrichment, setWikiEnrichment] = useState<{ poi: KarnatakaPOI; data: WikiEnrichment } | null>(null);
+  const [isLoadingWiki, setIsLoadingWiki] = useState<boolean>(false);
+
+  // Transit Sub-tab Filter ('origin_corridor' | 'all_trains' | 'all_buses')
+  const [transitSubTab, setTransitSubTab] = useState<'origin_corridor' | 'all_trains' | 'all_buses'>('origin_corridor');
+
+  // Discover & Add Places Filters
+  const [discoverRegionFilter, setDiscoverRegionFilter] = useState<string>('all');
+  const [discoverCategoryFilter, setDiscoverCategoryFilter] = useState<string>('all');
+  const [discoverSearchQuery, setDiscoverSearchQuery] = useState<string>('');
+
   // World-Class Cinematic 60 FPS Route Tour Simulation States
   const [isTourActive, setIsTourActive] = useState<boolean>(false);
   const [isTourPaused, setIsTourPaused] = useState<boolean>(false);
@@ -300,6 +324,74 @@ export function App() {
       .catch(() => setRoute(buildFallbackRoadCorridor(fullRouteStops)));
     return () => controller.abort();
   }, [fullRouteStops]);
+
+  // Fetch live real-time weather from Open-Meteo for origin
+  useEffect(() => {
+    let active = true;
+    fetchLiveWeather(userOrigin.coordinates[1], userOrigin.coordinates[0], userOrigin.id).then((w) => {
+      if (active && w) setOriginWeather(w);
+    });
+    return () => {
+      active = false;
+    };
+  }, [userOrigin]);
+
+  // Fetch live real-time weather for all itinerary stops
+  useEffect(() => {
+    let active = true;
+    if (itineraryStops.length > 0) {
+      const coords = itineraryStops.map((s) => ({
+        id: s.id,
+        name: s.name,
+        lat: s.coordinates[1],
+        lng: s.coordinates[0],
+      }));
+      fetchWeatherForDestinations(coords).then((map) => {
+        if (active) setStopsWeather(map);
+      });
+    }
+    return () => {
+      active = false;
+    };
+  }, [itineraryStops]);
+
+  // Open Wikipedia live lore modal
+  const handleOpenWikiLore = async (poi: KarnatakaPOI) => {
+    setIsLoadingWiki(true);
+    try {
+      const data = await fetchWikiEnrichment(poi.id);
+      if (data) {
+        setWikiEnrichment({ poi, data });
+      } else {
+        setWikiEnrichment({
+          poi,
+          data: {
+            title: poi.name,
+            extract: poi.summary,
+            wikiUrl: poi.officialUrl || `https://en.wikipedia.org/wiki/${encodeURIComponent(poi.name)}`,
+          },
+        });
+      }
+    } finally {
+      setIsLoadingWiki(false);
+    }
+  };
+
+  // Set any POI or clicked point as the starting origin
+  const handleSetAsOrigin = (poi: KarnatakaPOI) => {
+    const newOrigin: UserOriginOption = {
+      id: `origin-${poi.id}`,
+      name: poi.name,
+      nameKannada: poi.nameKannada,
+      coordinates: poi.coordinates,
+    };
+    setUserOrigin(newOrigin);
+    setStopIds((prev) => prev.filter((id) => id !== poi.id));
+    setAiStatusBanner(
+      `📍 Starting point set to "${poi.name}". Road route recalculated from here!`
+    );
+    mapRef.current?.flyTo({ center: poi.coordinates, zoom: 11.5, duration: 800 });
+  };
 
   // Precomputed cumulative distance segments along the primary road route
   const routeGeometryData = useMemo(() => {
@@ -481,6 +573,23 @@ export function App() {
 
       map.on('load', drawRouteLayer);
       map.on('style.load', drawRouteLayer);
+
+      // Right-click or long-press on any map coordinate to anchor as trip starting location
+      map.on('contextmenu', (e) => {
+        const lng = Number(e.lngLat.lng.toFixed(4));
+        const lat = Number(e.lngLat.lat.toFixed(4));
+        const customOrigin: UserOriginOption = {
+          id: `origin-custom-${Date.now()}`,
+          name: `Map Pin (${lat}°N, ${lng}°E)`,
+          nameKannada: 'ಆಯ್ಕೆ ಮಾಡಿದ ನಕ್ಷೆ ಸ್ಥಳ',
+          coordinates: [lng, lat],
+        };
+        setUserOrigin(customOrigin);
+        setAiStatusBanner(
+          `📍 Starting location set to clicked point: ${lat}°N, ${lng}°E. Live road route recalculated!`
+        );
+      });
+
       mapRef.current = map;
     } catch {
       // Headless / WebGL fallback handled gracefully
@@ -1175,7 +1284,18 @@ export function App() {
                   <div className="nt-origin-info">
                     <div className="nt-origin-icon">📍</div>
                     <div className="nt-origin-details">
-                      <span className="nt-origin-label">Starting Location</span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6 }}>
+                        <span className="nt-origin-label">Starting Location</span>
+                        {originWeather && (
+                          <span
+                            className="nt-badge blue"
+                            style={{ fontSize: 10, padding: '2px 6px', cursor: 'help' }}
+                            title={`Live Open-Meteo: ${originWeather.tempC}°C, Humidity ${originWeather.humidity}%, Wind ${originWeather.windKmh}km/h • ${originWeather.advisory}`}
+                          >
+                            {originWeather.emoji} {originWeather.tempC}°C {originWeather.label}
+                          </span>
+                        )}
+                      </div>
                       <select
                         className="nt-origin-select"
                         value={userOrigin.id}
@@ -1221,6 +1341,29 @@ export function App() {
                     </div>
                   )}
 
+                  {/* Highway Corridor Branches */}
+                  {corridorInfo.availableBranches && corridorInfo.availableBranches.length > 1 && (
+                    <div style={{ marginTop: 8, marginBottom: 8 }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#475569', marginBottom: 4 }}>
+                        🔀 Highway Corridor Options from {userOrigin.name.split('(')[0].trim()}:
+                      </div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        {corridorInfo.availableBranches.map((branch) => (
+                          <button
+                            key={branch.id}
+                            type="button"
+                            onClick={() => handleLoadCircuit(branch.suggestedPresetId)}
+                            className={`nt-corridor-pill-btn ${activeCircuitId === branch.suggestedPresetId ? 'added' : ''}`}
+                            style={{ fontSize: 11, padding: '3px 8px' }}
+                            title={`${branch.roadName}: ${branch.mountainAdvisory}`}
+                          >
+                            {branch.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* En-Route Recommended Places for this specific origin */}
                   <div className="nt-corridor-suggestions">
                     <span style={{ fontSize: 11, fontWeight: 700, color: '#475569' }}>
@@ -1254,6 +1397,26 @@ export function App() {
                         </button>
                       )}
                     </div>
+                  </div>
+
+                  {/* Road Route Provenance & Geometry Badge */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginTop: 10,
+                      paddingTop: 8,
+                      borderTop: '1px solid #e2e8f0',
+                      fontSize: 11,
+                    }}
+                  >
+                    <span className="nt-badge blue" style={{ fontSize: 10, padding: '2px 8px' }}>
+                      {route.provenance === 'live_osrm' ? '🛣️ Live OSRM Road Geometry' : '📡 Highway Corridor Estimate'}
+                    </span>
+                    <span style={{ color: '#475569', fontWeight: 600 }}>
+                      {route.totalDistanceKm} km • {Math.floor(route.totalDurationMinutes / 60)}h {route.totalDurationMinutes % 60}m road drive
+                    </span>
                   </div>
                 </div>
 
@@ -1348,6 +1511,15 @@ export function App() {
                               <span className="nt-badge emerald">
                                 ₹{stop.entryFeeInr.indianCitizen} ({stop.entryFeeInr.feeNote.slice(0, 26)})
                               </span>
+                              {stopsWeather.get(stop.id) && (
+                                <span
+                                  className="nt-badge blue"
+                                  style={{ cursor: 'help' }}
+                                  title={`Live Open-Meteo: ${stopsWeather.get(stop.id)!.tempC}°C, Humidity ${stopsWeather.get(stop.id)!.humidity}%, Wind ${stopsWeather.get(stop.id)!.windKmh}km/h • ${stopsWeather.get(stop.id)!.advisory}`}
+                                >
+                                  {stopsWeather.get(stop.id)!.emoji} {stopsWeather.get(stop.id)!.tempC}°C ({stopsWeather.get(stop.id)!.label})
+                                </span>
+                              )}
                               {nearestRail?.transportMeta && (
                                 <span className="nt-badge purple">
                                   🚆 Rail: {nearestRail.transportMeta.officialCode}
@@ -1385,21 +1557,43 @@ export function App() {
                             <span style={{ color: '#64748b' }}>— "{stop.localPhrase.english}"</span>
                           </div>
 
-                          {nearestBus?.transportMeta && (
-                            <a
-                              href="https://ksrtc.in"
-                              target="_blank"
-                              rel="noreferrer"
-                              style={{
-                                color: '#dc2626',
-                                fontWeight: 700,
-                                textDecoration: 'none',
-                                flexShrink: 0,
-                              }}
+                          <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginLeft: 'auto' }}>
+                            <button
+                              type="button"
+                              className="nt-btn-outline"
+                              style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, cursor: 'pointer' }}
+                              onClick={() => handleOpenWikiLore(stop)}
+                              disabled={isLoadingWiki}
+                              title="Live Wikipedia History & Lore"
                             >
-                              KSRTC ↗
-                            </a>
-                          )}
+                              📖 Lore
+                            </button>
+                            <button
+                              type="button"
+                              className="nt-btn-outline"
+                              style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, cursor: 'pointer' }}
+                              onClick={() => handleSetAsOrigin(stop)}
+                              title="Set as Trip Starting Origin"
+                            >
+                              📍 Start Here
+                            </button>
+                            {nearestBus?.transportMeta && (
+                              <a
+                                href="https://ksrtc.in"
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{
+                                  color: '#dc2626',
+                                  fontWeight: 700,
+                                  fontSize: 11.5,
+                                  textDecoration: 'none',
+                                  flexShrink: 0,
+                                }}
+                              >
+                                KSRTC ↗
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -1424,59 +1618,184 @@ export function App() {
               </>
             )}
 
-            {/* VIEW 2: VERIFIED TRAINS (VISTADOME / HAMPI EXP / VANDE BHARAT) & KSRTC */}
+            {/* VIEW 2: VERIFIED TRAINS (VISTADOME / HAMPI EXP / VANDE BHARAT) & KSRTC FLEET */}
             {activeTab === 'trains' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {Object.values(VERIFIED_TRAIN_CORRIDORS).map((tr) => (
-                  <div key={tr.trainNumber} className="nt-stop-card" style={{ padding: 16 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="nt-badge purple">🚆 Train #{tr.trainNumber}</span>
-                      {tr.savesHotelNight && (
-                        <span className="nt-badge emerald">
-                          🌙 Overnight Hotel-Saver (Saves ₹{tr.hotelNightSavingsInr.toLocaleString('en-IN')})
-                        </span>
-                      )}
-                    </div>
-                    <h3 style={{ fontSize: 15, fontWeight: 800, marginTop: 8 }}>{tr.corridorName}</h3>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#334155', marginTop: 2 }}>
-                      {tr.trainName} ({tr.originCode} {tr.departureTime} → {tr.destinationCode}{' '}
-                      {tr.arrivalTime} • {tr.durationLabel})
-                    </div>
-                    <p style={{ fontSize: 12, color: '#475569', marginTop: 6 }}>{tr.specialHighlight}</p>
-                    <div
-                      style={{
-                        background: '#f8fafc',
-                        padding: 10,
-                        borderRadius: 8,
-                        fontSize: 12,
-                        marginTop: 8,
-                        border: '1px solid #e2e8f0',
-                      }}
-                    >
-                      <strong>Last-Mile KSRTC Link:</strong> {tr.lastMileKsrtcNote}
-                    </div>
-                    <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-                      <a
-                        href="https://www.irctc.co.in/nget/train-search"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="nt-btn-primary"
-                        style={{ textDecoration: 'none' }}
-                      >
-                        Book on IRCTC ({tr.originCode} → {tr.destinationCode}) ↗
-                      </a>
-                      <a
-                        href="https://ksrtc.in"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="nt-btn-outline"
-                        style={{ textDecoration: 'none' }}
-                      >
-                        Book KSRTC Bus ↗
-                      </a>
-                    </div>
-                  </div>
-                ))}
+                {/* Transit Mode Sub-Tabs */}
+                <div style={{ display: 'flex', gap: 6, background: '#f1f5f9', padding: 4, borderRadius: 10 }}>
+                  <button
+                    type="button"
+                    onClick={() => setTransitSubTab('origin_corridor')}
+                    className={`nt-mode-tab ${transitSubTab === 'origin_corridor' ? 'active' : ''}`}
+                    style={{ flex: 1, fontSize: 11, padding: '6px 8px' }}
+                  >
+                    📍 From {userOrigin.name.split('(')[0].trim().slice(0, 14)}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTransitSubTab('all_trains')}
+                    className={`nt-mode-tab ${transitSubTab === 'all_trains' ? 'active' : ''}`}
+                    style={{ flex: 1, fontSize: 11, padding: '6px 8px' }}
+                  >
+                    🚆 All Trains ({KARNATAKA_TRAIN_SCHEDULES.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTransitSubTab('all_buses')}
+                    className={`nt-mode-tab ${transitSubTab === 'all_buses' ? 'active' : ''}`}
+                    style={{ flex: 1, fontSize: 11, padding: '6px 8px' }}
+                  >
+                    🚌 KSRTC Buses ({KSRTC_BUS_SERVICES.length})
+                  </button>
+                </div>
+
+                {/* TRAINS LIST */}
+                {(transitSubTab === 'all_trains' || transitSubTab === 'origin_corridor') && (
+                  <>
+                    {transitSubTab === 'origin_corridor' && (
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#334155', marginTop: 4 }}>
+                        🚆 South Western Railway Trains Serving {userOrigin.name.split('(')[0].trim()}:
+                      </div>
+                    )}
+                    {(transitSubTab === 'all_trains'
+                      ? KARNATAKA_TRAIN_SCHEDULES
+                      : getTrainsForOrigin(userOrigin.id).length > 0
+                      ? getTrainsForOrigin(userOrigin.id)
+                      : KARNATAKA_TRAIN_SCHEDULES.slice(0, 3)
+                    ).map((tr) => (
+                      <div key={tr.id} className="nt-stop-card" style={{ padding: 14 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', gap: 6 }}>
+                            <span className="nt-badge purple">🚆 #{tr.trainNumber}</span>
+                            <span className="nt-badge blue">{tr.trainType.replace('_', ' ').toUpperCase()}</span>
+                          </div>
+                          {tr.savesHotelNight && (
+                            <span className="nt-badge emerald">
+                              🌙 Overnight Saver (Saves ₹{tr.hotelSavingInr.toLocaleString('en-IN')})
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 style={{ fontSize: 15, fontWeight: 800, marginTop: 8 }}>{tr.trainName}</h3>
+
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', marginTop: 2 }}>
+                          {tr.originName} ({tr.originCode} • {tr.departureTime}) ➔ {tr.destinationName} ({tr.destinationCode} • {tr.arrivalTime})
+                        </div>
+
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 6, fontSize: 11 }}>
+                          <span className="nt-badge blue">⏱ {tr.durationLabel}</span>
+                          <span className="nt-badge blue">🗓 Days: {tr.daysRunning.join(', ')}</span>
+                          <span className="nt-badge purple">💺 Classes: {tr.classesAvailable.join(' | ')}</span>
+                          <span className="nt-badge emerald">
+                            ₹{tr.fareRange.secondClass > 0 ? tr.fareRange.secondClass : tr.fareRange.chair || tr.fareRange.sleeper} onwards
+                          </span>
+                        </div>
+
+                        <p style={{ fontSize: 12, color: '#475569', marginTop: 8 }}>{tr.specialHighlight}</p>
+
+                        <div
+                          style={{
+                            background: '#f8fafc',
+                            padding: 8,
+                            borderRadius: 8,
+                            fontSize: 11.5,
+                            marginTop: 8,
+                            border: '1px solid #e2e8f0',
+                          }}
+                        >
+                          <strong>Last-Mile KSRTC Link:</strong> {tr.lastMileNote}
+                        </div>
+
+                        <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                          <a
+                            href={tr.bookingUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="nt-btn-primary"
+                            style={{ textDecoration: 'none', fontSize: 12 }}
+                          >
+                            Book on IRCTC ({tr.originCode} → {tr.destinationCode}) ↗
+                          </a>
+                          <a
+                            href={tr.liveStatusUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="nt-btn-outline"
+                            style={{ textDecoration: 'none', fontSize: 12 }}
+                          >
+                            Live Status (NTES) ↗
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
+
+                {/* KSRTC BUSES LIST */}
+                {(transitSubTab === 'all_buses' || transitSubTab === 'origin_corridor') && (
+                  <>
+                    {transitSubTab === 'origin_corridor' && (
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#334155', marginTop: 8 }}>
+                        🚌 KSRTC & KKRTC Bus Services Serving {userOrigin.name.split('(')[0].trim()}:
+                      </div>
+                    )}
+                    {(transitSubTab === 'all_buses'
+                      ? KSRTC_BUS_SERVICES
+                      : getBusesForOrigin(userOrigin.id).length > 0
+                      ? getBusesForOrigin(userOrigin.id)
+                      : KSRTC_BUS_SERVICES.slice(0, 3)
+                    ).map((b) => (
+                      <div key={b.id} className="nt-stop-card" style={{ padding: 14 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', gap: 6 }}>
+                            <span className="nt-badge saffron">🚌 {b.serviceLabel}</span>
+                          </div>
+                          {b.shaktiFree && (
+                            <span className="nt-badge emerald" title="Karnataka Govt Order No. TRAN 38 TEP 2023">
+                              💖 Shakti Scheme: ₹0 FREE for Women
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 style={{ fontSize: 15, fontWeight: 800, marginTop: 8 }}>
+                          {b.originCity} ➔ {b.destinationCity}
+                        </h3>
+
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
+                          <span className="nt-badge blue" style={{ fontWeight: 700 }}>
+                            {getNextDeparture(b.departureTimes)}
+                          </span>
+                          <span className="nt-badge blue">⏱ {b.durationLabel}</span>
+                          <span className="nt-badge emerald">
+                            Fare: ₹{b.fareInr} (General) / ₹0 (Shakti Women)
+                          </span>
+                        </div>
+
+                        <p style={{ fontSize: 12, color: '#475569', marginTop: 8 }}>{b.operatorNote}</p>
+
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
+                          {b.amenities.map((am) => (
+                            <span key={am} className="nt-badge purple" style={{ fontSize: 10 }}>
+                              ✓ {am}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div style={{ marginTop: 10 }}>
+                          <a
+                            href={b.bookingUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="nt-btn-primary"
+                            style={{ textDecoration: 'none', fontSize: 12, display: 'inline-block' }}
+                          >
+                            Book on KSRTC.in / Awatar Portal ↗
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             )}
 
@@ -1584,35 +1903,169 @@ export function App() {
             {/* VIEW 4: DISCOVER & ADD MORE KARNATAKA DESTINATIONS */}
             {activeTab === 'discover' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {KARNATAKA_POIS.map((poi) => {
-                  const added = stopIds.includes(poi.id);
-                  return (
-                    <div
-                      key={poi.id}
-                      className="nt-stop-card"
-                      style={{ padding: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                      onClick={() => handleFocusStop(poi)}
-                    >
-                      <div>
-                        <div style={{ fontWeight: 700, fontSize: 14 }}>{poi.name}</div>
-                        <div style={{ fontSize: 12, color: '#64748b' }}>
-                          {poi.district} • {poi.macroRegion} • ₹{poi.entryFeeInr.indianCitizen}
+                {/* Search Bar */}
+                <input
+                  type="text"
+                  placeholder="🔍 Search places, temples, waterfalls, coffee estates..."
+                  value={discoverSearchQuery}
+                  onChange={(e) => setDiscoverSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: 10,
+                    border: '1px solid #cbd5e1',
+                    fontSize: 12.5,
+                    background: '#ffffff',
+                    outline: 'none',
+                  }}
+                />
+
+                {/* Cultural Macro-Region Filter */}
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#475569', marginBottom: 4 }}>
+                    🏛️ Karnataka 6 Cultural Regions:
+                  </div>
+                  <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                    {[
+                      { id: 'all', label: 'All Regions' },
+                      { id: 'Old Mysuru', label: 'Old Mysuru (ಮೈಸೂರು)' },
+                      { id: 'Malnad & Western Ghats', label: 'Malnad (ಮಲೆನಾಡು)' },
+                      { id: 'Karavali Coastal', label: 'Karavali (ಕರಾವಳಿ)' },
+                      { id: 'Kalyana Karnataka', label: 'Kalyana Karnataka' },
+                      { id: 'Kittur Karnataka', label: 'Kittur Karnataka' },
+                      { id: 'Bayaluseeme', label: 'Bayaluseeme' },
+                    ].map((reg) => (
+                      <button
+                        key={reg.id}
+                        type="button"
+                        onClick={() => setDiscoverRegionFilter(reg.id)}
+                        className={`nt-corridor-pill-btn ${discoverRegionFilter === reg.id ? 'added' : ''}`}
+                        style={{ fontSize: 10.5, padding: '3px 7px' }}
+                      >
+                        {reg.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Category Filter */}
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#475569', marginBottom: 4 }}>
+                    🎯 Destination Type:
+                  </div>
+                  <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                    {[
+                      { id: 'all', label: 'All' },
+                      { id: 'heritage', label: '🏛️ Heritage & UNESCO' },
+                      { id: 'hill_trek', label: '⛰️ Hills & Ghats' },
+                      { id: 'beach_coastal', label: '🏖️ Coastal' },
+                      { id: 'wildlife_nature', label: '🐅 Wildlife & Safaris' },
+                      { id: 'temple', label: '🛕 Temples' },
+                      { id: 'food_dining', label: '🍛 Iconic Food' },
+                    ].map((cat) => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setDiscoverCategoryFilter(cat.id)}
+                        className={`nt-corridor-pill-btn ${discoverCategoryFilter === cat.id ? 'added' : ''}`}
+                        style={{ fontSize: 10.5, padding: '3px 7px' }}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* POI Cards */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 4 }}>
+                  {KARNATAKA_POIS.filter((poi) => {
+                    if (discoverRegionFilter !== 'all' && poi.macroRegion !== discoverRegionFilter) return false;
+                    if (discoverCategoryFilter !== 'all' && poi.category !== discoverCategoryFilter) return false;
+                    if (discoverSearchQuery.trim()) {
+                      const q = discoverSearchQuery.toLowerCase();
+                      const matchName = poi.name.toLowerCase().includes(q);
+                      const matchKn = poi.nameKannada.includes(q);
+                      const matchDist = poi.district.toLowerCase().includes(q);
+                      if (!matchName && !matchKn && !matchDist) return false;
+                    }
+                    return true;
+                  }).map((poi) => {
+                    const added = stopIds.includes(poi.id);
+                    const photo = POI_PHOTO_MAP[poi.id] || DEFAULT_PHOTO;
+                    return (
+                      <div
+                        key={poi.id}
+                        className="nt-stop-card"
+                        style={{ padding: 10, display: 'flex', gap: 10, alignItems: 'center' }}
+                        onClick={() => handleFocusStop(poi)}
+                      >
+                        <img
+                          src={photo}
+                          alt={poi.name}
+                          style={{ width: 56, height: 56, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }}
+                          loading="lazy"
+                        />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontWeight: 700, fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {poi.name}
+                          </div>
+                          <div style={{ fontSize: 11, color: '#64748b' }}>
+                            {poi.nameKannada} • {poi.district}
+                          </div>
+                          <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
+                            <span className="nt-badge blue" style={{ fontSize: 9.5, padding: '1px 5px' }}>
+                              {poi.macroRegion}
+                            </span>
+                            <span className="nt-badge emerald" style={{ fontSize: 9.5, padding: '1px 5px' }}>
+                              ₹{poi.entryFeeInr.indianCitizen}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
+                          <button
+                            type="button"
+                            disabled={added}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddStop(poi.id);
+                            }}
+                            className={added ? 'nt-btn-outline' : 'nt-btn-primary'}
+                            style={{ fontSize: 11, padding: '4px 8px' }}
+                          >
+                            {added ? '✓ In Trip' : '+ Add Stop'}
+                          </button>
+                          <div style={{ display: 'flex', gap: 4 }}>
+                            <button
+                              type="button"
+                              className="nt-btn-outline"
+                              style={{ fontSize: 10, padding: '2px 5px' }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSetAsOrigin(poi);
+                              }}
+                              title="Start route from here"
+                            >
+                              📍 Start
+                            </button>
+                            <button
+                              type="button"
+                              className="nt-btn-outline"
+                              style={{ fontSize: 10, padding: '2px 5px' }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenWikiLore(poi);
+                              }}
+                              title="View history & lore"
+                            >
+                              📖 Lore
+                            </button>
+                          </div>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        disabled={added}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAddStop(poi.id);
-                        }}
-                        className={added ? 'nt-btn-outline' : 'nt-btn-primary'}
-                      >
-                        {added ? '✓ In Trip' : '+ Add Stop'}
-                      </button>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
@@ -1849,6 +2302,174 @@ export function App() {
           food: baseBudget.foodInr,
         }}
       />
+
+      {/* ================= WIKIPEDIA LIVE LORE & PROVENANCE MODAL ================= */}
+      {wikiEnrichment && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            background: 'rgba(15, 23, 42, 0.45)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+          }}
+          onClick={() => setWikiEnrichment(null)}
+        >
+          <div
+            style={{
+              background: '#ffffff',
+              borderRadius: 16,
+              maxWidth: 580,
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.18)',
+              border: '1px solid rgba(226, 232, 240, 0.9)',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div
+              style={{
+                padding: '16px 20px',
+                borderBottom: '1px solid #e2e8f0',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                background: '#f8fafc',
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+              }}
+            >
+              <div>
+                <span className="nt-badge saffron">🏛️ Karnataka Heritage Lore & History</span>
+                <h2 style={{ fontSize: 18, fontWeight: 800, marginTop: 4, color: '#0f172a' }}>
+                  {wikiEnrichment.data.title}
+                </h2>
+                <div style={{ fontSize: 12.5, color: '#64748b' }}>
+                  {wikiEnrichment.poi.nameKannada} • {wikiEnrichment.poi.district} ({wikiEnrichment.poi.macroRegion})
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setWikiEnrichment(null)}
+                style={{
+                  border: 'none',
+                  background: '#e2e8f0',
+                  color: '#475569',
+                  width: 28,
+                  height: 28,
+                  borderRadius: 14,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: 20 }}>
+              {wikiEnrichment.data.thumbnailUrl && (
+                <img
+                  src={wikiEnrichment.data.thumbnailUrl}
+                  alt={wikiEnrichment.data.title}
+                  style={{
+                    width: '100%',
+                    height: 200,
+                    objectFit: 'cover',
+                    borderRadius: 12,
+                    marginBottom: 14,
+                    border: '1px solid #e2e8f0',
+                  }}
+                />
+              )}
+
+              <p style={{ fontSize: 13.5, lineHeight: 1.65, color: '#334155', marginBottom: 14 }}>
+                {wikiEnrichment.data.extract}
+              </p>
+
+              <div
+                style={{
+                  background: '#f8fafc',
+                  padding: 12,
+                  borderRadius: 10,
+                  fontSize: 12,
+                  border: '1px solid #e2e8f0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 4,
+                }}
+              >
+                <div>
+                  <strong>Official Attribution:</strong> {wikiEnrichment.poi.sourceAttribution}
+                </div>
+                <div>
+                  <strong>Recommended Visit Time:</strong> {wikiEnrichment.poi.recommendedHours} hrs (Best: {wikiEnrichment.poi.bestTimeOfDay})
+                </div>
+                <div>
+                  <strong>Entry Fee:</strong> ₹{wikiEnrichment.poi.entryFeeInr.indianCitizen} ({wikiEnrichment.poi.entryFeeInr.feeNote})
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div
+              style={{
+                padding: '12px 20px',
+                borderTop: '1px solid #e2e8f0',
+                background: '#f8fafc',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 8,
+                borderBottomLeftRadius: 16,
+                borderBottomRightRadius: 16,
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setWikiEnrichment(null)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: 8,
+                  border: '1px solid #cbd5e1',
+                  background: '#ffffff',
+                  color: '#475569',
+                  fontWeight: 600,
+                  fontSize: 12.5,
+                  cursor: 'pointer',
+                }}
+              >
+                Close
+              </button>
+              <a
+                href={wikiEnrichment.data.wikiUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="nt-btn-primary"
+                style={{
+                  textDecoration: 'none',
+                  padding: '8px 16px',
+                  borderRadius: 8,
+                  fontSize: 12.5,
+                  fontWeight: 700,
+                }}
+              >
+                Read Full Encyclopedia ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

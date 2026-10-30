@@ -74,6 +74,7 @@ export function calculateTripBudget(params: {
 }
 
 export interface ShareableTripState {
+  origin?: string;
   stopIds: string[];
   days: number;
   travellers: number;
@@ -82,6 +83,7 @@ export interface ShareableTripState {
 
 export function serializeTripToQueryString(state: ShareableTripState): string {
   const params = new URLSearchParams();
+  if (state.origin) params.set('origin', state.origin);
   params.set('stops', state.stopIds.join(','));
   params.set('days', String(state.days));
   params.set('travellers', String(state.travellers));
@@ -91,6 +93,7 @@ export function serializeTripToQueryString(state: ShareableTripState): string {
 
 export function parseTripFromQueryString(search: string): ShareableTripState {
   const params = new URLSearchParams(search);
+  const rawOrigin = params.get('origin');
   const rawStops = params.get('stops');
   const validStopIds = rawStops
     ? rawStops
@@ -107,7 +110,7 @@ export function parseTripFromQueryString(search: string): ShareableTripState {
   const tier: BudgetTier =
     rawTier === 'backpacker' || rawTier === 'comfort' || rawTier === 'premium' ? rawTier : defaultPreset.defaultTier;
 
-  return { stopIds, days, travellers, tier };
+  return { origin: rawOrigin || undefined, stopIds, days, travellers, tier };
 }
 
 export function exportItineraryToMarkdown(params: {

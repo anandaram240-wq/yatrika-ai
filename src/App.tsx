@@ -9,6 +9,8 @@ import {
   KARNATAKA_POIS,
   CURATED_CIRCUIT_PRESETS,
   getPoiById,
+  UserOriginOption,
+  KARNATAKA_GATEWAY_ORIGINS,
 } from './data/karnatakaTravelRegistry';
 import { BudgetTier, ComputedTripRoute, KarnatakaPOI } from './types/nammatrip';
 import {
@@ -125,6 +127,28 @@ const POI_PHOTO_MAP: Record<string, string> = {
   'poi-nuggehalli': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=600&q=80',
   'poi-begur-fort': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
   'poi-gundal-dam': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-seethalayyanagiri': 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80',
+  'poi-jhari-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-bababudangiri': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+  'poi-kallathigiri-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-z-point-kemmangundi': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-kyathanamakki': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+  'poi-horanadu-annapoorneshwari': 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=600&q=80',
+  'poi-sringeri-sharada-peetham': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=600&q=80',
+  'poi-charmadi-ghat-view': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-ballalarayana-durga': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+  'poi-balehonnur-rambhapuri': 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80',
+  'poi-syntheri-rocks': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+  'poi-sathodi-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-magod-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-unchalli-falls': 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80',
+  'poi-ibrahim-rouza': 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=600&q=80',
+  'poi-talakad-keerthinarayana': 'https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=600&q=80',
+  'poi-gorur-dam': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+  'poi-devarayanadurga-bhoganarasimha': 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80',
+  'poi-savandurga-narasimha': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+  'poi-chennakeshava-aralaguppe': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=600&q=80',
+  'poi-kudremukh-national-park': 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
   'food-mtr-bengaluru': 'https://images.unsplash.com/photo-1630383249896-424e482df921?auto=format&fit=crop&w=600&q=80',
   'food-davangere-benne-dose': 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80',
   'food-dharwad-pedha-jolada-rotti': 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80',
@@ -139,28 +163,82 @@ const POI_PHOTO_MAP: Record<string, string> = {
 const DEFAULT_PHOTO =
   'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80';
 
-export interface UserOriginOption {
-  id: string;
-  name: string;
-  nameKannada: string;
-  coordinates: [number, number]; // [lng, lat]
+export interface CorridorRecommendation {
+  corridorTitle: string;
+  roadName: string;
+  mountainAdvisory?: string;
+  recommendedPoiIds: string[];
+  suggestedPresetId?: string;
 }
 
-export const KARNATAKA_GATEWAY_ORIGINS: UserOriginOption[] = [
-  { id: 'origin-bengaluru', name: 'Bengaluru (KSR / Majestic)', nameKannada: 'ಬೆಂಗಳೂರು', coordinates: [77.5683, 12.9784] },
-  { id: 'origin-mysuru', name: 'Mysuru City', nameKannada: 'ಮೈಸೂರು', coordinates: [76.6498, 12.3145] },
-  { id: 'origin-mangaluru', name: 'Mangaluru Central', nameKannada: 'ಮಂಗಳೂರು', coordinates: [74.8560, 12.9141] },
-  { id: 'origin-hubballi', name: 'Hubballi Junction', nameKannada: 'ಹುಬ್ಬಳ್ಳಿ', coordinates: [75.1432, 15.3587] },
-  { id: 'origin-belagavi', name: 'Belagavi', nameKannada: 'ಬೆಳಗಾವಿ', coordinates: [74.5089, 15.8497] },
-  { id: 'origin-shivamogga', name: 'Shivamogga (Malnad Gateway)', nameKannada: 'ಶಿವಮೊಗ್ಗ', coordinates: [75.5681, 13.9299] },
-  { id: 'origin-kalaburagi', name: 'Kalaburagi (Gulbarga)', nameKannada: 'ಕಲಬುರಗಿ', coordinates: [76.8343, 17.3297] },
-  { id: 'origin-udupi', name: 'Udupi City', nameKannada: 'ಉಡುಪಿ', coordinates: [74.7473, 13.3409] },
-  { id: 'origin-hassan', name: 'Hassan', nameKannada: 'ಹಾಸನ', coordinates: [76.0967, 13.0033] },
-];
+export function getCorridorIntelligence(originId: string): CorridorRecommendation {
+  if (originId === 'origin-chikkamagaluru') {
+    return {
+      corridorTitle: 'Mullayanagiri Mountain Ridge & Coffee Valley Corridor',
+      roadName: 'Kaimara - Mullayanagiri Mountain Ghat Road (18 Hairpins)',
+      mountainAdvisory: 'Ascent from 1,030m to 1,930m summit • Drive in 1st/2nd gear • Morning cloud mist between 06:00–08:30 • 4x4 needed for Jhari Falls',
+      recommendedPoiIds: ['poi-seethalayyanagiri', 'poi-mullayanagiri', 'poi-jhari-falls', 'poi-bababudangiri', 'poi-hirekolale-lake'],
+      suggestedPresetId: 'circuit-chikkamagaluru-mullayanagiri',
+    };
+  }
+  if (originId === 'origin-mangaluru' || originId === 'origin-udupi') {
+    return {
+      corridorTitle: 'Karavali to Western Ghats Mountain Pass Corridor',
+      roadName: 'Charmadi Ghat (SH-37) / Shiradi Ghat (NH-75)',
+      mountainAdvisory: 'Dramatic transition from sea level to 1,100m • Cascading roadside streams • Heavy rain mist; daytime travel advised',
+      recommendedPoiIds: ['poi-charmadi-ghat-view', 'poi-ballalarayana-durga', 'poi-horanadu-annapoorneshwari', 'poi-sringeri-sharada-peetham'],
+      suggestedPresetId: 'circuit-malnad-spiritual-peaks',
+    };
+  }
+  if (originId === 'origin-mysuru') {
+    return {
+      corridorTitle: 'Old Mysuru & Nilgiri Foothills Wildlife Corridor',
+      roadName: 'Bengaluru-Mysuru Expressway (NH-275) & Ooty Highway (NH-766)',
+      mountainAdvisory: 'Statutory wildlife night-driving ban on NH-766 through Bandipur 21:00 to 06:00 • Keep safe distance from wild elephant herds',
+      recommendedPoiIds: ['poi-srirangapatna', 'poi-somnathpur-temple', 'poi-ranganathittu', 'poi-bandipur', 'poi-talakad-keerthinarayana'],
+      suggestedPresetId: 'circuit-wildlife-royal-heritage',
+    };
+  }
+  if (originId === 'origin-shivamogga') {
+    return {
+      corridorTitle: 'Central Malnad Forest & Waterfall Circuit',
+      roadName: 'NH-169 & Tarikere-Kemmangundi Mountain Pass',
+      mountainAdvisory: 'Lush evergreen canopy • Winding curves around Bhadra reservoir • Kalhatti cascade directly crosses temple rocks',
+      recommendedPoiIds: ['poi-kallathigiri-falls', 'poi-z-point-kemmangundi', 'poi-bhadra-wildlife', 'poi-sringeri-sharada-peetham'],
+      suggestedPresetId: 'circuit-grand-hoysala-heritage',
+    };
+  }
+  if (originId === 'origin-hubballi' || originId === 'origin-belagavi' || originId === 'origin-vijayapura' || originId === 'origin-hampi') {
+    return {
+      corridorTitle: 'Deccan Chalukya & Adil Shahi Heritage Corridor',
+      roadName: 'NH-50 & NH-218 Heritage Golden Quadrangle',
+      mountainAdvisory: 'Smooth high-speed North Karnataka expressway • High midday sun; early morning monument exploration recommended',
+      recommendedPoiIds: ['poi-badami-caves', 'poi-banashankari', 'poi-pattadakal-unesco', 'poi-kudalasangama', 'poi-ibrahim-rouza'],
+      suggestedPresetId: 'circuit-kalyana-tungabhadra',
+    };
+  }
+  if (originId === 'origin-madikeri') {
+    return {
+      corridorTitle: 'Kodagu Coffee Hills & Pushpagiri Sanctuary Corridor',
+      roadName: 'SH-88 Madikeri-Somwarpet & Sampaje Ghat (NH-275)',
+      mountainAdvisory: 'Narrow estate roads with blind corners • 4x4 jeep required for Mandalpatti summit • Night forest restrictions apply',
+      recommendedPoiIds: ['poi-omkareshwara-madikeri', 'poi-mandalpatti', 'poi-chelavara-falls', 'poi-talakaveri', 'poi-dubare-elephant-camp'],
+      suggestedPresetId: 'circuit-royal-mysuru-coorg',
+    };
+  }
+  // Default for Bengaluru / Other
+  return {
+    corridorTitle: 'Bengaluru Gateway to Karnataka Scenic Corridors',
+    roadName: 'NH-75 Hassan Express / NH-275 Mysuru Expressway',
+    mountainAdvisory: 'Access-controlled multi-lane highway • Fast corridor connections to Malnad, Heritage & Coastal routes',
+    recommendedPoiIds: ['poi-shravanabelagola', 'poi-belur-halebidu', 'poi-mullayanagiri', 'poi-mysore-palace'],
+    suggestedPresetId: 'circuit-grand-hoysala-heritage',
+  };
+}
 
 export function App() {
   const initialTrip = useMemo(() => {
-    if (typeof window !== 'undefined' && window.location.search.includes('stops=')) {
+    if (typeof window !== 'undefined' && window.location.search) {
       return parseTripFromQueryString(window.location.search);
     }
     return parseTripFromQueryString('');
@@ -181,11 +259,19 @@ export function App() {
   const [shareCopied, setShareCopied] = useState<boolean>(false);
 
   // User starting location & interactive overview tour states
-  const [userOrigin, setUserOrigin] = useState<UserOriginOption>(KARNATAKA_GATEWAY_ORIGINS[0]);
+  const [userOrigin, setUserOrigin] = useState<UserOriginOption>(() => {
+    if (initialTrip.origin) {
+      const match = KARNATAKA_GATEWAY_ORIGINS.find((o) => o.id === initialTrip.origin);
+      if (match) return match;
+    }
+    return KARNATAKA_GATEWAY_ORIGINS[0];
+  });
   const [isDetectingGps, setIsDetectingGps] = useState<boolean>(false);
   const [isTourPlaying, setIsTourPlaying] = useState<boolean>(false);
   const [tourStatusText, setTourStatusText] = useState<string | null>(null);
   const tourTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const corridorInfo = useMemo(() => getCorridorIntelligence(userOrigin.id), [userOrigin.id]);
 
   // MapLibre WebGL refs
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -245,9 +331,9 @@ export function App() {
   // Sync URL query string
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const qs = serializeTripToQueryString({ stopIds, days, travellers, tier: budgetTier });
+    const qs = serializeTripToQueryString({ origin: userOrigin.id, stopIds, days, travellers, tier: budgetTier });
     window.history.replaceState(null, '', qs);
-  }, [stopIds, days, travellers, budgetTier]);
+  }, [userOrigin.id, stopIds, days, travellers, budgetTier]);
 
   // Budget & Shakti ₹0 Bus Savings
   const baseBudget = useMemo(
@@ -804,6 +890,57 @@ export function App() {
                   </button>
                 </div>
 
+                {/* Dynamic Origin-Aware Corridor Intelligence Card */}
+                <div className="nt-corridor-intelligence-card">
+                  <div className="nt-corridor-header">
+                    <span className="nt-corridor-tag">🛣️ Route Corridor</span>
+                    <span className="nt-corridor-title">{corridorInfo.corridorTitle}</span>
+                  </div>
+                  <div className="nt-corridor-road">
+                    📍 <strong>Primary Highway / Pass:</strong> {corridorInfo.roadName}
+                  </div>
+                  {corridorInfo.mountainAdvisory && (
+                    <div className="nt-corridor-advisory">
+                      ⚠️ <strong>Mountain & Highway Advisory:</strong> {corridorInfo.mountainAdvisory}
+                    </div>
+                  )}
+
+                  {/* En-Route Recommended Places for this specific origin */}
+                  <div className="nt-corridor-suggestions">
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#475569' }}>
+                      ⭐ Best En-Route Stops from {userOrigin.name.split('(')[0].trim()}:
+                    </span>
+                    <div className="nt-corridor-pills">
+                      {corridorInfo.recommendedPoiIds.map((recId) => {
+                        const recPoi = getPoiById(recId);
+                        if (!recPoi) return null;
+                        const isAdded = stopIds.includes(recId);
+                        return (
+                          <button
+                            key={recId}
+                            type="button"
+                            disabled={isAdded}
+                            onClick={() => handleAddStop(recId)}
+                            className={`nt-corridor-pill-btn ${isAdded ? 'added' : ''}`}
+                          >
+                            {isAdded ? '✓ ' : '+ '}
+                            {recPoi.name.split('(')[0].trim()}
+                          </button>
+                        );
+                      })}
+                      {corridorInfo.suggestedPresetId && (
+                        <button
+                          type="button"
+                          onClick={() => handleLoadCircuit(corridorInfo.suggestedPresetId!)}
+                          className="nt-corridor-preset-btn"
+                        >
+                          ⚡ Load Corridor Circuit
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Starting Leg Driving Connector from User Origin to First Stop */}
                 {itineraryStops.length > 0 && route.legs.length > 0 && (
                   <div className="nt-leg-connector" style={{ marginBottom: 12 }}>
@@ -816,7 +953,7 @@ export function App() {
                       </span>
                       <span>•</span>
                       <span style={{ color: '#047857', fontWeight: 700 }}>
-                        Departing from {userOrigin.name.split('(')[0].trim()}
+                        {userOrigin.name.split('(')[0].trim()} ➔ {itineraryStops[0].name.split('(')[0].trim()} ({corridorInfo.roadName.split('(')[0].trim()})
                       </span>
                     </div>
                   </div>

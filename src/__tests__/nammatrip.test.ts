@@ -121,4 +121,46 @@ describe('NammaTrip AI — Geospatial, Transport & Travel Intelligence Suite', (
     expect(md).toContain('# NammaTrip AI — Karnataka Travel Itinerary');
     expect(md).toContain('Mysuru Ambavilas Palace');
   });
+
+  it('9. expands verified Karnataka catalog to over 130 destination POIs with coordinates and Kannada phrases', () => {
+    expect(KARNATAKA_POIS.length).toBeGreaterThanOrEqual(130);
+
+    // Verify critical Malnad & Chikkamagaluru summit POIs exist
+    const seethalayyana = getPoiById('poi-seethalayyanagiri');
+    const jhari = getPoiById('poi-jhari-falls');
+    const bababudan = getPoiById('poi-bababudangiri');
+    const sringeri = getPoiById('poi-sringeri-sharada-peetham');
+    const horanadu = getPoiById('poi-horanadu-annapoorneshwari');
+
+    expect(seethalayyana).toBeDefined();
+    expect(seethalayyana?.district).toBe('Chikkamagaluru');
+    // Elevation ~1,700m in Baba Budan range
+    expect(seethalayyana?.coordinates[1]).toBeGreaterThan(13.3);
+    expect(seethalayyana?.coordinates[1]).toBeLessThan(13.5);
+
+    expect(jhari).toBeDefined();
+    expect(jhari?.district).toBe('Chikkamagaluru');
+
+    expect(bababudan).toBeDefined();
+    expect(bababudan?.localPhrase.kannada).toContain('ದತ್ತಾತ್ರೇಯ');
+
+    expect(sringeri).toBeDefined();
+    expect(horanadu).toBeDefined();
+  });
+
+  it('10. round-trips origin parameter in URL query string to preserve user starting point', () => {
+    const stateWithOrigin = {
+      origin: 'origin-chikkamagaluru',
+      stopIds: ['poi-seethalayyanagiri', 'poi-jhari-falls', 'poi-bababudangiri'],
+      days: 2,
+      travellers: 2,
+      tier: 'comfort' as const,
+    };
+    const qs = serializeTripToQueryString(stateWithOrigin);
+    expect(qs).toContain('origin=origin-chikkamagaluru');
+
+    const parsed = parseTripFromQueryString(qs);
+    expect(parsed.origin).toBe('origin-chikkamagaluru');
+    expect(parsed.stopIds).toEqual(stateWithOrigin.stopIds);
+  });
 });

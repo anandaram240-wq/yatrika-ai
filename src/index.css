@@ -1,26 +1,31 @@
-/* src/index.css — NammaTrip AI Modern Daylight & Glassmorphic Design System */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@500;600;700&display=swap');
+/* src/index.css — YatriKa AI Royal Karnataka Heritage & Glassmorphic Design System */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@500;600;700;800&display=swap');
 
 :root {
-  --bg-app: #f8fafc;
+  --bg-app: #fdfbf7; /* Mysore Sandstone Warm Ivory */
   --bg-surface: #ffffff;
-  --bg-subtle: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  --border-light: #e2e8f0;
-  --border-focus: #cbd5e1;
-  --brand-primary: #2563eb;
-  --brand-primary-Soft: #eff6ff;
-  --accent-saffron: #ea580c;
-  --accent-saffron-soft: #fff7ed;
-  --accent-emerald: #059669;
+  --bg-subtle: #faf6ee; /* Subtle Sandstone Cream */
+  --bg-hover: #fef3c7; /* Warm Amber Tint */
+  --text-primary: #1c1917; /* Deep Obsidian Stone */
+  --text-secondary: #44403c; /* Stone-700 */
+  --text-muted: #78716c; /* Stone-500 */
+  --border-light: #f0e6d6; /* Warm Sandstone Border */
+  --border-focus: #d97706; /* Golden Amber Focus */
+  --brand-primary: #d97706; /* Royal Karnataka Gold */
+  --brand-primary-hover: #b45309; /* Deep Saffron Ochre */
+  --brand-primary-soft: #fef3c7; /* Light Amber Glow */
+  --brand-crimson: #991b1b; /* Royal Karnataka Flag Crimson */
+  --brand-crimson-soft: #fee2e2;
+  --accent-saffron: #f59e0b; /* Vivid Karnataka Flag Saffron */
+  --accent-saffron-soft: #fffbeb;
+  --accent-emerald: #047857; /* Western Ghats Evergreen */
   --accent-emerald-soft: #ecfdf5;
-  --accent-purple: #7c3aed;
-  --accent-purple-soft: #f5f3ff;
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.14);
+  --accent-purple: #7e22ce; /* Chalukya Royal Violet */
+  --accent-purple-soft: #faf5ff;
+  --shadow-sm: 0 1px 3px rgba(41, 37, 36, 0.05);
+  --shadow-md: 0 4px 18px -2px rgba(120, 53, 15, 0.08), 0 2px 6px -1px rgba(41, 37, 36, 0.04);
+  --shadow-lg: 0 12px 36px -4px rgba(120, 53, 15, 0.16);
+  --radius-card: 14px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-pill: 9999px;
@@ -36,15 +41,41 @@ body, html, #root {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-app);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
 }
 
-[lang="kn"] {
-  font-family: 'Noto Sans Kannada', 'Inter', sans-serif;
+[lang="kn"], .font-kannada {
+  font-family: 'Noto Sans Kannada', 'Plus Jakarta Sans', sans-serif;
   line-height: 1.5;
+}
+
+.font-heritage {
+  font-family: 'Cinzel', serif;
+}
+
+/* Custom subtle amber scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fef3c7;
+}
+::-webkit-scrollbar-thumb {
+  background: #d97706;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b45309;
+}
+
+/* Selection */
+::selection {
+  background-color: #fcd34d;
+  color: #1c1917;
 }
 
 /* ================= SHELL LAYOUT ================= */
@@ -53,21 +84,23 @@ body, html, #root {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  background: var(--bg-app);
 }
 
 /* Top Glassmorphic Command Header */
 .nt-topbar {
   height: 68px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-light);
+  background: rgba(253, 251, 247, 0.96);
+  backdrop-filter: blur(16px);
+  border-bottom: 1.5px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 22px;
   gap: 16px;
   z-index: 30;
   flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(120, 53, 15, 0.04);
 }
 
 .nt-brand {
@@ -78,17 +111,18 @@ body, html, #root {
 }
 
 .nt-logo-badge {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%);
   color: #ffffff;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .nt-brand-title {
@@ -107,23 +141,24 @@ body, html, #root {
   font-weight: 500;
 }
 
-/* AI Omni-Prompt Bar (Mindtrip Style) */
+/* AI Omni-Prompt Bar (Mindtrip Style with Royal Karnataka Accents) */
 .nt-omnibar {
   flex: 1;
   max-width: 580px;
   display: flex;
   align-items: center;
-  background: var(--bg-subtle);
+  background: #ffffff;
   border: 1.5px solid var(--border-light);
   border-radius: var(--radius-pill);
   padding: 5px 6px 5px 16px;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .nt-omnibar:focus-within {
   background: #ffffff;
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16);
 }
 
 .nt-omnibar input {
@@ -136,186 +171,209 @@ body, html, #root {
 }
 
 .nt-omnibar-btn {
-  background: var(--brand-primary);
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   color: #ffffff;
   border: none;
   border-radius: var(--radius-pill);
-  padding: 8px 16px;
+  padding: 8px 18px;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
 }
 
 .nt-omnibar-btn:hover {
-  background: #1d4ed8;
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
 }
 
-/* Header Right KPIs & Share */
-.nt-header-actions {
+/* Header Summary Metric Chips */
+.nt-metrics {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
-.nt-stat-pill {
-  background: var(--bg-subtle);
+.nt-metric-chip {
+  background: #ffffff;
   border: 1px solid var(--border-light);
-  padding: 6px 12px;
   border-radius: var(--radius-pill);
+  padding: 6px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.nt-stat-pill strong {
-  color: var(--text-primary);
-}
-
-.nt-btn-outline {
-  background: #ffffff;
-  border: 1px solid var(--border-focus);
-  color: var(--text-primary);
-  padding: 7px 13px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
   gap: 6px;
-  transition: all 0.15s ease;
-}
-
-.nt-btn-outline:hover {
-  background: var(--bg-subtle);
-  border-color: #94a3b8;
-}
-
-.nt-btn-primary {
-  background: var(--text-primary);
-  color: #ffffff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* ================= SPLIT-SCREEN WORKSPACE (WANDERLOG STYLE) ================= */
-.nt-workspace {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 540px 1fr;
-  height: calc(100vh - 68px);
-  overflow: hidden;
-}
-
-@media (max-width: 1100px) {
-  .nt-workspace {
-    grid-template-columns: 440px 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .nt-workspace {
-    grid-template-columns: 1fr;
-    grid-template-rows: 52% 48%;
-  }
-}
-
-/* Left Panel: Scrollable Itinerary & Intelligence Feed */
-.nt-left-feed {
-  height: 100%;
-  overflow-y: auto;
-  background: var(--bg-app);
-  border-right: 1px solid var(--border-light);
-  display: flex;
-  flex-direction: column;
-}
-
-.nt-feed-sticky-controls {
-  position: sticky;
-  top: 0;
-  z-index: 15;
-  background: rgba(248, 250, 252, 0.96);
-  backdrop-filter: blur(10px);
-  padding: 14px 20px 10px;
-  border-bottom: 1px solid var(--border-light);
-}
-
-/* Circuit Preset Pills */
-.nt-preset-strip {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  scrollbar-width: none;
-}
-
-.nt-preset-pill {
-  flex-shrink: 0;
-  padding: 6px 12px;
-  border-radius: var(--radius-pill);
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid var(--border-light);
-  background: #ffffff;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.nt-preset-pill.active {
-  background: var(--text-primary);
-  color: #ffffff;
-  border-color: var(--text-primary);
-}
-
-/* Sub-Nav Mode Switcher */
-.nt-mode-tabs {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
-}
-
-.nt-mode-tab {
-  flex: 1;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.nt-mode-tab.active {
-  background: #ffffff;
-  color: var(--brand-primary);
   box-shadow: var(--shadow-sm);
 }
 
-/* Itinerary Cards Container */
-.nt-feed-body {
-  padding: 18px 20px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+.nt-metric-chip strong {
+  color: var(--brand-primary-hover);
+  font-weight: 800;
 }
 
-/* Stop Card (Layla / Airbnb Visual Card) */
+.nt-btn-header {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.nt-btn-header:hover {
+  background: var(--bg-hover);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary-hover);
+}
+
+.nt-btn-header.primary {
+  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(153, 27, 27, 0.3);
+}
+
+.nt-btn-header.primary:hover {
+  background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+}
+
+/* Secondary Navigation & Presets Bar */
+.nt-subbar {
+  background: rgba(253, 251, 247, 0.94);
+  border-bottom: 1px solid var(--border-light);
+  padding: 8px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 20;
+  flex-shrink: 0;
+}
+
+.nt-preset-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.nt-preset-pill {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.nt-preset-pill:hover,
+.nt-preset-pill.active {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+}
+
+/* ================= 50/50 WORKSPACE SPLIT-SCREEN ================= */
+.nt-workspace {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  height: calc(100vh - 116px);
+  overflow: hidden;
+}
+
+/* LEFT PANEL: WANDERLOG / MINDTRIP ITINERARY FEED */
+.nt-timeline-pane {
+  width: 48%;
+  min-width: 480px;
+  max-width: 720px;
+  height: 100%;
+  background: var(--bg-app);
+  border-right: 1.5px solid var(--border-light);
+  overflow-y: auto;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Left Pane View Mode Tabs */
+.nt-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0e6d6;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  width: fit-content;
+}
+
+.nt-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nt-tab-btn.active {
+  background: #ffffff;
+  color: var(--brand-primary-hover);
+  box-shadow: 0 2px 6px rgba(120, 53, 15, 0.1);
+}
+
+/* Day Header Pill (e.g. Day 1: Royal Mysuru Heritage) */
+.nt-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--brand-primary);
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.nt-day-title {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.nt-day-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Stop Card (Wanderlog Photo Card Beside Details) */
 .nt-stop-card {
-  background: var(--bg-surface);
+  background: #ffffff;
   border: 1.5px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
@@ -323,63 +381,71 @@ body, html, #root {
 }
 
 .nt-stop-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: #cbd5e1;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  border-color: #f59e0b;
+  box-shadow: 0 6px 20px -2px rgba(217, 119, 6, 0.12);
 }
 
 .nt-stop-card.selected {
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12), var(--shadow-md);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18), var(--shadow-md);
 }
 
 .nt-stop-card-top {
-  display: grid;
-  grid-template-columns: 135px 1fr;
-  min-height: 132px;
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  padding: 14px;
 }
 
 .nt-stop-photo-wrap {
+  width: 128px;
+  min-width: 128px;
+  height: 98px;
+  border-radius: 10px;
+  overflow: hidden;
   position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 132px;
-  background: #cbd5e1;
+  background: #f0e6d6;
+  flex-shrink: 0;
 }
 
 .nt-stop-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  transition: transform 0.3s ease;
 }
 
-.nt-stop-number-badge {
+.nt-stop-card:hover .nt-stop-photo {
+  transform: scale(1.04);
+}
+
+.nt-stop-order-pill {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-pill);
-  background: var(--accent-saffron);
+  top: 6px;
+  left: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   color: #ffffff;
+  font-size: 11.5px;
   font-weight: 800;
-  font-size: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.5);
+  border: 1.5px solid #ffffff;
 }
 
-.nt-stop-info {
-  padding: 12px 14px;
+.nt-stop-details {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.nt-stop-header-row {
+.nt-stop-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -424,9 +490,10 @@ body, html, #root {
   gap: 4px;
 }
 
-.nt-badge.blue { background: var(--brand-primary-Soft); color: #1d4ed8; }
+.nt-badge.blue, .nt-badge.gold { background: var(--brand-primary-soft); color: var(--brand-primary-hover); }
 .nt-badge.emerald { background: var(--accent-emerald-soft); color: var(--accent-emerald); }
-.nt-badge.saffron { background: var(--accent-saffron-soft); color: var(--accent-saffron); }
+.nt-badge.crimson { background: var(--brand-crimson-soft); color: var(--brand-crimson); }
+.nt-badge.saffron { background: var(--accent-saffron-soft); color: #b45309; }
 .nt-badge.purple { background: var(--accent-purple-soft); color: var(--accent-purple); }
 
 /* Embedded Kannada Voice & Transport Strip at bottom of card */
@@ -449,7 +516,7 @@ body, html, #root {
 }
 
 .nt-voice-btn {
-  background: var(--brand-primary);
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   color: #ffffff;
   border: none;
   border-radius: var(--radius-pill);
@@ -461,10 +528,13 @@ body, html, #root {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.25);
+  transition: all 0.15s ease;
 }
 
 .nt-voice-btn:hover {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+  transform: scale(1.03);
 }
 
 /* Wanderlog-style Drive / Train Connector Between Stops */
@@ -480,8 +550,8 @@ body, html, #root {
   height: 34px;
   background: repeating-linear-gradient(
     to bottom,
-    #94a3b8 0,
-    #94a3b8 4px,
+    #d97706 0,
+    #d97706 4px,
     transparent 4px,
     transparent 8px
   );
@@ -501,117 +571,14 @@ body, html, #root {
   gap: 8px;
 }
 
-/* ================= RIGHT PANEL: FULL-VIEWPORT MAPLIBRE CANVAS ================= */
-.nt-map-pane {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: #dbeafe;
-}
-
-/* Floating Glassmorphic Overlays on Map */
-.nt-map-top-bar {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  right: 16px;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  pointer-events: none;
-}
-
-.nt-map-glass-pill {
-  pointer-events: auto;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: var(--shadow-md);
-  border-radius: var(--radius-pill);
-  padding: 6px 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.nt-map-floating-controls {
-  position: absolute;
-  right: 16px;
-  bottom: 32px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.nt-map-ctrl-btn {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-md);
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.nt-map-ctrl-btn:hover {
-  background: #ffffff;
-  transform: translateY(-1px);
-}
-
-/* Custom MapLibre HTML Marker Pin */
-.nt-custom-map-pin {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #ffffff;
-  color: var(--text-primary);
-  padding: 4px 10px 4px 4px;
-  border-radius: var(--radius-pill);
-  font-weight: 700;
-  font-size: 12px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
-  border: 2px solid #ffffff;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-  white-space: nowrap;
-}
-
-.nt-custom-map-pin:hover,
-.nt-custom-map-pin.active {
-  transform: scale(1.1);
-  border-color: var(--brand-primary);
-  z-index: 25 !important;
-}
-
-.nt-custom-map-pin-num {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent-saffron);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 800;
-}
-
 /* User Starting Location & Route Animation Tour Styles */
 .nt-origin-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
-  border: 1px solid #bae6fd;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid #fde68a;
   border-radius: var(--radius-card);
   padding: 12px 16px;
   margin-bottom: 12px;
@@ -629,14 +596,14 @@ body, html, #root {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #0284c7;
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
 }
 
 .nt-origin-details {
@@ -647,7 +614,7 @@ body, html, #root {
 .nt-origin-label {
   font-size: 11px;
   font-weight: 700;
-  color: #0369a1;
+  color: #b45309;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -657,7 +624,7 @@ body, html, #root {
   background: transparent;
   font-size: 13.5px;
   font-weight: 700;
-  color: #0f172a;
+  color: #1c1917;
   cursor: pointer;
   padding: 2px 0;
   outline: none;
@@ -668,8 +635,8 @@ body, html, #root {
   align-items: center;
   gap: 5px;
   background: #ffffff;
-  border: 1px solid #7dd3fc;
-  color: #0369a1;
+  border: 1px solid #f59e0b;
+  color: #b45309;
   padding: 6px 12px;
   border-radius: var(--radius-pill);
   font-size: 11.5px;
@@ -677,109 +644,20 @@ body, html, #root {
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(180, 83, 9, 0.1);
 }
 
 .nt-origin-gps-btn:hover {
-  background: #0284c7;
+  background: #f59e0b;
   color: #ffffff;
-  border-color: #0284c7;
-}
-
-/* Floating Tour Banner on Map */
-.nt-map-tour-banner {
-  position: absolute;
-  top: 72px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  background: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(14px);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-  border-radius: var(--radius-pill);
-  padding: 8px 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  animation: fadeInDown 0.3s ease;
-  max-width: 90%;
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -10px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-.nt-pulse-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-  animation: pulse-ring 1.5s infinite;
-  flex-shrink: 0;
-}
-
-@keyframes pulse-ring {
-  0% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-  }
-}
-
-.nt-btn-tour-close {
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  color: #ffffff;
-  padding: 3px 9px;
-  border-radius: var(--radius-pill);
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.nt-btn-tour-close:hover {
-  background: #ef4444;
-}
-
-/* Custom Origin Map Pin */
-.nt-custom-map-pin-origin {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #0284c7;
-  color: #ffffff;
-  padding: 4px 10px 4px 5px;
-  border-radius: var(--radius-pill);
-  font-weight: 700;
-  font-size: 12px;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
-  border: 2px solid #ffffff;
-  cursor: pointer;
-  white-space: nowrap;
-  z-index: 20 !important;
+  border-color: #f59e0b;
 }
 
 /* Corridor Intelligence Card */
 .nt-corridor-intelligence-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-left: 4px solid #0284c7;
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--brand-primary);
   border-radius: var(--radius-card);
   padding: 12px 14px;
   margin-bottom: 14px;
@@ -798,32 +676,32 @@ body, html, #root {
 .nt-corridor-tag {
   font-size: 10.5px;
   font-weight: 800;
-  background: #e0f2fe;
-  color: #0369a1;
-  padding: 2px 7px;
+  background: #fef3c7;
+  color: #b45309;
+  padding: 2px 8px;
   border-radius: 999px;
   text-transform: uppercase;
 }
 
 .nt-corridor-title {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
-  color: #0f172a;
+  color: #1c1917;
 }
 
 .nt-corridor-road {
   font-size: 12px;
-  color: #334155;
+  color: #44403c;
 }
 
 .nt-corridor-advisory {
   font-size: 11.5px;
-  color: #b45309;
-  background: #fef3c7;
+  color: #78350f;
+  background: #fffbeb;
   border: 1px solid #fde68a;
-  padding: 6px 10px;
+  padding: 7px 11px;
   border-radius: 8px;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .nt-corridor-suggestions {
@@ -840,42 +718,492 @@ body, html, #root {
 }
 
 .nt-corridor-pill-btn {
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
-  color: #1e293b;
-  padding: 4px 10px;
+  background: #ffffff;
+  border: 1px solid #e7e5e4;
+  color: #292524;
+  padding: 4px 11px;
   border-radius: var(--radius-pill);
   font-size: 11.5px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(41, 37, 36, 0.04);
 }
 
 .nt-corridor-pill-btn:hover:not(:disabled) {
-  background: #0284c7;
+  background: #d97706;
   color: #ffffff;
-  border-color: #0284c7;
+  border-color: #d97706;
 }
 
 .nt-corridor-pill-btn.added {
   background: #ecfdf5;
   border-color: #a7f3d0;
-  color: #059669;
+  color: #047857;
   cursor: default;
 }
 
 .nt-corridor-preset-btn {
-  background: #4f46e5;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   border: none;
   color: #ffffff;
-  padding: 4px 11px;
+  padding: 5px 13px;
   border-radius: var(--radius-pill);
   font-size: 11.5px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.25);
 }
 
 .nt-corridor-preset-btn:hover {
-  background: #4338ca;
+  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+}
+
+/* ================= RIGHT PANEL: FULL-VIEWPORT MAPLIBRE CANVAS ================= */
+.nt-map-pane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f5f0e6; /* Warm parchment */
+}
+
+/* Floating Glassmorphic Overlays on Map */
+.nt-map-top-bar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.nt-map-glass-pill {
+  pointer-events: auto;
+  background: rgba(253, 251, 247, 0.94);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(240, 230, 214, 0.8);
+  box-shadow: 0 4px 16px rgba(120, 53, 15, 0.1);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nt-map-floating-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 24px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nt-map-ctrl-btn {
+  background: rgba(253, 251, 247, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nt-map-ctrl-btn:hover {
+  background: #ffffff;
+  border-color: #d97706;
+  color: #b45309;
+  transform: translateY(-1px);
+}
+
+/* Custom MapLibre HTML Marker Pin */
+.nt-custom-map-pin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: var(--text-primary);
+  padding: 4px 10px 4px 4px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 4px 14px rgba(41, 37, 36, 0.22);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.nt-custom-map-pin:hover,
+.nt-custom-map-pin.active {
+  transform: scale(1.1);
+  border-color: #d97706;
+  z-index: 25 !important;
+}
+
+.nt-custom-map-pin-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Custom Origin Map Pin */
+.nt-custom-map-pin-origin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%);
+  color: #ffffff;
+  padding: 4px 10px 4px 5px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.45);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+  z-index: 20 !important;
+}
+
+/* ================= WORLD-CLASS CINEMATIC TOUR FLIGHT DECK (HUD) ================= */
+
+/* Moving Animated Vehicle on Map Canvas */
+.nt-vehicle-marker {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 40 !important;
+}
+
+.nt-vehicle-chassis {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d97706 0%, #78350f 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 16px rgba(180, 83, 9, 0.6), 0 0 0 3px rgba(254, 243, 199, 0.9);
+  position: relative;
+}
+
+/* Golden Headlight Beams illuminating the road forward */
+.nt-vehicle-headlights {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 24px;
+  background: radial-gradient(ellipse at bottom, rgba(251, 191, 36, 0.8) 0%, rgba(251, 191, 36, 0) 80%);
+  clip-path: polygon(30% 100%, 70% 100%, 100% 0%, 0% 0%);
+  pointer-events: none;
+}
+
+/* Pulsing radar ring */
+.nt-vehicle-radar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(245, 158, 11, 0.7);
+  animation: radar-pulse 1.8s infinite;
+  pointer-events: none;
+}
+
+@keyframes radar-pulse {
+  0% {
+    width: 36px;
+    height: 36px;
+    opacity: 0.9;
+  }
+  100% {
+    width: 76px;
+    height: 76px;
+    opacity: 0;
+  }
+}
+
+/* Floating Tour HUD Dock (Flight Deck at bottom of map) */
+.nt-tour-flight-deck {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92%, 640px);
+  background: rgba(28, 25, 23, 0.92);
+  backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  border-radius: 18px;
+  padding: 14px 18px;
+  z-index: 35;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: slideUpFade 0.3s ease;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Tour HUD Telemetry Top Row */
+.nt-tour-telemetry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.nt-tour-telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  color: #fde68a;
+  border: 1px solid rgba(253, 230, 138, 0.2);
+}
+
+.nt-tour-location-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+/* Scrubber Timeline Bar */
+.nt-tour-scrubber-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.nt-tour-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.nt-tour-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+  cursor: pointer;
+}
+
+/* Tour Controls Action Row */
+.nt-tour-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nt-tour-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nt-tour-icon-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nt-tour-icon-btn:hover {
+  background: #f59e0b;
+  color: #1c1917;
+  border-color: #f59e0b;
+  transform: scale(1.05);
+}
+
+.nt-tour-play-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #1c1917;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5);
+  transition: all 0.15s ease;
+}
+
+.nt-tour-play-btn:hover {
+  transform: scale(1.08);
+  background: #fbbf24;
+}
+
+.nt-tour-speed-pill {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nt-tour-speed-pill.active {
+  background: #f59e0b;
+  color: #1c1917;
+  border-color: #f59e0b;
+}
+
+.nt-tour-mode-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.nt-tour-mode-btn.active {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
+/* Waypoint Arrival Celebration Toast on Map */
+.nt-waypoint-celebration-toast {
+  position: absolute;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(28, 25, 23, 0.94);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid #f59e0b;
+  box-shadow: 0 10px 32px rgba(180, 83, 9, 0.35);
+  border-radius: 16px;
+  padding: 10px 16px;
+  z-index: 36;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 90%;
+  animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -15px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.nt-waypoint-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1.5px solid #f59e0b;
+  flex-shrink: 0;
+}
+
+.nt-waypoint-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.nt-waypoint-tag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #f59e0b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nt-waypoint-name {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.nt-waypoint-kn {
+  font-size: 11.5px;
+  color: #fde68a;
 }

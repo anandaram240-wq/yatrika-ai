@@ -1,5 +1,5 @@
-// src/App.tsx — NammaTrip AI (Wanderlog + Mindtrip + Stippl Grade UI/UX)
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+// src/App.tsx — YatriKa AI (Wanderlog + Mindtrip + Stippl Grade UI/UX)
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './index.css';
@@ -164,6 +164,32 @@ const POI_PHOTO_MAP: Record<string, string> = {
 const DEFAULT_PHOTO =
   'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80';
 
+// Geodesic distance calculation between two [lng, lat] coordinates in kilometers
+function getCoordDistanceKm(c1: [number, number], c2: [number, number]): number {
+  const R = 6371;
+  const dLat = ((c2[1] - c1[1]) * Math.PI) / 180;
+  const dLon = ((c2[0] - c1[0]) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((c1[1] * Math.PI) / 180) *
+      Math.cos((c2[1] * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// Calculate compass heading in degrees from c1 to c2 (0° = North, 90° = East, 180° = South, 270° = West)
+function getCoordBearing(c1: [number, number], c2: [number, number]): number {
+  const y = Math.sin(((c2[0] - c1[0]) * Math.PI) / 180) * Math.cos((c2[1] * Math.PI) / 180);
+  const x =
+    Math.cos((c1[1] * Math.PI) / 180) * Math.sin((c2[1] * Math.PI) / 180) -
+    Math.sin((c1[1] * Math.PI) / 180) *
+      Math.cos((c2[1] * Math.PI) / 180) *
+      Math.cos(((c2[0] - c1[0]) * Math.PI) / 180);
+  const b = (Math.atan2(y, x) * 180) / Math.PI;
+  return (b + 360) % 360;
+}
+
 export function App() {
   const initialTrip = useMemo(() => {
     if (typeof window !== 'undefined' && window.location.search) {
@@ -186,7 +212,7 @@ export function App() {
   const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState<boolean>(false);
 
-  // User starting location & interactive overview tour states
+  // User starting location states
   const [userOrigin, setUserOrigin] = useState<UserOriginOption>(() => {
     if (initialTrip.origin) {
       const match = KARNATAKA_GATEWAY_ORIGINS.find((o) => o.id === initialTrip.origin);
@@ -195,9 +221,23 @@ export function App() {
     return KARNATAKA_GATEWAY_ORIGINS[0];
   });
   const [isDetectingGps, setIsDetectingGps] = useState<boolean>(false);
-  const [isTourPlaying, setIsTourPlaying] = useState<boolean>(false);
-  const [tourStatusText, setTourStatusText] = useState<string | null>(null);
-  const tourTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // World-Class Cinematic 60 FPS Route Tour Simulation States
+  const [isTourActive, setIsTourActive] = useState<boolean>(false);
+  const [isTourPaused, setIsTourPaused] = useState<boolean>(false);
+  const [tourProgressRatio, setTourProgressRatio] = useState<number>(0);
+  const [tourSpeedMultiplier, setTourSpeedMultiplier] = useState<1 | 2 | 5>(1);
+  const [isCameraChase, setIsCameraChase] = useState<boolean>(true);
+  const [telemetrySpeed, setTelemetrySpeed] = useState<number>(78);
+  const [telemetryAltitude, setTelemetryAltitude] = useState<number>(940);
+  const [arrivedStop, setArrivedStop] = useState<KarnatakaPOI | null>(null);
+
+  const vehicleMarkerRef = useRef<maplibregl.Marker | null>(null);
+  const vehicleElRef = useRef<HTMLDivElement | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const currentDistKmRef = useRef<number>(0);
+  const lastFrameTimeRef = useRef<number | null>(null);
+  const celebratedStopIdsRef = useRef<Set<string>>(new Set());
 
   const corridorInfo = useMemo(() => getCorridorIntelligence(userOrigin.id), [userOrigin.id]);
 
@@ -256,6 +296,82 @@ export function App() {
     return () => controller.abort();
   }, [fullRouteStops]);
 
+  // Precomputed cumulative distance segments along the primary road route
+  const routeGeometryData = useMemo(() => {
+    const coords: [number, number][] =
+      route.primaryGeometry.coordinates.length >= 2
+        ? (route.primaryGeometry.coordinates as [number, number][])
+        : [userOrigin.coordinates, ...itineraryStops.map((s) => s.coordinates)];
+
+    const cumDist: number[] = [0];
+    let totalDist = 0;
+    for (let i = 1; i < coords.length; i++) {
+      const d = getCoordDistanceKm(coords[i - 1], coords[i]);
+      totalDist += d;
+      cumDist.push(totalDist);
+    }
+
+    const stopMilestones = itineraryStops.map((stop) => {
+      let bestDist = 0;
+      let minDiff = Infinity;
+      for (let i = 0; i < coords.length; i++) {
+        const diff = getCoordDistanceKm(coords[i], stop.coordinates);
+        if (diff < minDiff) {
+          minDiff = diff;
+          bestDist = cumDist[i];
+        }
+      }
+      return { stop, distanceKm: bestDist };
+    });
+
+    return { coords, cumDist, totalDist, stopMilestones };
+  }, [route.primaryGeometry.coordinates, userOrigin.coordinates, itineraryStops]);
+
+  // Interpolate exact position, bearing, and traveled segment at distance d
+  const getInterpolatedState = useCallback(
+    (distKm: number) => {
+      const { coords, cumDist, totalDist } = routeGeometryData;
+      if (coords.length === 0) {
+        return {
+          coord: userOrigin.coordinates,
+          bearing: 0,
+          traveledCoords: [userOrigin.coordinates],
+          ratio: 0,
+        };
+      }
+      const clampedDist = Math.max(0, Math.min(distKm, totalDist));
+      const ratio = totalDist > 0 ? clampedDist / totalDist : 0;
+
+      let i = 0;
+      while (i < cumDist.length - 1 && cumDist[i + 1] < clampedDist) {
+        i++;
+      }
+
+      const startD = cumDist[i];
+      const endD = cumDist[i + 1] ?? startD + 0.001;
+      const segFraction = endD > startD ? (clampedDist - startD) / (endD - startD) : 0;
+
+      const p0 = coords[i];
+      const p1 = coords[i + 1] ?? p0;
+
+      const currentLng = p0[0] + segFraction * (p1[0] - p0[0]);
+      const currentLat = p0[1] + segFraction * (p1[1] - p0[1]);
+      const bearing = getCoordBearing(p0, p1);
+
+      const traveledCoords = coords.slice(0, i + 1);
+      traveledCoords.push([currentLng, currentLat]);
+
+      return {
+        coord: [currentLng, currentLat] as [number, number],
+        bearing,
+        traveledCoords,
+        ratio,
+        segmentIndex: i,
+      };
+    },
+    [routeGeometryData, userOrigin.coordinates]
+  );
+
   // Sync URL query string
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -282,7 +398,7 @@ export function App() {
 
   const netTotalBudgetInr = baseBudget.totalInr - shaktiInfo.shaktiDiscountInr;
 
-  // Initialize Real MapLibre GL JS Vector Map
+  // Initialize Real MapLibre GL JS Vector Map with Royal Heritage Route Layers
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
     const styleConfig = getBasemapStyle(styleId);
@@ -320,19 +436,40 @@ export function App() {
           existing.setData(routeGeoJson);
         } else {
           map.addSource('nt-route', { type: 'geojson', data: routeGeoJson });
+          // Base planned route in Mysore Umber casing and Karnataka Amber Gold line
           map.addLayer({
             id: 'nt-route-casing',
             type: 'line',
             source: 'nt-route',
             layout: { 'line-cap': 'round', 'line-join': 'round' },
-            paint: { 'line-color': '#1e3a8a', 'line-width': 7, 'line-opacity': 0.85 },
+            paint: { 'line-color': '#78350f', 'line-width': 7.5, 'line-opacity': 0.8 },
           });
           map.addLayer({
             id: 'nt-route-line',
             type: 'line',
             source: 'nt-route',
             layout: { 'line-cap': 'round', 'line-join': 'round' },
-            paint: { 'line-color': '#3b82f6', 'line-width': 4, 'line-opacity': 1 },
+            paint: { 'line-color': '#d97706', 'line-width': 4, 'line-opacity': 1 },
+          });
+
+          // Traveled route source and animated glowing amber layers
+          map.addSource('nt-route-traveled', {
+            type: 'geojson',
+            data: { type: 'FeatureCollection', features: [] },
+          });
+          map.addLayer({
+            id: 'nt-route-traveled-casing',
+            type: 'line',
+            source: 'nt-route-traveled',
+            layout: { 'line-cap': 'round', 'line-join': 'round' },
+            paint: { 'line-color': '#991b1b', 'line-width': 9, 'line-opacity': 0.9 },
+          });
+          map.addLayer({
+            id: 'nt-route-traveled-line',
+            type: 'line',
+            source: 'nt-route-traveled',
+            layout: { 'line-cap': 'round', 'line-join': 'round' },
+            paint: { 'line-color': '#fbbf24', 'line-width': 5, 'line-opacity': 1 },
           });
         }
       };
@@ -345,6 +482,9 @@ export function App() {
     }
 
     return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       mapRef.current?.remove();
       mapRef.current = null;
     };
@@ -415,8 +555,9 @@ export function App() {
     setSelectedPoiId(poi.id);
     mapRef.current?.flyTo({
       center: poi.coordinates,
-      zoom: 10.5,
-      duration: 750,
+      zoom: 11,
+      pitch: 35,
+      duration: 800,
       essential: true,
     });
   };
@@ -427,7 +568,7 @@ export function App() {
     const bounds = new maplibregl.LngLatBounds();
     bounds.extend(userOrigin.coordinates);
     itineraryStops.forEach((s) => bounds.extend(s.coordinates));
-    map.fitBounds(bounds, { padding: 70, maxZoom: 11.5, duration: 650 });
+    map.fitBounds(bounds, { padding: 70, maxZoom: 11.5, duration: 650, pitch: 10, bearing: 0 });
   };
 
   const handleDetectCurrentLocation = () => {
@@ -460,83 +601,253 @@ export function App() {
     );
   };
 
-  const handleStopTour = () => {
-    if (tourTimerRef.current) {
-      clearTimeout(tourTimerRef.current);
-      tourTimerRef.current = null;
+  // 60 FPS RequestAnimationFrame Simulation Loop
+  const runAnimationLoop = useCallback((timestamp: number) => {
+    if (!lastFrameTimeRef.current) {
+      lastFrameTimeRef.current = timestamp;
     }
-    setIsTourPlaying(false);
-    setTourStatusText(null);
-  };
+    const deltaMs = Math.min(100, timestamp - lastFrameTimeRef.current);
+    lastFrameTimeRef.current = timestamp;
+
+    const map = mapRef.current;
+    const totalDist = routeGeometryData.totalDist;
+
+    // Simulation speed rate: ~140 km/h baseline so a full circuit plays gracefully in ~30s
+    const baseSimSpeedKmH = 140;
+    const effectiveSpeedKmH = baseSimSpeedKmH * tourSpeedMultiplier;
+    const deltaDistKm = (effectiveSpeedKmH / 3600) * (deltaMs / 1000);
+
+    currentDistKmRef.current += deltaDistKm;
+
+    if (currentDistKmRef.current >= totalDist) {
+      currentDistKmRef.current = totalDist;
+      setTourProgressRatio(1);
+      setIsTourPaused(true);
+      if (vehicleMarkerRef.current && routeGeometryData.coords.length > 0) {
+        vehicleMarkerRef.current.setLngLat(routeGeometryData.coords[routeGeometryData.coords.length - 1]);
+      }
+      return;
+    }
+
+    const state = getInterpolatedState(currentDistKmRef.current);
+    setTourProgressRatio(state.ratio);
+
+    // Update vehicle marker on MapLibre
+    if (vehicleMarkerRef.current) {
+      vehicleMarkerRef.current.setLngLat(state.coord);
+    }
+    if (vehicleElRef.current) {
+      vehicleElRef.current.style.transform = `rotate(${state.bearing}deg)`;
+    }
+
+    // Update glowing traveled polyline
+    if (map) {
+      const travSrc = map.getSource('nt-route-traveled') as maplibregl.GeoJSONSource | undefined;
+      if (travSrc) {
+        travSrc.setData({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: {
+                type: 'LineString',
+                coordinates: state.traveledCoords,
+              },
+              properties: {},
+            },
+          ],
+        });
+      }
+
+      // Smooth 3D chase camera
+      if (isCameraChase) {
+        map.jumpTo({
+          center: state.coord,
+          zoom: 12.8,
+          pitch: 54,
+          bearing: state.bearing,
+        });
+      }
+    }
+
+    // Dynamic Telemetry Readout
+    const isMountain = state.coord[1] >= 12.8 && state.coord[1] <= 13.8 && state.coord[0] <= 76.2;
+    const speedGauge = isMountain
+      ? 36 + Math.round(Math.sin(timestamp * 0.003) * 6)
+      : 82 + Math.round(Math.sin(timestamp * 0.003) * 5);
+    setTelemetrySpeed(speedGauge);
+
+    const baseAlt = isMountain ? 1040 + Math.round(state.ratio * 880) : 840;
+    setTelemetryAltitude(baseAlt);
+
+    // Check stop milestones for arrival celebration
+    routeGeometryData.stopMilestones.forEach(({ stop, distanceKm }) => {
+      if (
+        Math.abs(currentDistKmRef.current - distanceKm) < 0.6 &&
+        !celebratedStopIdsRef.current.has(stop.id)
+      ) {
+        celebratedStopIdsRef.current.add(stop.id);
+        setArrivedStop(stop);
+        setSelectedPoiId(stop.id);
+        setTimeout(() => {
+          setArrivedStop((cur) => (cur?.id === stop.id ? null : cur));
+        }, 3200);
+      }
+    });
+
+    animationFrameRef.current = requestAnimationFrame(runAnimationLoop);
+  }, [getInterpolatedState, isCameraChase, routeGeometryData, tourSpeedMultiplier]);
 
   const handleStartTour = () => {
     const map = mapRef.current;
-    if (!map || itineraryStops.length === 0) return;
+    if (!map || routeGeometryData.coords.length < 2) return;
 
-    if (tourTimerRef.current) {
-      clearTimeout(tourTimerRef.current);
-      tourTimerRef.current = null;
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
     }
 
-    setIsTourPlaying(true);
+    setIsTourActive(true);
+    setIsTourPaused(false);
+    celebratedStopIdsRef.current.clear();
+    currentDistKmRef.current = 0;
+    lastFrameTimeRef.current = null;
+    setTourProgressRatio(0);
 
-    const tourWaypoints = [
-      {
-        coords: userOrigin.coordinates,
-        zoom: 12.5,
-        pitch: 45,
-        bearing: 30,
-        label: `📍 Stage 1: Journey departs from ${userOrigin.name}`,
-      },
-      ...itineraryStops.map((stop, i) => ({
-        coords: stop.coordinates,
-        zoom: 13,
-        pitch: 52,
-        bearing: ((i + 1) * 45) % 180,
-        label: `🚗 Leg ${i + 1}: Arriving at ${stop.name} (${stop.district})`,
-      })),
-    ];
+    // Create vehicle DOM marker if not already created
+    if (!vehicleMarkerRef.current) {
+      const el = document.createElement('div');
+      el.className = 'nt-vehicle-marker';
+      el.innerHTML = `
+        <div class="nt-vehicle-radar"></div>
+        <div class="nt-vehicle-headlights"></div>
+        <div class="nt-vehicle-chassis">🚗</div>
+      `;
+      vehicleElRef.current = el;
+      const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        .setLngLat(routeGeometryData.coords[0])
+        .addTo(map);
+      vehicleMarkerRef.current = marker;
+    } else {
+      vehicleMarkerRef.current.setLngLat(routeGeometryData.coords[0]);
+    }
 
-    let step = 0;
+    // Orient initial camera to start
+    map.flyTo({
+      center: routeGeometryData.coords[0],
+      zoom: 13,
+      pitch: 54,
+      bearing: routeGeometryData.coords.length >= 2 ? getCoordBearing(routeGeometryData.coords[0], routeGeometryData.coords[1]) : 0,
+      duration: 1200,
+      essential: true,
+    });
 
-    const runStep = () => {
-      if (step >= tourWaypoints.length) {
-        // Final overview of the complete trip
-        const bounds = new maplibregl.LngLatBounds();
-        bounds.extend(userOrigin.coordinates);
-        itineraryStops.forEach((s) => bounds.extend(s.coordinates));
-        map.fitBounds(bounds, { padding: 60, duration: 2200, pitch: 15, bearing: 0 });
-        setTourStatusText(
-          `✨ Complete Journey Overview: ${userOrigin.name} across ${itineraryStops.length} stops (${route.totalDistanceKm} km total)`
-        );
-        tourTimerRef.current = setTimeout(() => {
-          handleStopTour();
-        }, 4000);
-        return;
-      }
-
-      const current = tourWaypoints[step];
-      setTourStatusText(current.label);
-      map.flyTo({
-        center: current.coords,
-        zoom: current.zoom,
-        pitch: current.pitch,
-        bearing: current.bearing,
-        duration: 2500,
-        essential: true,
-      });
-
-      step += 1;
-      tourTimerRef.current = setTimeout(runStep, 3200);
-    };
-
-    runStep();
+    lastFrameTimeRef.current = performance.now();
+    animationFrameRef.current = requestAnimationFrame(runAnimationLoop);
   };
 
-  const handleToggleRouteTour = () => {
-    if (isTourPlaying) {
-      handleStopTour();
+  const handleTogglePlayPause = () => {
+    if (isTourPaused) {
+      setIsTourPaused(false);
+      lastFrameTimeRef.current = performance.now();
+      animationFrameRef.current = requestAnimationFrame(runAnimationLoop);
+    } else {
+      setIsTourPaused(true);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    }
+  };
+
+  const handleScrubTour = (percent: number) => {
+    const ratio = Math.max(0, Math.min(1, percent / 100));
+    const targetDist = ratio * routeGeometryData.totalDist;
+    currentDistKmRef.current = targetDist;
+    setTourProgressRatio(ratio);
+
+    const state = getInterpolatedState(targetDist);
+    if (vehicleMarkerRef.current) {
+      vehicleMarkerRef.current.setLngLat(state.coord);
+    }
+    if (vehicleElRef.current) {
+      vehicleElRef.current.style.transform = `rotate(${state.bearing}deg)`;
+    }
+    const map = mapRef.current;
+    if (map) {
+      const travSrc = map.getSource('nt-route-traveled') as maplibregl.GeoJSONSource | undefined;
+      if (travSrc) {
+        travSrc.setData({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: { type: 'LineString', coordinates: state.traveledCoords },
+              properties: {},
+            },
+          ],
+        });
+      }
+      if (isCameraChase) {
+        map.jumpTo({
+          center: state.coord,
+          zoom: 12.8,
+          pitch: 54,
+          bearing: state.bearing,
+        });
+      }
+    }
+  };
+
+  const handleNextStop = () => {
+    const nextMilestone = routeGeometryData.stopMilestones.find(
+      (m) => m.distanceKm > currentDistKmRef.current + 0.5
+    );
+    if (nextMilestone) {
+      handleScrubTour((nextMilestone.distanceKm / routeGeometryData.totalDist) * 100);
+    } else {
+      handleScrubTour(100);
+    }
+  };
+
+  const handlePrevStop = () => {
+    const prevMilestones = routeGeometryData.stopMilestones.filter(
+      (m) => m.distanceKm < currentDistKmRef.current - 0.5
+    );
+    if (prevMilestones.length > 0) {
+      const prev = prevMilestones[prevMilestones.length - 1];
+      handleScrubTour((prev.distanceKm / routeGeometryData.totalDist) * 100);
+    } else {
+      handleScrubTour(0);
+    }
+  };
+
+  const handleStopTour = () => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+    setIsTourActive(false);
+    setIsTourPaused(false);
+    setArrivedStop(null);
+    setTourProgressRatio(0);
+    if (vehicleMarkerRef.current) {
+      vehicleMarkerRef.current.remove();
+      vehicleMarkerRef.current = null;
+    }
+    const map = mapRef.current;
+    if (map) {
+      const travSrc = map.getSource('nt-route-traveled') as maplibregl.GeoJSONSource | undefined;
+      if (travSrc) {
+        travSrc.setData({ type: 'FeatureCollection', features: [] });
+      }
       handleFitAllStops();
+    }
+  };
+
+  const handleToggleTourActive = () => {
+    if (isTourActive) {
+      handleStopTour();
     } else {
       handleStartTour();
     }
@@ -619,27 +930,33 @@ export function App() {
       {/* ================= TOP COMMAND BAR ================= */}
       <header className="nt-topbar">
         <div className="nt-brand">
-          <div className="nt-logo-badge" lang="kn">
+          <div className="nt-logo-badge font-kannada">
             ಯಾ
           </div>
           <div>
             <div className="nt-brand-title">
-              <span>NammaTrip AI</span>
+              <span className="font-heritage" style={{ letterSpacing: '0.02em', color: '#1c1917' }}>
+                YatriKa AI
+              </span>
+              <span className="font-kannada" style={{ fontSize: 16, color: '#d97706', fontWeight: 800 }}>
+                (ಯಾತ್ರಿಕ)
+              </span>
               <span
                 style={{
                   fontSize: 11,
-                  background: '#eff6ff',
-                  color: '#1d4ed8',
+                  background: '#fef3c7',
+                  color: '#b45309',
+                  border: '1px solid #fde68a',
                   padding: '2px 8px',
                   borderRadius: 999,
                   fontWeight: 700,
                 }}
               >
-                Karnataka Geospatial & Rail Planner
+                Route-to-Trip Intelligence
               </span>
             </div>
-            <div className="nt-brand-subtitle" lang="kn">
-              ನಮ್ಮ ಟ್ರಿಪ್ — WebGL Vector Map • SWR/Konkan Rail • KSRTC & Regional Kannada Voice
+            <div className="nt-brand-subtitle font-kannada">
+              ಕರ್ನಾಟಕ ಯಾತ್ರೆ — Corridor Discovery · Multi-Bundle Archetypes · SWR/KSRTC · Shakti Audit
             </div>
           </div>
         </div>
@@ -1234,18 +1551,128 @@ export function App() {
         <main className="nt-map-pane">
           <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
 
-          {/* Floating Route Overview Tour Progress Toast */}
-          {tourStatusText && (
-            <div className="nt-map-tour-banner">
-              <span className="nt-pulse-dot" />
-              <span>{tourStatusText}</span>
+          {/* Waypoint Arrival Celebration Toast on Map */}
+          {arrivedStop && (
+            <div className="nt-waypoint-celebration-toast">
+              <img
+                src={POI_PHOTO_MAP[arrivedStop.id] || DEFAULT_PHOTO}
+                alt={arrivedStop.name}
+                className="nt-waypoint-thumb"
+              />
+              <div className="nt-waypoint-meta">
+                <span className="nt-waypoint-tag">🎯 Arrived at Destination</span>
+                <span className="nt-waypoint-name">{arrivedStop.name}</span>
+                <span className="nt-waypoint-kn font-kannada">{arrivedStop.nameKannada}</span>
+              </div>
               <button
                 type="button"
-                onClick={handleStopTour}
-                className="nt-btn-tour-close"
+                className="nt-voice-btn"
+                style={{ marginLeft: 'auto' }}
+                onClick={() => handleSpeakKannada(arrivedStop.localPhrase.kannada)}
               >
-                ✕ Stop Tour
+                🔊 Listen
               </button>
+            </div>
+          )}
+
+          {/* World-Class Cinematic Tour Flight Deck (HUD) */}
+          {isTourActive && (
+            <div className="nt-tour-flight-deck">
+              {/* Telemetry Row */}
+              <div className="nt-tour-telemetry-row">
+                <div className="nt-tour-telemetry-badge">
+                  <span>🚗</span>
+                  <span>{telemetrySpeed} km/h</span>
+                </div>
+                <div className="nt-tour-telemetry-badge">
+                  <span>⛰️</span>
+                  <span>Elev: {telemetryAltitude} m</span>
+                </div>
+                <span className="nt-tour-location-text">
+                  📍 {corridorInfo.corridorTitle} • {corridorInfo.roadName}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleStopTour}
+                  className="nt-tour-icon-btn"
+                  title="Close Simulation Tour"
+                  style={{ width: 28, height: 28, fontSize: 11 }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Scrubber Progress Slider */}
+              <div className="nt-tour-scrubber-wrap">
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#fde68a', minWidth: 32 }}>
+                  {Math.round(tourProgressRatio * 100)}%
+                </span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={Math.round(tourProgressRatio * 1000) / 10}
+                  onChange={(e) => handleScrubTour(parseFloat(e.target.value))}
+                  className="nt-tour-slider"
+                />
+                <span style={{ fontSize: 11, color: '#cbd5e1', minWidth: 60, textAlign: 'right' }}>
+                  {(routeGeometryData.totalDist * tourProgressRatio).toFixed(1)} / {routeGeometryData.totalDist.toFixed(1)} km
+                </span>
+              </div>
+
+              {/* Actions & Telemetry Controls */}
+              <div className="nt-tour-actions-row">
+                <div className="nt-tour-btn-group">
+                  <button
+                    type="button"
+                    onClick={handlePrevStop}
+                    className="nt-tour-icon-btn"
+                    title="Previous Waypoint (⏮)"
+                  >
+                    ⏮
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleTogglePlayPause}
+                    className="nt-tour-play-btn"
+                    title={isTourPaused ? 'Resume Simulation' : 'Pause Simulation'}
+                  >
+                    {isTourPaused ? '▶' : '❚❚'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNextStop}
+                    className="nt-tour-icon-btn"
+                    title="Next Waypoint (⏭)"
+                  >
+                    ⏭
+                  </button>
+                </div>
+
+                <div className="nt-tour-btn-group">
+                  <span style={{ fontSize: 11, color: '#a8a29e', marginRight: 4 }}>Speed:</span>
+                  {([1, 2, 5] as const).map((spd) => (
+                    <button
+                      key={spd}
+                      type="button"
+                      onClick={() => setTourSpeedMultiplier(spd)}
+                      className={`nt-tour-speed-pill ${tourSpeedMultiplier === spd ? 'active' : ''}`}
+                    >
+                      {spd}x
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsCameraChase(!isCameraChase)}
+                  className={`nt-tour-mode-btn ${isCameraChase ? 'active' : ''}`}
+                  title="Toggle 3D chase camera or free map navigation"
+                >
+                  <span>{isCameraChase ? '🎥 3D Chase' : '🗺️ Free Cam'}</span>
+                </button>
+              </div>
             </div>
           )}
 
@@ -1273,9 +1700,12 @@ export function App() {
                   onClick={() => handleSwitchStyle(st)}
                   style={{
                     border: 'none',
-                    background: styleId === st ? '#2563eb' : 'transparent',
-                    color: styleId === st ? '#ffffff' : '#0f172a',
-                    padding: '4px 8px',
+                    background:
+                      styleId === st
+                        ? 'linear-gradient(135deg, #d97706 0%, #b45309 100%)'
+                        : 'transparent',
+                    color: styleId === st ? '#ffffff' : '#1c1917',
+                    padding: '4px 9px',
                     borderRadius: 999,
                     fontSize: 11,
                     fontWeight: 700,
@@ -1294,14 +1724,17 @@ export function App() {
             <button
               type="button"
               className="nt-map-ctrl-btn"
-              onClick={handleToggleRouteTour}
+              onClick={handleToggleTourActive}
               style={{
-                background: isTourPlaying ? '#dc2626' : '#1e3a8a',
+                background: isTourActive
+                  ? 'linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%)'
+                  : 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
                 color: '#ffffff',
                 border: 'none',
+                boxShadow: '0 4px 14px rgba(217, 119, 6, 0.4)',
               }}
             >
-              {isTourPlaying ? '⏹ Stop Route Tour' : '▶️ Play Route Tour'}
+              {isTourActive ? '⏹ Stop Route Tour' : '▶️ Play Route Tour (60 FPS)'}
             </button>
             <button type="button" className="nt-map-ctrl-btn" onClick={() => mapRef.current?.zoomIn()}>
               + Zoom In

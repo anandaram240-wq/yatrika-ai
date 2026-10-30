@@ -263,3 +263,82 @@ export function parseNaturalLanguageTripPrompt(prompt: string): ParsedAiTripProm
     summaryExplanation: summary,
   };
 }
+
+export interface CorridorRecommendation {
+  corridorTitle: string;
+  roadName: string;
+  mountainAdvisory?: string;
+  recommendedPoiIds: string[];
+  suggestedPresetId?: string;
+}
+
+export function getCorridorIntelligence(originId: string): CorridorRecommendation {
+  if (originId === 'origin-chikkamagaluru') {
+    return {
+      corridorTitle: 'Mullayanagiri Mountain Ridge & Coffee Valley Corridor',
+      roadName: 'Kaimara - Mullayanagiri Mountain Ghat Road (18 Hairpins)',
+      mountainAdvisory: 'Ascent from 1,030m to 1,930m summit • Drive in 1st/2nd gear • Morning cloud mist between 06:00–08:30 • 4x4 needed for Jhari Falls',
+      recommendedPoiIds: [
+        'poi-seethalayyanagiri',
+        'poi-mullayanagiri',
+        'poi-jhari-falls',
+        'poi-bababudangiri',
+        'poi-hirekolale-lake',
+      ],
+      suggestedPresetId: 'circuit-chikkamagaluru-mullayanagiri',
+    };
+  }
+  if (originId === 'origin-mangaluru' || originId === 'origin-udupi') {
+    return {
+      corridorTitle: 'Karavali to Western Ghats Mountain Pass Corridor',
+      roadName: 'Charmadi Ghat (SH-37) / Shiradi Ghat (NH-75)',
+      mountainAdvisory: 'Dramatic transition from sea level to 1,100m • Cascading roadside streams • Heavy rain mist; daytime travel advised',
+      recommendedPoiIds: ['poi-charmadi-ghat-view', 'poi-ballalarayana-durga', 'poi-horanadu-annapoorneshwari', 'poi-sringeri-sharada-peetham'],
+      suggestedPresetId: 'circuit-malnad-spiritual-peaks',
+    };
+  }
+  if (originId === 'origin-mysuru') {
+    return {
+      corridorTitle: 'Old Mysuru & Nilgiri Foothills Wildlife Corridor',
+      roadName: 'Bengaluru-Mysuru Expressway (NH-275) & Ooty Highway (NH-766)',
+      mountainAdvisory: 'Statutory wildlife night-driving ban on NH-766 through Bandipur 21:00 to 06:00 • Keep safe distance from wild elephant herds',
+      recommendedPoiIds: ['poi-srirangapatna', 'poi-somnathpur-temple', 'poi-ranganathittu', 'poi-bandipur', 'poi-talakad-keerthinarayana'],
+      suggestedPresetId: 'circuit-wildlife-royal-heritage',
+    };
+  }
+  if (originId === 'origin-shivamogga') {
+    return {
+      corridorTitle: 'Central Malnad Forest & Waterfall Circuit',
+      roadName: 'NH-169 & Tarikere-Kemmangundi Mountain Pass',
+      mountainAdvisory: 'Lush evergreen canopy • Winding curves around Bhadra reservoir • Kalhatti cascade directly crosses temple rocks',
+      recommendedPoiIds: ['poi-kallathigiri-falls', 'poi-z-point-kemmangundi', 'poi-bhadra-wildlife', 'poi-sringeri-sharada-peetham'],
+      suggestedPresetId: 'circuit-grand-hoysala-heritage',
+    };
+  }
+  if (originId === 'origin-hubballi' || originId === 'origin-belagavi' || originId === 'origin-vijayapura' || originId === 'origin-hampi') {
+    return {
+      corridorTitle: 'Deccan Chalukya & Adil Shahi Heritage Corridor',
+      roadName: 'NH-50 & NH-218 Heritage Golden Quadrangle',
+      mountainAdvisory: 'Smooth high-speed North Karnataka expressway • High midday sun; early morning monument exploration recommended',
+      recommendedPoiIds: ['poi-badami-caves', 'poi-banashankari', 'poi-pattadakal-unesco', 'poi-kudalasangama', 'poi-ibrahim-rouza'],
+      suggestedPresetId: 'circuit-unesco-empire-trail',
+    };
+  }
+  if (originId === 'origin-madikeri') {
+    return {
+      corridorTitle: 'Kodagu Coffee Hills & Pushpagiri Sanctuary Corridor',
+      roadName: 'SH-88 Madikeri-Somwarpet & Sampaje Ghat (NH-275)',
+      mountainAdvisory: 'Narrow estate roads with blind corners • 4x4 jeep required for Mandalpatti summit • Night forest restrictions apply',
+      recommendedPoiIds: ['poi-omkareshwara-madikeri', 'poi-mandalpatti', 'poi-chelavara-falls', 'poi-talakaveri', 'poi-dubare-elephant-camp'],
+      suggestedPresetId: 'circuit-royal-mysuru-coorg',
+    };
+  }
+  // Default: Bengaluru Gateway
+  return {
+    corridorTitle: 'Bengaluru Gateway to Karnataka Scenic Corridors',
+    roadName: 'NH-75 Hassan Express / NH-275 Mysuru Expressway',
+    mountainAdvisory: 'Access-controlled multi-lane highway • Fast corridor connections to Malnad, Heritage & Coastal routes',
+    recommendedPoiIds: ['poi-shravanabelagola', 'poi-belur-halebidu', 'poi-mullayanagiri', 'poi-mysore-palace'],
+    suggestedPresetId: 'circuit-royal-mysuru-coorg',
+  };
+}

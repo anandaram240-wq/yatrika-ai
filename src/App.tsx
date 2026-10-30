@@ -436,23 +436,23 @@ export function App() {
           existing.setData(routeGeoJson);
         } else {
           map.addSource('nt-route', { type: 'geojson', data: routeGeoJson });
-          // Base planned route in Mysore Umber casing and Karnataka Amber Gold line
+          // Base planned route in clean Navy casing and Royal Blue line (fa2dd28 baseline)
           map.addLayer({
             id: 'nt-route-casing',
             type: 'line',
             source: 'nt-route',
             layout: { 'line-cap': 'round', 'line-join': 'round' },
-            paint: { 'line-color': '#78350f', 'line-width': 7.5, 'line-opacity': 0.8 },
+            paint: { 'line-color': '#1e3a8a', 'line-width': 7.5, 'line-opacity': 0.85 },
           });
           map.addLayer({
             id: 'nt-route-line',
             type: 'line',
             source: 'nt-route',
             layout: { 'line-cap': 'round', 'line-join': 'round' },
-            paint: { 'line-color': '#d97706', 'line-width': 4, 'line-opacity': 1 },
+            paint: { 'line-color': '#3b82f6', 'line-width': 4, 'line-opacity': 1 },
           });
 
-          // Traveled route source and animated glowing amber layers
+          // Traveled route source and animated glowing emerald trail
           map.addSource('nt-route-traveled', {
             type: 'geojson',
             data: { type: 'FeatureCollection', features: [] },
@@ -462,14 +462,14 @@ export function App() {
             type: 'line',
             source: 'nt-route-traveled',
             layout: { 'line-cap': 'round', 'line-join': 'round' },
-            paint: { 'line-color': '#991b1b', 'line-width': 9, 'line-opacity': 0.9 },
+            paint: { 'line-color': '#065f46', 'line-width': 8.5, 'line-opacity': 0.9 },
           });
           map.addLayer({
             id: 'nt-route-traveled-line',
             type: 'line',
             source: 'nt-route-traveled',
             layout: { 'line-cap': 'round', 'line-join': 'round' },
-            paint: { 'line-color': '#fbbf24', 'line-width': 5, 'line-opacity': 1 },
+            paint: { 'line-color': '#10b981', 'line-width': 5, 'line-opacity': 1 },
           });
         }
       };
@@ -935,18 +935,18 @@ export function App() {
           </div>
           <div>
             <div className="nt-brand-title">
-              <span className="font-heritage" style={{ letterSpacing: '0.02em', color: '#1c1917' }}>
+              <span style={{ letterSpacing: '-0.02em', color: 'var(--text-primary)', fontWeight: 800 }}>
                 YatriKa AI
               </span>
-              <span className="font-kannada" style={{ fontSize: 16, color: '#d97706', fontWeight: 800 }}>
+              <span className="font-kannada" style={{ fontSize: 16, color: 'var(--accent-saffron)', fontWeight: 800 }}>
                 (ಯಾತ್ರಿಕ)
               </span>
               <span
                 style={{
                   fontSize: 11,
-                  background: '#fef3c7',
-                  color: '#b45309',
-                  border: '1px solid #fde68a',
+                  background: '#eff6ff',
+                  color: '#1d4ed8',
+                  border: '1px solid #bfdbfe',
                   padding: '2px 8px',
                   borderRadius: 999,
                   fontWeight: 700,
@@ -1604,7 +1604,7 @@ export function App() {
 
               {/* Scrubber Progress Slider */}
               <div className="nt-tour-scrubber-wrap">
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#fde68a', minWidth: 32 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#93c5fd', minWidth: 32 }}>
                   {Math.round(tourProgressRatio * 100)}%
                 </span>
                 <input
@@ -1700,11 +1700,8 @@ export function App() {
                   onClick={() => handleSwitchStyle(st)}
                   style={{
                     border: 'none',
-                    background:
-                      styleId === st
-                        ? 'linear-gradient(135deg, #d97706 0%, #b45309 100%)'
-                        : 'transparent',
-                    color: styleId === st ? '#ffffff' : '#1c1917',
+                    background: styleId === st ? '#2563eb' : 'transparent',
+                    color: styleId === st ? '#ffffff' : '#0f172a',
                     padding: '4px 9px',
                     borderRadius: 999,
                     fontSize: 11,
@@ -1726,12 +1723,12 @@ export function App() {
               className="nt-map-ctrl-btn"
               onClick={handleToggleTourActive}
               style={{
-                background: isTourActive
-                  ? 'linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%)'
-                  : 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
+                background: isTourActive ? '#dc2626' : '#2563eb',
                 color: '#ffffff',
                 border: 'none',
-                boxShadow: '0 4px 14px rgba(217, 119, 6, 0.4)',
+                boxShadow: isTourActive
+                  ? '0 4px 14px rgba(220, 38, 38, 0.4)'
+                  : '0 4px 14px rgba(37, 99, 235, 0.4)',
               }}
             >
               {isTourActive ? '⏹ Stop Route Tour' : '▶️ Play Route Tour (60 FPS)'}

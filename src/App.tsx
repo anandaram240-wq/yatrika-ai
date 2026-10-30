@@ -265,6 +265,7 @@ export function App() {
   const vehicleElRef = useRef<HTMLDivElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const currentDistKmRef = useRef<number>(0);
+  const currentCameraBearingRef = useRef<number>(0);
   const lastFrameTimeRef = useRef<number | null>(null);
   const celebratedStopIdsRef = useRef<Set<string>>(new Set());
 
@@ -726,8 +727,11 @@ export function App() {
     const map = mapRef.current;
     const totalDist = routeGeometryData.totalDist;
 
-    // Simulation speed rate: ~140 km/h baseline so a full circuit plays gracefully in ~30s
-    const baseSimSpeedKmH = 140;
+    const state = getInterpolatedState(currentDistKmRef.current);
+    const isMountain = state.coord[1] >= 12.8 && state.coord[1] <= 13.8 && state.coord[0] <= 76.2;
+
+    // Adaptive smooth simulation speed: 60 km/h in Western Ghats, 85 km/h on expressways
+    const baseSimSpeedKmH = isMountain ? 60 : 85;
     const effectiveSpeedKmH = baseSimSpeedKmH * tourSpeedMultiplier;
     const deltaDistKm = (effectiveSpeedKmH / 3600) * (deltaMs / 1000);
 
@@ -743,7 +747,6 @@ export function App() {
       return;
     }
 
-    const state = getInterpolatedState(currentDistKmRef.current);
     setTourProgressRatio(state.ratio);
 
     // Update vehicle marker on MapLibre
@@ -773,19 +776,24 @@ export function App() {
         });
       }
 
-      // Smooth 3D chase camera
+      // Smooth 3D chase camera with exponential angular easing (no rapid snapping or jumping)
       if (isCameraChase) {
-        map.jumpTo({
+        let diff = (state.bearing - currentCameraBearingRef.current) % 360;
+        if (diff < -180) diff += 360;
+        if (diff > 180) diff -= 360;
+        currentCameraBearingRef.current = (currentCameraBearingRef.current + diff * 0.10 + 360) % 360;
+
+        map.easeTo({
           center: state.coord,
-          zoom: 12.8,
-          pitch: 54,
-          bearing: state.bearing,
+          zoom: isMountain ? 13.0 : 12.3,
+          pitch: 48,
+          bearing: currentCameraBearingRef.current,
+          duration: 0,
         });
       }
     }
 
     // Dynamic Telemetry Readout
-    const isMountain = state.coord[1] >= 12.8 && state.coord[1] <= 13.8 && state.coord[0] <= 76.2;
     const speedGauge = isMountain
       ? 36 + Math.round(Math.sin(timestamp * 0.003) * 6)
       : 82 + Math.round(Math.sin(timestamp * 0.003) * 5);
@@ -828,6 +836,12 @@ export function App() {
     lastFrameTimeRef.current = null;
     setTourProgressRatio(0);
 
+    const initialBearing =
+      routeGeometryData.coords.length >= 2
+        ? getCoordBearing(routeGeometryData.coords[0], routeGeometryData.coords[1])
+        : 0;
+    currentCameraBearingRef.current = initialBearing;
+
     // Create vehicle DOM marker if not already created
     if (!vehicleMarkerRef.current) {
       const el = document.createElement('div');
@@ -846,12 +860,12 @@ export function App() {
       vehicleMarkerRef.current.setLngLat(routeGeometryData.coords[0]);
     }
 
-    // Orient initial camera to start
+    // Orient initial camera smoothly to start
     map.flyTo({
       center: routeGeometryData.coords[0],
-      zoom: 13,
-      pitch: 54,
-      bearing: routeGeometryData.coords.length >= 2 ? getCoordBearing(routeGeometryData.coords[0], routeGeometryData.coords[1]) : 0,
+      zoom: 12.8,
+      pitch: 48,
+      bearing: initialBearing,
       duration: 1200,
       essential: true,
     });
@@ -1418,6 +1432,37 @@ export function App() {
                       {route.totalDistanceKm} km • {Math.floor(route.totalDurationMinutes / 60)}h {route.totalDurationMinutes % 60}m road drive
                     </span>
                   </div>
+                </div>
+
+                {/* Itinerary Waypoints Header & Auto-Sequencer */}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: 10,
+                    marginBottom: 10,
+                    padding: '0 4px',
+                  }}
+                >
+                  <span style={{ fontSize: 12, fontWeight: 700, color: '#334155' }}>
+                    📍 {itineraryStops.length} Destinations Connected
+                  </span>
+                  {itineraryStops.length > 2 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const optimized = optimizeStopSequence(itineraryStops);
+                        setStopIds(optimized.map((s) => s.id));
+                        setAiStatusBanner('🛣️ Route sequence optimized geographically along the highway to prevent backtracking!');
+                      }}
+                      className="nt-btn-outline"
+                      style={{ fontSize: 11, padding: '3px 8px', borderRadius: 8 }}
+                      title="Sort stops sequentially along the highway corridor to eliminate jumping"
+                    >
+                      ⚡ Auto-Smooth Highway Order
+                    </button>
+                  )}
                 </div>
 
                 {/* Starting Leg Driving Connector from User Origin to First Stop */}

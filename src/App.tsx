@@ -33,6 +33,9 @@ import {
   TravelSeason,
   getCorridorIntelligence,
 } from './services/karnatakaSmartTravelIntelligence';
+import { KannadaVoiceAssistantModal } from './features/voice-agent/components/KannadaVoiceAssistantModal';
+import { OfflineSurvivalModal } from './features/offline-travel/components/OfflineSurvivalModal';
+import { VoiceIntentResult } from './features/voice-agent/domain/types';
 
 // High-resolution curated photography for each Karnataka POI
 const POI_PHOTO_MAP: Record<string, string> = {
@@ -211,6 +214,8 @@ export function App() {
   const [aiPromptInput, setAiPromptInput] = useState<string>('');
   const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(null);
   const [shareCopied, setShareCopied] = useState<boolean>(false);
+  const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState<boolean>(false);
+  const [isOfflineSurvivalOpen, setIsOfflineSurvivalOpen] = useState<boolean>(false);
 
   // User starting location states
   const [userOrigin, setUserOrigin] = useState<UserOriginOption>(() => {
@@ -925,6 +930,40 @@ export function App() {
     URL.revokeObjectURL(url);
   };
 
+  const handleApplyVoiceIntent = (intentResult: VoiceIntentResult) => {
+    if (intentResult.targetCircuitId) {
+      handleLoadCircuit(intentResult.targetCircuitId);
+    }
+    if (intentResult.entities.origin) {
+      const matchOrigin = KARNATAKA_GATEWAY_ORIGINS.find(
+        (o) =>
+          o.name.toLowerCase().includes(intentResult.entities.origin!.toLowerCase()) ||
+          o.nameKannada.includes(intentResult.entities.origin!)
+      );
+      if (matchOrigin) {
+        setUserOrigin(matchOrigin);
+      }
+    }
+    if (intentResult.entities.budgetInr) {
+      if (intentResult.entities.budgetInr < 4000) {
+        setBudgetTier('backpacker');
+      } else if (intentResult.entities.budgetInr < 12000) {
+        setBudgetTier('comfort');
+      } else {
+        setBudgetTier('premium');
+      }
+    }
+    if (intentResult.entities.isFemalePassenger) {
+      setShaktiWomenCount(Math.max(1, shaktiWomenCount));
+    }
+    if (intentResult.suggestedAction === 'SHOW_BUDGET') {
+      setActiveTab('budget');
+    }
+    setAiStatusBanner(
+      `ಧ್ವನಿ ಪ್ರಾಂಪ್ಟ್: "${intentResult.rawTranscript}" (${intentResult.detectedDialect.replace('_', ' ')})`
+    );
+  };
+
   return (
     <div className="nt-shell">
       {/* ================= TOP COMMAND BAR ================= */}
@@ -970,6 +1009,28 @@ export function App() {
             placeholder="Ask AI: '4 days under ₹5000 for UNESCO Hampi & waterfalls for 2 people'..."
             aria-label="Natural language trip planner prompt"
           />
+          <button
+            type="button"
+            onClick={() => setIsVoiceAssistantOpen(true)}
+            title="ಕನ್ನಡ ಧ್ವನಿ ಸಹಾಯಕ (Kannada Voice Assistant)"
+            style={{
+              background: '#eff6ff',
+              border: '1px solid #bfdbfe',
+              color: '#2563eb',
+              borderRadius: '50%',
+              width: 32,
+              height: 32,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              marginRight: 6,
+              fontSize: 14,
+              flexShrink: 0,
+            }}
+          >
+            🎙️
+          </button>
           <button type="submit" className="nt-omnibar-btn">
             ✨ Generate Trip
           </button>
@@ -990,6 +1051,16 @@ export function App() {
               ₹{netTotalBudgetInr.toLocaleString('en-IN')}
             </span>
           </div>
+
+          <button
+            type="button"
+            className="nt-btn-outline"
+            onClick={() => setIsOfflineSurvivalOpen(true)}
+            title="Open Offline Survival Mode & Emergency Directory"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+          >
+            <span>📡 Offline Pack</span>
+          </button>
 
           <button
             type="button"
@@ -1754,6 +1825,30 @@ export function App() {
           </div>
         </main>
       </div>
+
+      {/* ================= ADVANCED INNOVATION MODALS ================= */}
+      <KannadaVoiceAssistantModal
+        isOpen={isVoiceAssistantOpen}
+        onClose={() => setIsVoiceAssistantOpen(false)}
+        onApplyIntent={handleApplyVoiceIntent}
+      />
+
+      <OfflineSurvivalModal
+        isOpen={isOfflineSurvivalOpen}
+        onClose={() => setIsOfflineSurvivalOpen(false)}
+        activeItineraryStops={itineraryStops}
+        userOrigin={userOrigin}
+        circuitTitle={CURATED_CIRCUIT_PRESETS.find((c) => c.id === activeCircuitId)?.title || 'Karnataka Circuit'}
+        totalDistanceKm={route.totalDistanceKm}
+        routeCoordinates={route.primaryGeometry.coordinates}
+        budgetMetrics={{
+          netTotal: netTotalBudgetInr,
+          lodging: baseBudget.accommodationInr,
+          fuel: baseBudget.transportInr,
+          tickets: baseBudget.entryAndActivitiesInr,
+          food: baseBudget.foodInr,
+        }}
+      />
     </div>
   );
 }

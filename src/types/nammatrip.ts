@@ -23,7 +23,8 @@ export type KarnatakaMacroRegion =
   | 'Karavali Coastal'
   | 'Kittur Karnataka'
   | 'Kalyana Karnataka'
-  | 'Central Karnataka';
+  | 'Central Karnataka'
+  | 'Bayaluseeme';
 
 export type BudgetTier = 'backpacker' | 'comfort' | 'premium';
 
@@ -44,15 +45,18 @@ export interface TransportHubMetadata {
   referenceFareNote: string;
 }
 
+export type POICategory = Exclude<MapLayerCategory, 'itinerary_stops' | 'planned_route' | 'alternative_route'>;
+export type BestTimeOfDay = 'Sunrise' | 'Morning' | 'Afternoon' | 'Sunset' | 'Evening' | 'Night' | '24 Hours';
+
 export interface KarnatakaPOI {
   id: string;
   name: string;
   nameKannada: string;
-  category: Exclude<MapLayerCategory, 'itinerary_stops' | 'planned_route' | 'alternative_route'>;
+  category: POICategory;
   district: string;
   macroRegion: KarnatakaMacroRegion;
   coordinates: [number, number]; // [lng, lat]
-  minZoomLevel: number; // Progressive LOD threshold
+  minZoomLevel?: number; // Progressive LOD threshold
   summary: string;
   recommendedHours: number;
   bestTimeOfDay: string;
@@ -70,6 +74,7 @@ export interface KarnatakaPOI {
   localPhrase: RegionalKannadaPhrase;
   transportMeta?: TransportHubMetadata;
   costEstimatePerPersonInr?: number;
+  photoUrl?: string;
 }
 
 export interface RouteManeuverStep {

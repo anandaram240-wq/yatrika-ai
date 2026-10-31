@@ -217,7 +217,15 @@ export function App() {
   const [budgetTier, setBudgetTier] = useState<BudgetTier>(initialTrip.tier);
   const [season, setSeason] = useState<TravelSeason>('winter_oct_feb');
   const [styleId, setStyleId] = useState<BasemapStyleId>('bright');
-  const [activeTab, setActiveTab] = useState<'timeline' | 'trains' | 'budget' | 'discover'>('timeline');
+  const initialTab = useMemo<'timeline' | 'trains' | 'budget' | 'discover'>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const t = params.get('tab');
+      if (t === 'discover' || t === 'trains' || t === 'budget') return t;
+    }
+    return 'timeline';
+  }, []);
+  const [activeTab, setActiveTab] = useState<'timeline' | 'trains' | 'budget' | 'discover'>(initialTab);
   const [selectedPoiId, setSelectedPoiId] = useState<string>(initialTrip.stopIds[0] || 'poi-mysore-palace');
   const [aiPromptInput, setAiPromptInput] = useState<string>('');
   const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(null);
@@ -1489,7 +1497,7 @@ export function App() {
                   const seasonal = getSeasonalAdvisory(stop, season);
                   const nearestRail = getPoiById(stop.nearestRailwayId);
                   const nearestBus = getPoiById(stop.nearestBusTerminalId);
-                  const photoUrl = POI_PHOTO_MAP[stop.id] || DEFAULT_PHOTO;
+                  const photoUrl = stop.photoUrl || POI_PHOTO_MAP[stop.id] || DEFAULT_PHOTO;
 
                   return (
                     <React.Fragment key={stop.id}>
@@ -2036,7 +2044,7 @@ export function App() {
                     return true;
                   }).map((poi) => {
                     const added = stopIds.includes(poi.id);
-                    const photo = POI_PHOTO_MAP[poi.id] || DEFAULT_PHOTO;
+                    const photo = poi.photoUrl || POI_PHOTO_MAP[poi.id] || DEFAULT_PHOTO;
                     return (
                       <div
                         key={poi.id}
@@ -2124,7 +2132,7 @@ export function App() {
           {arrivedStop && (
             <div className="nt-waypoint-celebration-toast">
               <img
-                src={POI_PHOTO_MAP[arrivedStop.id] || DEFAULT_PHOTO}
+                src={arrivedStop.photoUrl || POI_PHOTO_MAP[arrivedStop.id] || DEFAULT_PHOTO}
                 alt={arrivedStop.name}
                 className="nt-waypoint-thumb"
               />

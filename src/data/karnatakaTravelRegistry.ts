@@ -1,6 +1,23 @@
 // src/data/karnatakaTravelRegistry.ts
 
 import { KarnatakaPOI, CuratedCircuitPreset, MapLayerCategory } from '../types/nammatrip';
+import {
+  KARNATAKA_500_POIS,
+  PHOTO_POOL,
+  DISTRICT_METADATA_MAP,
+  FLAGSHIP_KARNATAKA_POIS,
+  compilePOIs,
+  CORRIDOR_COMPACT_TUPLES,
+} from './karnataka500Registry';
+
+export {
+  KARNATAKA_500_POIS,
+  PHOTO_POOL,
+  DISTRICT_METADATA_MAP,
+  FLAGSHIP_KARNATAKA_POIS,
+  compilePOIs,
+  CORRIDOR_COMPACT_TUPLES,
+};
 
 export interface LayerCategoryMeta {
   id: MapLayerCategory;
@@ -28,7 +45,7 @@ export const LAYER_CATEGORY_META: LayerCategoryMeta[] = [
   { id: 'emergency_facility', label: 'District Medical & Emergency', colorHex: '#ef4444', badgeCode: 'EMG', defaultVisible: false },
 ];
 
-export const KARNATAKA_POIS: KarnatakaPOI[] = [
+const BASE_KARNATAKA_POIS: KarnatakaPOI[] = [
   // ================= TRANSPORT HUBS: RAILWAY STATIONS =================
   {
     id: 'rail-sbc',
@@ -3665,6 +3682,15 @@ export const KARNATAKA_POIS: KarnatakaPOI[] = [
       usageContext: 'Permit protocol check',
     },
   },
+];
+
+/**
+ * Grand Unified Karnataka Tourism Registry
+ * Merges baseline transport hubs with the comprehensive 518-destination catalog.
+ */
+export const KARNATAKA_POIS: KarnatakaPOI[] = [
+  ...BASE_KARNATAKA_POIS,
+  ...KARNATAKA_500_POIS,
 ];
 
 export const CURATED_CIRCUIT_PRESETS: CuratedCircuitPreset[] = [

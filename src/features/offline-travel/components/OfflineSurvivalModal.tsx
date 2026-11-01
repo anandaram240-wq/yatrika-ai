@@ -335,6 +335,29 @@ export const OfflineSurvivalModal: React.FC<OfflineSurvivalModalProps> = ({
           {/* TAB 2: EMERGENCY DIRECTORY */}
           {activeTab === 'emergency' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {/* Hardware & Network Limitation Notice */}
+              <div
+                style={{
+                  background: '#fffbeb',
+                  border: '1px solid #fde68a',
+                  borderRadius: 10,
+                  padding: '10px 14px',
+                  fontSize: 12,
+                  color: '#92400e',
+                  lineHeight: 1.5,
+                }}
+              >
+                <div style={{ fontWeight: 800, marginBottom: 2 }}>
+                  ⚠️ ಸಾಧನ & ನೆಟ್‌ವರ್ಕ್ ಮಿತಿ (Hardware & Cellular Network Limitations):
+                </div>
+                <div>
+                  ದೂರವಾಣಿ ಕರೆಗಳು (112, 108, 1077) ನಿಮ್ಮ ಸಾಧನದ ಸಿಮ್ ಕಾರ್ಡ್ ಮತ್ತು ಸ್ಥಳೀಯ ಸೆಲ್ಯುಲಾರ್ ಟವರ್ ವ್ಯಾಪ್ತಿಯನ್ನು ಅವಲಂಬಿಸಿವೆ. ಪಶ್ಚಿಮ ಘಟ್ಟಗಳ ಸಂಪೂರ್ಣ ನೆಟ್‌ವರ್ಕ್ ರಹಿತ ಕಣಿವೆಗಳಲ್ಲಿ ಧ್ವನಿ ಕರೆಗಳು ಸಂಪರ್ಕಗೊಳ್ಳದಿರಬಹುದು. ತುರ್ತು ಸಹಾಯವಾಣಿ ಸಂಖ್ಯೆಗಳು, ರಸ್ತೆ ನಕ್ಷೆ ಮತ್ತು ಉಳಿಸಿದ ಮಾರ್ಗದ ವಿವರಗಳು ನೆಟ್‌ವರ್ಕ್ ಇಲ್ಲದಿದ್ದರೂ ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಸುರಕ್ಷಿತವಾಗಿರುತ್ತವೆ.
+                </div>
+                <div style={{ fontSize: 11, color: '#b45309', marginTop: 4 }}>
+                  Note: Emergency voice calls require an active SIM card and cellular network tower connection. In deep Western Ghats zero-connectivity dead-zones, voice calls will not connect. All offline route maps, destination records, and emergency contact details remain fully accessible on-device.
+                </div>
+              </div>
+
               <div style={{ fontSize: 12.5, color: '#475569', lineHeight: 1.4 }}>
                 Direct Karnataka emergency contacts verified by the Home and Health Departments. These numbers work on any active GSM network without mobile data.
               </div>

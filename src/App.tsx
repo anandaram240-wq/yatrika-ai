@@ -17,6 +17,7 @@ import {
   buildFallbackRoadCorridor,
   calculateMultiStopRoadRoute,
   optimizeStopSequence,
+  computeHaversineKm,
 } from './services/routingService';
 import {
   calculateTripBudget,
@@ -440,23 +441,33 @@ export function App() {
     });
   }, [maxPrecipitationMm, maxWindKmh]);
 
-  // Shakti Scheme per-leg audit ledger
+  // Statutory Shakti Scheme per-leg audit ledger
   const shaktiLegs: ShaktiLeg[] = useMemo(() => {
     return itineraryStops.map((stop, index) => {
       const fromName = index === 0 ? userOrigin.name.split('(')[0].trim() : itineraryStops[index - 1].name.split('(')[0].trim();
       const toName = stop.name.split('(')[0].trim();
-      const baseFare = 280 + index * 45;
-      const isEligible = shaktiWomenCount > 0;
+      const fromCoord = index === 0 ? userOrigin.coordinates : itineraryStops[index - 1].coordinates;
+      const legDistKm = route.legs[index]?.distanceKm ?? Math.max(5, computeHaversineKm(fromCoord, stop.coordinates) * 1.3);
+
+      // Mountain summit roads and off-road trails require private local jeeps and are exempt from KSRTC Shakti
+      const isPrivateJeepLeg = stop.id === 'poi-mullayanagiri' || stop.id === 'poi-jhari-falls';
+      const isEligible = shaktiWomenCount > 0 && !isPrivateJeepLeg;
+
+      // Defensible KSRTC Karnataka Sarige tariff: ~₹1.25/km, minimum fare ₹20 (GoK Order TRD 34 MDA 2023)
+      const baseFare = isPrivateJeepLeg ? 200 : Math.max(20, Math.round(legDistKm * 1.25));
+
       return {
         id: `leg-${stop.id}-${index}`,
-        description: `${fromName} ➔ ${toName}`,
+        description: `${fromName} ➔ ${toName} (${legDistKm.toFixed(1)} km)`,
         eligibility: isEligible ? ('verified-eligible' as const) : ('not-eligible' as const),
         baseFareInr: baseFare,
         farePaidInr: isEligible ? 0 : baseFare,
-        serviceLabel: 'KSRTC Karnataka Sarige (Ordinary/Express)',
+        serviceLabel: isPrivateJeepLeg
+          ? 'Chikkamagaluru 4x4 Hill Jeep Union (Exempt from Shakti)'
+          : 'KSRTC Karnataka Sarige (Ordinary/Express — Free for Female Domicile Residents)',
       };
     });
-  }, [itineraryStops, userOrigin, shaktiWomenCount]);
+  }, [itineraryStops, userOrigin, shaktiWomenCount, route.legs]);
 
   const carbonEstimate: CarbonComparison = useMemo(() => {
     const dist = route.totalDistanceKm || 250;

@@ -108,23 +108,16 @@ export function buildFallbackRoadCorridor(stops: KarnatakaPOI[]): ComputedTripRo
 
     const steps: RouteManeuverStep[] = [
       {
-        instruction: `Depart ${from.name} (${from.district}) via State/National Highway corridor`,
-        distanceKm: Number((roadKm * 0.35).toFixed(1)),
-        durationMinutes: Math.round(durationMins * 0.35),
-        roadName: isGhatLeg ? 'NH-66 / Western Ghats State Highway' : 'NH-48 / NH-275',
+        instruction: `[Estimated Corridor] Depart ${from.name} (${from.district}) via Highway corridor (Schematic fallback)`,
+        distanceKm: Number((roadKm * 0.5).toFixed(1)),
+        durationMinutes: Math.round(durationMins * 0.5),
+        roadName: isGhatLeg ? 'Western Ghats Highway (NH-75 / SH-57)' : 'National Highway Corridor',
         maneuverType: 'depart',
       },
       {
-        instruction: `Continue toward ${to.district} district (${isGhatLeg ? 'Ghat curves — drive cautiously' : 'Expressway corridor'})`,
-        distanceKm: Number((roadKm * 0.55).toFixed(1)),
-        durationMinutes: Math.round(durationMins * 0.55),
-        roadName: `${from.district}–${to.district} Highway`,
-        maneuverType: 'continue',
-      },
-      {
-        instruction: `Arrive at ${to.name}`,
-        distanceKm: Number((roadKm * 0.1).toFixed(1)),
-        durationMinutes: Math.max(2, Math.round(durationMins * 0.1)),
+        instruction: `[Estimated Corridor] Approach and arrive at destination: ${to.name}`,
+        distanceKm: Number((roadKm * 0.5).toFixed(1)),
+        durationMinutes: Math.max(2, Math.round(durationMins * 0.5)),
         roadName: to.name,
         maneuverType: 'arrive',
       },
@@ -143,7 +136,7 @@ export function buildFallbackRoadCorridor(stops: KarnatakaPOI[]): ComputedTripRo
 
   return {
     provenance: 'fallback_geodesic_corridor',
-    provenanceLabel: 'Karnataka Highway Corridor Estimate (Offline-Safe Mode)',
+    provenanceLabel: 'Estimated Highway Corridor (Offline/Fallback Mode — Schematic Preview)',
     totalDistanceKm: Number(totalDistanceKm.toFixed(1)),
     totalDurationMinutes,
     primaryGeometry: { type: 'LineString', coordinates: primaryCoords },
@@ -152,121 +145,155 @@ export function buildFallbackRoadCorridor(stops: KarnatakaPOI[]): ComputedTripRo
   };
 }
 
+// In-flight route calculation deduplication cache
+const inFlightRouteRequests = new Map<string, Promise<ComputedTripRoute>>();
+
 /**
  * Queries live road geometry from OSRM via Vite dev proxy (/osrm-api → router.project-osrm.org)
  * with an 8 second timeout and automatic fallback to buildFallbackRoadCorridor.
+ * Includes in-flight request deduplication and strict coordinate validation.
  *
  * Priority: Vite proxy → direct OSRM → geodesic fallback
  */
-export async function calculateMultiStopRoadRoute(
+export function calculateMultiStopRoadRoute(
   stops: KarnatakaPOI[],
   signal?: AbortSignal
 ): Promise<ComputedTripRoute> {
   if (stops.length < 2) {
-    return buildFallbackRoadCorridor(stops);
+    return Promise.resolve(buildFallbackRoadCorridor(stops));
+  }
+
+  // Strict coordinate validation
+  const areCoordsValid = stops.every(
+    (s) =>
+      Array.isArray(s.coordinates) &&
+      s.coordinates.length === 2 &&
+      typeof s.coordinates[0] === 'number' &&
+      typeof s.coordinates[1] === 'number' &&
+      !isNaN(s.coordinates[0]) &&
+      !isNaN(s.coordinates[1]) &&
+      s.coordinates[0] >= -180 &&
+      s.coordinates[0] <= 180 &&
+      s.coordinates[1] >= -90 &&
+      s.coordinates[1] <= 90
+  );
+  if (!areCoordsValid) {
+    return Promise.resolve(buildFallbackRoadCorridor(stops));
   }
 
   const coordsParam = stops.map((s) => `${s.coordinates[0]},${s.coordinates[1]}`).join(';');
-  const qs = 'overview=full&geometries=geojson&steps=true&alternatives=true';
 
-  // Try Vite dev-server proxy first (avoids browser SNI / timeout issues in dev)
-  // In production build, falls back directly to OSRM public endpoint
-  const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const primaryUrl = isDev
-    ? `/osrm-api/route/v1/driving/${coordsParam}?${qs}`
-    : `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?${qs}`;
-  const fallbackUrl = `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?${qs}`;
+  // In-flight request deduplication
+  if (inFlightRouteRequests.has(coordsParam)) {
+    return inFlightRouteRequests.get(coordsParam)!;
+  }
 
-  const timeoutController = new AbortController();
-  const timeoutId = setTimeout(() => timeoutController.abort(), 8000);
+  const fetchPromise: Promise<ComputedTripRoute> = (async (): Promise<ComputedTripRoute> => {
+    const qs = 'overview=full&geometries=geojson&steps=true&alternatives=true';
 
-  try {
-    // Try primary URL (dev proxy or direct)
-    let response: Response;
+    // Try Vite dev-server proxy first (avoids browser SNI / timeout issues in dev)
+    // In production build, falls back directly to OSRM public endpoint
+    const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const primaryUrl = isDev
+      ? `/osrm-api/route/v1/driving/${coordsParam}?${qs}`
+      : `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?${qs}`;
+    const fallbackUrl = `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?${qs}`;
+
+    const timeoutController = new AbortController();
+    const timeoutId = setTimeout(() => timeoutController.abort(), 8000);
+
     try {
-      response = await fetch(primaryUrl, {
-        signal: signal || timeoutController.signal,
-      });
-    } catch {
-      // If proxy fails or we're in prod, try direct OSRM
-      if (primaryUrl !== fallbackUrl) {
-        response = await fetch(fallbackUrl, {
+      // Try primary URL (dev proxy or direct)
+      let response: Response;
+      try {
+        response = await fetch(primaryUrl, {
           signal: signal || timeoutController.signal,
         });
-      } else {
-        throw new Error('OSRM unreachable');
+      } catch {
+        // If proxy fails or we're in prod, try direct OSRM
+        if (primaryUrl !== fallbackUrl) {
+          response = await fetch(fallbackUrl, {
+            signal: signal || timeoutController.signal,
+          });
+        } else {
+          throw new Error('OSRM unreachable');
+        }
       }
-    }
-    clearTimeout(timeoutId);
+      clearTimeout(timeoutId);
 
-    if (!response.ok) {
-      return buildFallbackRoadCorridor(stops);
-    }
+      if (!response.ok) {
+        return buildFallbackRoadCorridor(stops);
+      }
 
-    const data = await response.json();
-    if (data.code !== 'Ok' || !Array.isArray(data.routes) || data.routes.length === 0) {
-      return buildFallbackRoadCorridor(stops);
-    }
+      const data = await response.json();
+      if (data.code !== 'Ok' || !Array.isArray(data.routes) || data.routes.length === 0) {
+        return buildFallbackRoadCorridor(stops);
+      }
 
-    const primaryRoute = data.routes[0];
-    const altRoute = data.routes.length > 1 ? data.routes[1] : undefined;
+      const primaryRoute = data.routes[0];
+      const altRoute = data.routes.length > 1 ? data.routes[1] : undefined;
 
-    const legs: RouteLegSummary[] = (primaryRoute.legs || []).map(
-      (
-        leg: {
-          distance: number;
-          duration: number;
-          steps?: Array<{
+      const legs: RouteLegSummary[] = (primaryRoute.legs || []).map(
+        (
+          leg: {
             distance: number;
             duration: number;
-            name?: string;
-            maneuver?: { type?: string; modifier?: string };
-          }>;
-        },
-        idx: number
-      ) => {
-        const fromStop = stops[idx];
-        const toStop = stops[idx + 1];
+            steps?: Array<{
+              distance: number;
+              duration: number;
+              name?: string;
+              maneuver?: { type?: string; modifier?: string };
+            }>;
+          },
+          idx: number
+        ) => {
+          const fromStop = stops[idx];
+          const toStop = stops[idx + 1];
 
-        const steps: RouteManeuverStep[] = (leg.steps || [])
-          .filter((st) => st.distance > 50)
-          .slice(0, 8)
-          .map((st) => {
-            const mType = st.maneuver?.type || 'continue';
-            const mod = st.maneuver?.modifier ? ` (${st.maneuver.modifier})` : '';
-            const road = st.name && st.name.trim().length > 0 ? st.name : 'Regional Highway';
-            return {
-              instruction: `${mType.charAt(0).toUpperCase() + mType.slice(1)}${mod} onto ${road}`,
-              distanceKm: Number((st.distance / 1000).toFixed(1)),
-              durationMinutes: Math.max(1, Math.round(st.duration / 60)),
-              roadName: road,
-              maneuverType: mType,
-            };
-          });
+          const steps: RouteManeuverStep[] = (leg.steps || [])
+            .filter((st) => st.distance > 50)
+            .slice(0, 8)
+            .map((st) => {
+              const mType = st.maneuver?.type || 'continue';
+              const mod = st.maneuver?.modifier ? ` (${st.maneuver.modifier})` : '';
+              const road = st.name && st.name.trim().length > 0 ? st.name : 'Regional Highway';
+              return {
+                instruction: `${mType.charAt(0).toUpperCase() + mType.slice(1)}${mod} onto ${road}`,
+                distanceKm: Number((st.distance / 1000).toFixed(1)),
+                durationMinutes: Math.max(1, Math.round(st.duration / 60)),
+                roadName: road,
+                maneuverType: mType,
+              };
+            });
 
-        return {
-          fromStopId: fromStop?.id || `stop-${idx}`,
-          fromStopName: fromStop?.name || `Stop ${idx + 1}`,
-          toStopId: toStop?.id || `stop-${idx + 1}`,
-          toStopName: toStop?.name || `Stop ${idx + 2}`,
-          distanceKm: Number((leg.distance / 1000).toFixed(1)),
-          durationMinutes: Math.max(1, Math.round(leg.duration / 60)),
-          steps,
-        };
-      }
-    );
+          return {
+            fromStopId: fromStop?.id || `stop-${idx}`,
+            fromStopName: fromStop?.name || `Stop ${idx + 1}`,
+            toStopId: toStop?.id || `stop-${idx + 1}`,
+            toStopName: toStop?.name || `Stop ${idx + 2}`,
+            distanceKm: Number((leg.distance / 1000).toFixed(1)),
+            durationMinutes: Math.max(1, Math.round(leg.duration / 60)),
+            steps,
+          };
+        }
+      );
 
-    return {
-      provenance: 'live_osrm',
-      provenanceLabel: 'Live OSRM Street & Highway Geometry',
-      totalDistanceKm: Number((primaryRoute.distance / 1000).toFixed(1)),
-      totalDurationMinutes: Math.max(1, Math.round(primaryRoute.duration / 60)),
-      primaryGeometry: primaryRoute.geometry,
-      alternativeGeometry: altRoute?.geometry,
-      legs,
-    };
-  } catch {
-    clearTimeout(timeoutId);
-    return buildFallbackRoadCorridor(stops);
-  }
+      return {
+        provenance: 'live_osrm' as const,
+        provenanceLabel: 'Live OSRM Street & Highway Geometry',
+        totalDistanceKm: Number((primaryRoute.distance / 1000).toFixed(1)),
+        totalDurationMinutes: Math.max(1, Math.round(primaryRoute.duration / 60)),
+        primaryGeometry: primaryRoute.geometry as ComputedTripRoute['primaryGeometry'],
+        alternativeGeometry: altRoute?.geometry as ComputedTripRoute['alternativeGeometry'],
+        legs,
+      };
+    } catch {
+      clearTimeout(timeoutId);
+      return buildFallbackRoadCorridor(stops);
+    }
+  })();
+
+  inFlightRouteRequests.set(coordsParam, fetchPromise);
+  fetchPromise.finally(() => inFlightRouteRequests.delete(coordsParam));
+  return fetchPromise;
 }

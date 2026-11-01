@@ -50,7 +50,7 @@ export const OnboardingTourModal: React.FC<OnboardingTourModalProps> = ({
       descriptionKannada:
         'ಪಶ್ಚಿಮ ಘಟ್ಟಗಳ ಹೇರ್‌ಪಿನ್ ತಿರುವುಗಳು, ಮಳೆ, ಹಾಗೂ ಬೇಲೂರು ಮಧ್ಯಾಹ್ನದ ನೈವೇದ್ಯ ವಿರಾಮ (12:30–3:30) ಮತ್ತು ಮುಳ್ಳಯ್ಯನಗಿರಿ ಸಂಜೆ 5:30 ರ ನಿರ್ಬಂಧಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪರಿಶೀಲಿಸುತ್ತದೆ. ನೆಟ್‌ವರ್ಕ್ ಇಲ್ಲದಿದ್ದರೂ ಆಫ್‌ಲೈನ್ ಪಾಸ್ ಮತ್ತು 112/108 SOS ತುರ್ತು ಸಹಾಯ ಲಭ್ಯ.',
       descriptionEnglish:
-        'Automated Western Ghat hairpin, fog & darshan window checks. Belur noon sanctum & Mullayanagiri 17:30 gate restrictions verified. Zero-connectivity cryptographic offline packs with emergency SOS directory.',
+        'Automated Western Ghat hairpin, fog & darshan window checks. Belur noon sanctum & Mullayanagiri 17:30 gate restrictions verified. Zero-connectivity integrity-verified offline packs with emergency SOS directory.',
       samplePrompt: 'SHA-256 ಸಮಗ್ರತೆಯುಳ್ಳ ಆಫ್‌ಲೈನ್ ರೂಟ್ ಪ್ಯಾಕ್ & ತುರ್ತು ಡೈರೆಕ್ಟರಿ',
     },
   ];

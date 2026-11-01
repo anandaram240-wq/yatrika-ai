@@ -296,6 +296,22 @@ export const KARNATAKA_AUTHENTIC_PHOTOS: Record<string, DestinationPhotoMeta> = 
     source: 'Wikimedia Commons (File:Mysore Palace Morning.jpg)',
   },
 
+  // 6.1 Srirangapatna Island Heritage (Daria Daulat Bagh)
+  'poi-srirangapatna': {
+    poiId: 'poi-srirangapatna',
+    name: 'Srirangapatna (Daria Daulat Bagh & Ranganathaswamy)',
+    nameKannada: 'ಶ್ರೀರಂಗಪಟ್ಟಣ (ದರಿಯಾ ದೌಲತ್ ಬಾಗ್ ಮತ್ತು ಶ್ರೀರಂಗನಾಥಸ್ವಾಮಿ)',
+    district: 'Mandya',
+    region: 'Old Mysuru',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Daria_Daulat_Bagh.jpg',
+    thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Daria_Daulat_Bagh.jpg',
+    caption: 'Daria Daulat Bagh, the Summer Palace of Tipu Sultan built in 1784 with intricate teak woodwork and battle murals on Kaveri island.',
+    captionKannada: 'ಶ್ರೀರಂಗಪಟ್ಟಣ ದ್ವೀಪದಲ್ಲಿ ಕಾವೇರಿ ತೀರದ ೧೭೮೪ರ ಟಿಪ್ಪು ಸುಲ್ತಾನರ ಬೇಸಿಗೆ ಅರಮನೆ (ದರಿಯಾ ದೌಲತ್ ಬಾಗ್).',
+    attribution: 'Photo by Ankmachine / Wikimedia Commons',
+    license: 'CC BY-SA 3.0',
+    source: 'Wikimedia Commons (File:Daria Daulat Bagh.jpg)',
+  },
+
   // 7. Badami Cave Temples (Rock-Cut Cave 1)
   'poi-badami-caves': {
     poiId: 'poi-badami-caves',

@@ -93,6 +93,18 @@ export const VERIFIED_KARNATAKA_MEDIA_COLLECTION: Record<string, VerifiedPhotoRe
     aspectRatio: '16:9',
     geographicMatchNotes: 'Front facade of the Mysore Palace (Amba Vilas) in morning sunlight, showcasing Henry Irwin’s Indo-Saracenic royal arches.',
   },
+  'poi-srirangapatna': {
+    ...V8_PHOTOS['poi-srirangapatna'],
+    photoId: 'photo-srirangapatna-daria-daulat-01',
+    exactLandmarkVerified: true,
+    rightsHolder: 'Ankmachine (Wikimedia Commons)',
+    sourcePageUrl: 'https://commons.wikimedia.org/wiki/File:Daria_Daulat_Bagh.jpg',
+    originalMediaUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Daria_Daulat_Bagh.jpg',
+    isAiGenerated: false,
+    dateAcquired: '2026-11-01',
+    aspectRatio: '16:9',
+    geographicMatchNotes: 'Tipu Sultan’s 1784 teak Summer Palace (Daria Daulat Bagh) with painted frescoes and landscaped charbagh gardens on Srirangapatna island.',
+  },
   'poi-badami-caves': {
     ...V8_PHOTOS['poi-badami-caves'],
     photoId: 'photo-badami-caves-01',

@@ -140,6 +140,10 @@ export const EntityClarificationModal: React.FC<EntityClarificationModalProps> =
                 </div>
                 <button
                   type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectCandidate(c.id);
+                  }}
                   style={{
                     background: '#2563eb',
                     color: '#ffffff',

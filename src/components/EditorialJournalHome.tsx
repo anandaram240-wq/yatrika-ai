@@ -214,7 +214,7 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
           <article className="yt-circuit-card featured" onClick={() => onSelectCircuit('circuit-golden-bengaluru-mullayanagiri')}>
             <div className="yt-circuit-image-box">
               <img
-                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85"
+                src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Peaks_of_Mullayanagiri.jpg"
                 alt="Mullayanagiri Western Ghats Peak"
                 className="yt-circuit-img"
               />
@@ -242,7 +242,7 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
           <article className="yt-circuit-card" onClick={() => onSelectCircuit('circuit-unesco')}>
             <div className="yt-circuit-image-box">
               <img
-                src="https://images.unsplash.com/photo-1600100397608-f010f423b971?auto=format&fit=crop&w=1000&q=80"
+                src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Stone_Chariot_at_Hampi%2C_Karnataka.jpg"
                 alt="Stone Chariot Hampi"
                 className="yt-circuit-img"
               />
@@ -268,7 +268,7 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
           <article className="yt-circuit-card" onClick={() => onSelectCircuit('circuit-chikkamagaluru')}>
             <div className="yt-circuit-image-box">
               <img
-                src="https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1000&q=80"
+                src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Jog_Falls_05092016.jpg"
                 alt="Jog Falls Shravathi River"
                 className="yt-circuit-img"
               />
@@ -294,7 +294,7 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
           <article className="yt-circuit-card" onClick={() => onSelectCircuit('circuit-karavali')}>
             <div className="yt-circuit-image-box">
               <img
-                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+                src="https://upload.wikimedia.org/wikipedia/commons/5/53/PXL_20260103_101009613_People_and_Beach_Om_Beach_Gokarna%2C_Karnataka_35.jpg"
                 alt="Om Beach Gokarna Coast"
                 className="yt-circuit-img"
               />
@@ -323,12 +323,12 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
         <div className="yt-spotlight-card">
           <div className="yt-spotlight-media">
             <img
-              src="https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=85"
+              src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Chennakeshava_temple_Belur_761.jpg"
               alt="Hoysala Chennakeshava Temple Belur"
               className="yt-spotlight-img"
             />
             <div className="yt-spotlight-caption">
-              Photo: Chennakeshava Temple, Belur (1117 CE) • Attributed to ASI & Unsplash
+              Photo: Chennakeshava Temple, Belur (1117 CE) • Akshatha Inamdar / Wikimedia Commons (CC BY-SA 4.0)
             </div>
           </div>
           <div className="yt-spotlight-content">

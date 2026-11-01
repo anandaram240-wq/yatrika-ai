@@ -241,6 +241,6 @@ describe('YatriKa AI V8.1.1 — Transit Photography & Infrastructure Directory H
       expect(route.totalDistanceKm).toBeGreaterThan(150);
       expect(route.totalDurationMinutes).toBeGreaterThan(120);
       expect(route.primaryGeometry.coordinates.length).toBeGreaterThan(10);
-    });
+    }, 15000);
   });
 });

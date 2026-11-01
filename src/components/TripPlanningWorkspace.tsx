@@ -14,6 +14,9 @@ import {
   buildItineraryLegsTransit,
   ItineraryLegTransit,
 } from '../services/itineraryLegTransitService';
+import { JourneyFeasibilityPanel } from './JourneyFeasibilityPanel';
+import { JourneyReadinessPassport } from './JourneyReadinessPassport';
+import { FeasibilityEngine, FeasibilityAssessmentReport } from '../optimization/feasibilityEngine';
 
 export interface TripPlanningWorkspaceProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
@@ -32,8 +35,8 @@ export interface TripPlanningWorkspaceProps {
   setBudgetTier: (tier: BudgetTier) => void;
   netTotalBudgetInr: number;
   shaktiSavingsInr: number;
-  activeTab: 'timeline' | 'trains' | 'budget' | 'discover';
-  setActiveTab: (tab: 'timeline' | 'trains' | 'budget' | 'discover') => void;
+  activeTab: 'timeline' | 'trains' | 'budget' | 'discover' | 'feasibility' | 'passport';
+  setActiveTab: (tab: 'timeline' | 'trains' | 'budget' | 'discover' | 'feasibility' | 'passport') => void;
   onSelectPoiDetail: (poiId: string) => void;
   onAddStop: (poiId: string) => void;
   onRemoveStop: (poiId: string) => void;
@@ -156,6 +159,18 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
     [userOrigin, itineraryStops]
   );
 
+  const feasibilityReport = useMemo<FeasibilityAssessmentReport | null>(() => {
+    if (itineraryStops.length < 1) return null;
+    const estDriveHours = Math.max(1, (route?.totalDurationMinutes || 120) / 60);
+    return FeasibilityEngine.evaluateFullItinerary({
+      originName: userOrigin.name,
+      stops: itineraryStops,
+      allocatedDays: days,
+      startDepartureTime: '07:00',
+      estimatedTotalDriveHours: estDriveHours,
+    });
+  }, [userOrigin.name, itineraryStops, days, route?.totalDurationMinutes]);
+
   const activeLeg: ItineraryLegTransit | undefined =
     itineraryLegs[selectedLegIndex] || itineraryLegs[0];
 
@@ -274,6 +289,20 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
               onClick={() => setActiveTab('discover')}
             >
               + {uiLanguage === 'kn' ? 'ತಾಣ ಸೇರಿಸಿ' : 'Add Places'}
+            </button>
+            <button
+              type="button"
+              className={`yt-ws-tab ${activeTab === 'feasibility' ? 'active' : ''}`}
+              onClick={() => setActiveTab('feasibility')}
+            >
+              🛡️ {uiLanguage === 'kn' ? 'ಸಾಧ್ಯತೆ' : 'Feasibility'}
+            </button>
+            <button
+              type="button"
+              className={`yt-ws-tab ${activeTab === 'passport' ? 'active' : ''}`}
+              onClick={() => setActiveTab('passport')}
+            >
+              📋 {uiLanguage === 'kn' ? 'ಪಾಸ್‌ಪೋರ್ಟ್' : 'Readiness'}
             </button>
           </div>
         </div>
@@ -466,6 +495,59 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Feasibility Summary Banner */}
+              {feasibilityReport && (
+                <div
+                  className="yt-timeline-feasibility-card"
+                  style={{
+                    margin: '12px 0',
+                    padding: '12px 16px',
+                    borderRadius: '10px',
+                    background: feasibilityReport.isFeasible ? 'rgba(34, 197, 94, 0.08)' : 'rgba(245, 158, 11, 0.08)',
+                    border: `1px solid ${feasibilityReport.isFeasible ? 'rgba(34, 197, 94, 0.25)' : 'rgba(245, 158, 11, 0.25)'}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '12px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => setActiveTab('feasibility')}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '1.2rem' }}>{feasibilityReport.isFeasible ? '✅' : '⚠️'}</span>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: '0.85rem', color: feasibilityReport.isFeasible ? '#22c55e' : '#F59E0B' }}>
+                        {feasibilityReport.isFeasible
+                          ? (uiLanguage === 'kn' ? 'ಪರಿಶೀಲಿಸಿದ ಯೋಜನೆ: ಸಂಚಾರ ಸಾಧ್ಯ' : 'FEASIBLE WITH VERIFIED INPUTS')
+                          : (uiLanguage === 'kn' ? 'ವೇಳಾಪಟ್ಟಿ ಪರಿಶೀಲನೆ ಅಗತ್ಯ' : 'REQUIRES USER DECISION')}
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                        {feasibilityReport.explanation}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      background: 'rgba(255,255,255,0.08)',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      color: 'var(--text-primary)',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveTab('feasibility');
+                    }}
+                  >
+                    {uiLanguage === 'kn' ? 'ವರದಿ ನೋಡಿ →' : 'View Report →'}
+                  </button>
+                </div>
+              )}
 
               {/* Sequence Optimizer CTA */}
               <div className="yt-timeline-footer-tools">
@@ -1043,6 +1125,39 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {/* ================= VIEW 5: FEASIBILITY ENGINE VERDICT ================= */}
+          {activeTab === 'feasibility' && (
+            <div className="yt-feasibility-tab-content p-4">
+              <JourneyFeasibilityPanel
+                report={feasibilityReport}
+                stops={itineraryStops}
+                route={route}
+                allocatedDays={days}
+                onRequestAlternative={() => {
+                  if (feasibilityReport?.suggestedAlternativePlan?.recommendedDays) {
+                    setDays(feasibilityReport.suggestedAlternativePlan.recommendedDays);
+                  }
+                }}
+              />
+            </div>
+          )}
+
+          {/* ================= VIEW 6: JOURNEY READINESS PASSPORT ================= */}
+          {activeTab === 'passport' && (
+            <div className="yt-passport-tab-content p-4">
+              <JourneyReadinessPassport
+                stops={itineraryStops}
+                route={route}
+                feasibilityReport={feasibilityReport}
+                allocatedDays={days}
+                travellers={travellers}
+                originName={userOrigin.name}
+                onShare={onShareTrip}
+                uiLanguage={uiLanguage}
+              />
             </div>
           )}
         </div>

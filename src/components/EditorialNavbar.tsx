@@ -66,7 +66,7 @@ export const EditorialNavbar: React.FC<EditorialNavbarProps> = ({
           className={`yt-nav-link ${currentView === 'explore' ? 'active' : ''}`}
           onClick={() => onSelectView('explore')}
         >
-          <span>{uiLanguage === 'kn' ? 'ಅನ್ವೇಷಿಸಿ' : 'Discover'}</span>
+          <span>{uiLanguage === 'kn' ? 'ಅನ್ವೇಷಿಸಿ' : 'Explore'}</span>
         </button>
 
         <button

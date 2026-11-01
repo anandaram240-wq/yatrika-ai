@@ -33,7 +33,6 @@ import {
 } from './services/tripPlannerEngine';
 import {
   calculateShaktiSchemeSavings,
-  parseNaturalLanguageTripPrompt,
   getCorridorIntelligence,
 } from './services/karnatakaSmartTravelIntelligence';
 import { OfflineSurvivalModal } from './features/offline-travel/components/OfflineSurvivalModal';
@@ -49,7 +48,7 @@ import { KARNATAKA_PILOT_CIRCUITS } from './pilot/pilotValidationProtocol';
 import { OnboardingTourModal } from './components/OnboardingTourModal';
 import { EntityClarificationModal, AmbiguityCandidate } from './components/EntityClarificationModal';
 import { EditorialNavbar } from './components/EditorialNavbar';
-import { EditorialJournalHome } from './components/EditorialJournalHome';
+import { ExploreWorkspace } from './components/ExploreWorkspace';
 import { TripPlanningWorkspace } from './components/TripPlanningWorkspace';
 import { DestinationDetailDrawer } from './components/DestinationDetailDrawer';
 import { EditorialVoiceModal } from './features/voice/EditorialVoiceModal';
@@ -137,15 +136,15 @@ export function App() {
   const [budgetTier, setBudgetTier] = useState<BudgetTier>(initialTrip.tier);
   const [styleId, setStyleId] = useState<BasemapStyleId>('bright');
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
-  const initialTab = useMemo<'timeline' | 'trains' | 'budget' | 'discover'>(() => {
+  const initialTab = useMemo<'timeline' | 'trains' | 'budget' | 'discover' | 'feasibility' | 'passport'>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const t = params.get('tab');
-      if (t === 'discover' || t === 'trains' || t === 'budget') return t;
+      if (t === 'discover' || t === 'trains' || t === 'budget' || t === 'feasibility' || t === 'passport') return t;
     }
     return 'timeline';
   }, []);
-  const [activeTab, setActiveTab] = useState<'timeline' | 'trains' | 'budget' | 'discover'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'timeline' | 'trains' | 'budget' | 'discover' | 'feasibility' | 'passport'>(initialTab);
   const [selectedPoiId, setSelectedPoiId] = useState<string>(() => (isGoldenDemoInitial ? 'poi-belur-halebidu' : initialTrip.stopIds[0] || 'poi-mysore-palace'));
   const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(() => (isGoldenDemoInitial ? '🌟 ಸುವರ್ಣ ಪ್ರವಾಸ: ಬೆಂಗಳೂರು ➔ ಹಾಸನ (ಶೆಟ್ಟಿಹಳ್ಳಿ) ➔ ಬೇಲೂರು (ಚೆನ್ನಕೇಶವ) ➔ ಚಿಕ್ಕಮಗಳೂರು ➔ ಮುಳ್ಳಯ್ಯನಗಿರಿ' : null));
   const [shareCopied, setShareCopied] = useState<boolean>(false);
@@ -1278,41 +1277,15 @@ export function App() {
         </div>
       )}
 
-      {/* ================= 2. EXPLORE VIEW (MAGAZINE JOURNAL HOME) ================= */}
+      {/* ================= 2. EXPLORE VIEW (V9 KARNATAKA JOURNEY DISCOVERY WORKSPACE) ================= */}
       {currentView === 'explore' && (
-        <EditorialJournalHome
+        <ExploreWorkspace
           uiLanguage={uiLanguage}
           userOrigin={userOrigin}
-          onChangeOrigin={(orig) => setUserOrigin(orig)}
           onSelectCircuit={(cid) => handleLoadCircuit(cid)}
           onSelectPoiDetail={(pid) => setDetailPoiId(pid)}
           onAddPoiToTrip={(pid) => handleToggleStop(pid)}
           itineraryStopIds={stopIds}
-          onOpenVoice={() => setIsVoiceAssistantOpen(true)}
-          onSearchSubmit={(prompt) => {
-            const res = parseNaturalLanguageTripPrompt(prompt);
-            if (res.stopIds && res.stopIds.length > 0) {
-              setStopIds(res.stopIds);
-            }
-            if (res.days) {
-              setDays(res.days);
-            }
-            if (res.tier) {
-              setBudgetTier(res.tier);
-            }
-            setCurrentView('workspace');
-            setTimeout(() => {
-              mapRef.current?.resize();
-              handleFitAllStops();
-            }, 120);
-          }}
-          onEnterWorkspace={() => {
-            setCurrentView('workspace');
-            setTimeout(() => {
-              mapRef.current?.resize();
-              handleFitAllStops();
-            }, 120);
-          }}
         />
       )}
 

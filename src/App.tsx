@@ -142,6 +142,9 @@ export function App() {
       ) {
         return 'workspace';
       }
+      if (p.get('view') === 'transit') {
+        return 'transit';
+      }
     }
     return 'explore';
   });
@@ -964,8 +967,7 @@ export function App() {
         currentView={currentView}
         onSelectView={(v) => {
           if (v === 'transit') {
-            setCurrentView('workspace');
-            setActiveTab('trains');
+            setCurrentView('transit');
           } else {
             setCurrentView(v as 'explore' | 'workspace');
             if (v === 'workspace') {

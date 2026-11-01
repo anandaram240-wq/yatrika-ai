@@ -67,7 +67,7 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
     if (KARNATAKA_AUTHENTIC_PHOTOS[poiId]) {
       return KARNATAKA_AUTHENTIC_PHOTOS[poiId].imageUrl;
     }
-    return 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=800&q=80';
+    return 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Chennakeshava_temple_Belur_761.jpg';
   };
 
   return (
@@ -76,7 +76,7 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
       <section className="yt-hero-section">
         <div className="yt-hero-backdrop">
           <img
-            src="https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=2000&q=90"
+            src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Chennakeshava_temple_Belur_761.jpg"
             alt="Chennakeshava Temple Belur Hoysala Stone Architecture"
             className="yt-hero-image"
           />

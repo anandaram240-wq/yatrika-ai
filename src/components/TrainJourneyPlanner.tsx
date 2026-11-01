@@ -58,9 +58,12 @@ export const TrainJourneyPlanner: React.FC<TrainJourneyPlannerProps> = ({
           >
             <option value="SBC">SBC - KSR Bengaluru City (Majestic)</option>
             <option value="YPR">YPR - Yesvantpur Junction</option>
+            <option value="HPT">HPT - Hosapete Junction (Hampi Gateway)</option>
             <option value="MYS">MYS - Mysuru Junction</option>
+            <option value="BDM">BDM - Badami Railway Station</option>
+            <option value="HAS">HAS - Hassan Junction (Belur / Halebidu)</option>
+            <option value="MAJN">MAJN - Mangaluru Junction</option>
             <option value="UBL">UBL - SSS Hubballi Junction</option>
-            <option value="HAS">HAS - Hassan Junction</option>
           </select>
         </div>
 
@@ -72,11 +75,13 @@ export const TrainJourneyPlanner: React.FC<TrainJourneyPlannerProps> = ({
             className="w-full text-sm bg-white border border-[#D5C9B8] rounded-xl px-3 py-2 text-[#1A1714] focus:outline-none focus:ring-1 focus:ring-[#2B4C3F]"
           >
             <option value="HPT">HPT - Hosapete Junction (Hampi Gateway)</option>
+            <option value="SBC">SBC - KSR Bengaluru City</option>
+            <option value="YPR">YPR - Yesvantpur Junction</option>
             <option value="BDM">BDM - Badami (Cave Temples)</option>
             <option value="HAS">HAS - Hassan Junction (Belur / Halebidu)</option>
             <option value="MAJN">MAJN - Mangaluru Junction (Western Ghats Vistadome)</option>
             <option value="MYS">MYS - Mysuru Junction (Vande Bharat)</option>
-            <option value="SBC">SBC - KSR Bengaluru City</option>
+            <option value="UBL">UBL - SSS Hubballi Junction</option>
           </select>
         </div>
       </div>

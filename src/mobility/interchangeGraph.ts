@@ -10,6 +10,7 @@ import { KARNATAKA_LOCAL_TRANSFERS, LocalTransportOption } from './localTranspor
 export interface IntermodalChainStep {
   stepIndex: number;
   mode: 'train' | 'express_bus' | 'local_transfer' | 'walk' | 'sightseeing';
+  serviceName?: string;
   fromLabel: string;
   toLabel: string;
   durationLabel: string;
@@ -50,13 +51,14 @@ export class InterchangeGraph {
             {
               stepIndex: 1,
               mode: 'train',
+              serviceName: 'Train 16592 Hampi Express',
               fromLabel: 'KSR Bengaluru City (SBC)',
               toLabel: 'Hosapete Junction (HPT)',
               durationLabel: '9h 20m (Overnight)',
               durationMinutes: 560,
               distanceKm: 330,
               estimatedCostInr: 265,
-              instructions: 'Board Train 16591 Hampi Express at 21:50 from SBC Plat. 1.',
+              instructions: 'Board Train 16592 Hampi Express at 21:50 from SBC Plat. 1.',
               instructionsKannada: 'ರಾತ್ರಿ ೦೯:೫೦ಕ್ಕೆ ಹೊರಡುವ ಹಂಪಿ ಎಕ್ಸ್‌ಪ್ರೆಸ್ ಹತ್ತಿ.',
             },
             {

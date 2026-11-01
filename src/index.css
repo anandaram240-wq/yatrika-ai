@@ -265,6 +265,28 @@ body, html, #root {
     grid-template-columns: 1fr;
     grid-template-rows: 52% 48%;
   }
+  .nt-topbar {
+    height: auto;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nt-brand-subtitle {
+    display: none;
+  }
+  .nt-omnibar {
+    order: 3;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .nt-header-actions {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .nt-stat-pill {
+    padding: 3px 6px;
+    font-size: 10.5px;
+  }
 }
 
 /* Left Panel: Scrollable Itinerary & Intelligence Feed */

@@ -42,13 +42,23 @@ describe('Phase 11: Jury-Ready Demonstration System (Scenarios A - E)', () => {
     expect(reset.resetTimestamp).toBeDefined();
   });
 
-  it('7. Asserts all 5 demo definitions clearly identify simulation vs live data', () => {
+  it('7. Asserts all demo definitions clearly identify simulation vs live data', () => {
     const scenarios = Object.values(DEMO_SCENARIOS);
-    expect(scenarios.length).toBe(5);
+    expect(scenarios.length).toBe(6);
     scenarios.forEach((s) => {
       expect(s.scenarioId).toBeDefined();
       expect(s.simulationNote).toBeDefined();
       expect(typeof s.isSimulatedDemoData).toBe('boolean');
     });
+  });
+
+  it('8. Executes The Golden User Journey (Bengaluru -> Hassan -> Belur -> Chikkamagaluru -> Mullayanagiri)', () => {
+    const golden = DemoScenarioEngine.runScenarioGolden();
+    expect(golden.success).toBe(true);
+    expect(golden.scenarioId).toBe('SCENARIO_GOLDEN');
+    expect(golden.outputSummary).toContain('Golden Journey validated');
+    expect(golden.logs.some((l) => l.includes('Shettihalli'))).toBe(true);
+    expect(golden.logs.some((l) => l.includes('Belur Chennakeshava'))).toBe(true);
+    expect(golden.logs.some((l) => l.includes('Mullayanagiri'))).toBe(true);
   });
 });

@@ -3695,6 +3695,27 @@ export const KARNATAKA_POIS: KarnatakaPOI[] = [
 
 export const CURATED_CIRCUIT_PRESETS: CuratedCircuitPreset[] = [
   {
+    id: 'circuit-golden-bengaluru-mullayanagiri',
+    title: 'Golden Trail: Bengaluru → Hassan → Belur → Chikkamagaluru → Mullayanagiri',
+    subtitle: 'ಸುವರ್ಣ ಪಥ: ಬೆಂಗಳೂರು, ಹಾಸನ ಪರಂಪರೆ, ಬೇಲೂರು ಶಿಲ್ಪಕಲೆ, ಕಾಫಿ ಗಿರಿಧಾಮ ಮತ್ತು ಮುಳ್ಳಯ್ಯನಗಿರಿ (1,930m)',
+    days: 3,
+    defaultTier: 'comfort',
+    stopIds: [
+      'rail-sbc',
+      'poi-shettihalli-church',
+      'poi-belur-halebidu',
+      'poi-hirekolale-lake',
+      'poi-mullayanagiri',
+    ],
+    highlights: [
+      'Depart Bengaluru Majestic (SBC) via NH-75 expressway corridor',
+      'Hassan Shettihalli Gothic rosary church on Hemavathi backwaters',
+      'Belur Chennakeshava UNESCO Hoysala stone filigree & noon darshan schedule',
+      'Hirekolale lake coffee valley reflections in Chikkamagaluru',
+      'Summit sunset trek at Mullayanagiri (1,930m) before 17:30 gate restriction',
+    ],
+  },
+  {
     id: 'circuit-royal-mysuru-coorg',
     title: 'Royal Mysuru, Kabini & Misty Coorg',
     subtitle: 'Palaces, Tiger Safari & Western Ghats Coffee Estates',

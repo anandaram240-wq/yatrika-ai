@@ -11,6 +11,27 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['maplibre-gl'],
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules/maplibre-gl')) {
+            return 'vendor-maplibre';
+          }
+          if (id.includes('node_modules/react') || id.includes('node_modules/scheduler')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
+          if (id.includes('src/data/karnatakaTravelRegistry') || id.includes('src/data/karnataka500Registry')) {
+            return 'dataset-karnataka';
+          }
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       // Proxy OSRM requests to bypass potential network latency / SNI issues

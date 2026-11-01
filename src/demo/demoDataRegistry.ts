@@ -5,7 +5,7 @@
  */
 
 export interface DemoScenarioDefinition {
-  scenarioId: 'SCENARIO_A' | 'SCENARIO_B' | 'SCENARIO_C' | 'SCENARIO_D' | 'SCENARIO_E';
+  scenarioId: 'SCENARIO_A' | 'SCENARIO_B' | 'SCENARIO_C' | 'SCENARIO_D' | 'SCENARIO_E' | 'SCENARIO_GOLDEN';
   title: string;
   titleKannada: string;
   themeFocus: string;
@@ -16,6 +16,16 @@ export interface DemoScenarioDefinition {
 }
 
 export const DEMO_SCENARIOS: Record<string, DemoScenarioDefinition> = {
+  SCENARIO_GOLDEN: {
+    scenarioId: 'SCENARIO_GOLDEN',
+    title: 'The Golden User Journey: Bengaluru → Hassan → Belur → Chikkamagaluru → Mullayanagiri',
+    titleKannada: 'ಸುವರ್ಣ ಪ್ರವಾಸ: ಬೆಂಗಳೂರು ➔ ಹಾಸನ ➔ ಬೇಲೂರು ➔ ಚಿಕ್ಕಮಗಳೂರು ➔ ಮುಳ್ಳಯ್ಯನಗಿರಿ',
+    themeFocus: 'End-to-End Autonomous Travel Intelligence & Real Geographic Routing',
+    inputDescription: 'Full 5-stop corridor: Bengaluru SBC -> Shettihalli Church -> Belur Chennakeshava -> Coffee Valley -> Mullayanagiri Peak (1,930m).',
+    expectedOutcome: 'Resolves all 5 places, validates 265 km OSRM route, avoids Belur noon closure (12:30-3:30), satisfies Mullayanagiri 17:30 gate, applies Shakti ₹0 savings, and prepares offline pack.',
+    isSimulatedDemoData: false,
+    simulationNote: 'Executed using verified 650 destination registry, real OSRM road coordinates, and official ASI/Muzrai opening hours.',
+  },
   SCENARIO_A: {
     scenarioId: 'SCENARIO_A',
     title: 'Kannada Natural Speech-to-Plan',

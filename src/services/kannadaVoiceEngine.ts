@@ -259,6 +259,13 @@ export function parseKannadaTripRequest(
     messages.push("Destination inferred from an unmarked place name; confirm before using the itinerary.");
   }
 
+  // Any remaining unmarked intermediate places between origin and destination are via stops
+  if (contexts.length > 0 && (origins.length > 0 || destinations.length > 0)) {
+    contexts.forEach((ctx) => {
+      via.push({ ...ctx, role: "via" });
+    });
+  }
+
   if (origins.length > 1) messages.push("More than one origin was detected. Please confirm the starting point.");
   if (destinations.length > 1) messages.push("More than one destination was detected. Please confirm the destination.");
   if (origins.length === 0) messages.push("No explicit trip origin was found.");

@@ -468,12 +468,22 @@ export function App() {
     return pts;
   }, [route]);
 
-  const handleRunJuryScenario = async (scenarioKey: 'A' | 'B' | 'C' | 'D' | 'E' | 'RESET') => {
+  const handleRunJuryScenario = async (scenarioKey: 'A' | 'B' | 'C' | 'D' | 'E' | 'GOLDEN' | 'RESET') => {
     if (scenarioKey === 'RESET') {
       DemoResetController.resetCompleteDemoEnvironment();
       setStopIds(CURATED_CIRCUIT_PRESETS[0].stopIds);
       setUserOrigin(KARNATAKA_GATEWAY_ORIGINS[0]);
       setAiStatusBanner('ಡೆಮೊ ಪರಿಸರ ಮರುಹೊಂದಿಸಲಾಗಿದೆ (Demo Environment Reset Completed)');
+      return;
+    }
+
+    if (scenarioKey === 'GOLDEN') {
+      const res = DemoScenarioEngine.runScenarioGolden();
+      setAiStatusBanner(`🌟 ಸುವರ್ಣ ಪ್ರವಾಸ: ${res.outputSummary}`);
+      setUserOrigin(KARNATAKA_GATEWAY_ORIGINS[0]); // Bengaluru
+      setStopIds(['poi-shettihalli-church', 'poi-belur-halebidu', 'poi-hirekolale-lake', 'poi-mullayanagiri']);
+      setDays(3);
+      setActiveTab('timeline');
       return;
     }
 
@@ -2651,6 +2661,24 @@ export function App() {
             {/* Jury-Ready Demonstration System Pill */}
             <div className="nt-map-glass-pill" style={{ background: '#fef3c7', borderColor: '#fde68a' }}>
               <span style={{ fontWeight: 800, color: '#92400e' }}>🎯 Jury Demos:</span>
+              <button
+                type="button"
+                onClick={() => handleRunJuryScenario('GOLDEN')}
+                style={{
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #ea580c, #b45309)',
+                  color: '#fff',
+                  padding: '3px 10px',
+                  borderRadius: 6,
+                  fontSize: 11,
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 4px rgba(234, 88, 12, 0.4)',
+                }}
+                title="The Golden User Journey: Bengaluru -> Hassan -> Belur -> Chikkamagaluru -> Mullayanagiri"
+              >
+                🌟 Golden Journey
+              </button>
               <button
                 type="button"
                 onClick={() => handleRunJuryScenario('A')}

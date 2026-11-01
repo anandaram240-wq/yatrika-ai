@@ -22,6 +22,7 @@ export const BusSearchWorkspace: React.FC<BusSearchWorkspaceProps> = ({
 }) => {
   const [origin, setOrigin] = useState(initialOrigin);
   const [destination, setDestination] = useState(initialDestination);
+  const [journeyDate, setJourneyDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
   const [operatorFilter, setOperatorFilter] = useState<string>('all');
   const [shaktiOnly, setShaktiOnly] = useState(false);
   const womenPassengers = 1;
@@ -54,8 +55,33 @@ export const BusSearchWorkspace: React.FC<BusSearchWorkspaceProps> = ({
         </div>
       </div>
 
+      {/* Distinction Pillars Banner */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4 p-3 bg-white rounded-xl border border-[#E8DFD3] text-xs">
+        <div className="flex items-center gap-2 text-[#4A443C]">
+          <span className="text-sm">📋</span>
+          <div>
+            <strong className="block text-[#1A1714]">ಪ್ರಕಟಿತ ವೇಳಾಪಟ್ಟಿ</strong>
+            <span className="text-[11px] text-[#7A7369]">KSRTC Published Timetables</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 text-[#4A443C]">
+          <span className="text-sm">🛰️</span>
+          <div>
+            <strong className="block text-[#1A1714]">ಲೈವ್ ಟ್ರ್ಯಾಕಿಂಗ್</strong>
+            <span className="text-[11px] text-[#7A7369]">Mitra App / Depot Enquiry</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 text-[#4A443C]">
+          <span className="text-sm">🎫</span>
+          <div>
+            <strong className="block text-[#1A1714]">ಅಧಿಕೃತ ಬುಕಿಂಗ್ ಹಸ್ತಾಂತರ</strong>
+            <span className="text-[11px] text-[#7A7369]">KSRTC Awatar Portal</span>
+          </div>
+        </div>
+      </div>
+
       {/* Search Filter Controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 my-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 my-5">
         <div>
           <label className="block text-xs font-medium text-[#7A7369] mb-1">ಪ್ರಾರಂಭ • Origin</label>
           <input
@@ -74,6 +100,17 @@ export const BusSearchWorkspace: React.FC<BusSearchWorkspaceProps> = ({
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             placeholder="e.g. Belur, Hampi, Gokarna"
+            className="w-full text-sm bg-white border border-[#D5C9B8] rounded-xl px-3 py-2 text-[#1A1714] focus:outline-none focus:ring-1 focus:ring-[#A44A28]"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-[#7A7369] mb-1">ಪ್ರಯಾಣದ ದಿನಾಂಕ • Date</label>
+          <input
+            type="date"
+            value={journeyDate}
+            onChange={(e) => setJourneyDate(e.target.value)}
+            min={new Date().toISOString().split('T')[0]}
             className="w-full text-sm bg-white border border-[#D5C9B8] rounded-xl px-3 py-2 text-[#1A1714] focus:outline-none focus:ring-1 focus:ring-[#A44A28]"
           />
         </div>

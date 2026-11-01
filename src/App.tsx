@@ -50,6 +50,7 @@ import { EditorialVoiceModal } from './features/voice/EditorialVoiceModal';
 import { BusSearchWorkspace } from './components/BusSearchWorkspace';
 import { TrainJourneyPlanner } from './components/TrainJourneyPlanner';
 import { StayDiscoveryWorkspace } from './components/StayDiscoveryWorkspace';
+import { TransportDirectoryWorkspace } from './components/TransportDirectoryWorkspace';
 
 // High-resolution curated photography for each Karnataka POI
 // Geodesic distance calculation between two [lng, lat] coordinates in kilometers
@@ -82,6 +83,25 @@ export function App() {
   const initialTrip = useMemo(() => {
     if (typeof window !== 'undefined' && window.location.search) {
       return parseTripFromQueryString(window.location.search);
+    }
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('yatrika_active_trip');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed.stopIds) && parsed.stopIds.length > 0) {
+            return {
+              origin: parsed.origin,
+              stopIds: parsed.stopIds,
+              days: parsed.days || 3,
+              travellers: parsed.travellers || 2,
+              tier: parsed.tier || 'comfort',
+            };
+          }
+        }
+      } catch {
+        // Fallback to default preset
+      }
     }
     return parseTripFromQueryString('');
   }, []);
@@ -149,7 +169,14 @@ export function App() {
     return 'explore';
   });
 
-  const [transitHubTab, setTransitHubTab] = useState<'buses' | 'trains' | 'stays'>('buses');
+  const [transitHubTab, setTransitHubTab] = useState<'directory' | 'buses' | 'trains' | 'stays'>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const sub = p.get('sub');
+      if (sub === 'directory' || sub === 'buses' || sub === 'trains' || sub === 'stays') return sub;
+    }
+    return 'directory';
+  });
 
   // Selected POI for the Destination Detail Dossier Drawer
   const [detailPoiId, setDetailPoiId] = useState<string | null>(() => {
@@ -474,11 +501,19 @@ export function App() {
     [routeGeometryData, userOrigin.coordinates]
   );
 
-  // Sync URL query string
+  // Sync URL query string and persist trip state to localStorage
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const qs = serializeTripToQueryString({ origin: userOrigin.id, stopIds, days, travellers, tier: budgetTier });
     window.history.replaceState(null, '', qs);
+    try {
+      localStorage.setItem(
+        'yatrika_active_trip',
+        JSON.stringify({ origin: userOrigin.id, stopIds, days, travellers, tier: budgetTier })
+      );
+    } catch {
+      // Private browsing or quota limit
+    }
   }, [userOrigin.id, stopIds, days, travellers, budgetTier]);
 
   // Budget & Shakti ₹0 Bus Savings
@@ -869,7 +904,7 @@ export function App() {
   };
 
   const handleRemoveStop = (id: string) => {
-    if (stopIds.length <= 2) return;
+    if (stopIds.length <= 1) return;
     setStopIds((prev) => prev.filter((item) => item !== id));
   };
 
@@ -878,6 +913,14 @@ export function App() {
       setStopIds((prev) => [...prev, id]);
     }
     setSelectedPoiId(id);
+  };
+
+  const handleToggleStop = (id: string) => {
+    if (stopIds.includes(id)) {
+      handleRemoveStop(id);
+    } else {
+      handleAddStop(id);
+    }
   };
 
   const handleDownloadMarkdown = () => {
@@ -1012,7 +1055,7 @@ export function App() {
           onChangeOrigin={(orig) => setUserOrigin(orig)}
           onSelectCircuit={(cid) => handleLoadCircuit(cid)}
           onSelectPoiDetail={(pid) => setDetailPoiId(pid)}
-          onAddPoiToTrip={(pid) => handleAddStop(pid)}
+          onAddPoiToTrip={(pid) => handleToggleStop(pid)}
           itineraryStopIds={stopIds}
           onOpenVoice={() => setIsVoiceAssistantOpen(true)}
           onSearchSubmit={(prompt) => {
@@ -1062,7 +1105,18 @@ export function App() {
             </div>
 
             {/* Hub Sub-Tabs */}
-            <div className="flex items-center gap-2 bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E8DFD3]">
+            <div className="flex flex-wrap items-center gap-2 bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E8DFD3]">
+              <button
+                type="button"
+                onClick={() => setTransitHubTab('directory')}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                  transitHubTab === 'directory'
+                    ? 'bg-[#7C3AED] text-white shadow-sm'
+                    : 'text-[#7A7369] hover:text-[#1A1714]'
+                }`}
+              >
+                🏛️ {uiLanguage === 'kn' ? 'ನಿಲ್ದಾಣಗಳ ಕೈಪಿಡಿ (Directory)' : 'Transport Directory'}
+              </button>
               <button
                 type="button"
                 onClick={() => setTransitHubTab('buses')}
@@ -1100,6 +1154,15 @@ export function App() {
           </div>
 
           {/* Active Tab View */}
+          {transitHubTab === 'directory' && (
+            <TransportDirectoryWorkspace
+              onSelectFacility={(poiId) => setDetailPoiId(poiId)}
+              onAddToTrip={(poiId) => handleToggleStop(poiId)}
+              itineraryStopIds={stopIds}
+              uiLanguage={uiLanguage}
+            />
+          )}
+
           {transitHubTab === 'buses' && (
             <BusSearchWorkspace
               initialOrigin={userOrigin.name.split('(')[0].trim()}

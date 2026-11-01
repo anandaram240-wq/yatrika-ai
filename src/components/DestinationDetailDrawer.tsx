@@ -56,7 +56,7 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
 
   // Look up V8 comprehensive dossier if available
   const compDest: ComprehensiveDestination | undefined = DestinationRegistryV8.getInstance().getById(poi.id);
-  const photoMeta = getAuthenticDestinationPhoto(poi.id);
+  const photoMeta = getAuthenticDestinationPhoto(poi.id, poi.category, poi.name, poi.district);
   const airDistanceKm = originCoordinates ? computeDistanceKm(originCoordinates, poi.coordinates) : null;
 
   // Stays nearby
@@ -142,8 +142,20 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
           {/* Quick Metrics Bar */}
           <div className="yt-drawer-metrics-grid my-3">
             <div className="yt-metric-cell">
-              <span className="yt-metric-label">{uiLanguage === 'kn' ? 'ಸಮಯಾವಧಿ' : 'Recommended Time'}</span>
-              <span className="yt-metric-value">⏱️ {Math.round((poi.recommendedHours || 1.5) * 60)} mins</span>
+              <span className="yt-metric-label">
+                {poi.category === 'railway_station' || poi.category === 'bus_terminal' || poi.category === 'airport'
+                  ? (uiLanguage === 'kn' ? 'ನಿಲ್ದಾಣದ ವರ್ಗ' : 'Hub Classification')
+                  : (uiLanguage === 'kn' ? 'ಸಮಯಾವಧಿ' : 'Recommended Time')}
+              </span>
+              <span className="yt-metric-value">
+                {poi.category === 'railway_station'
+                  ? `🚆 Railway Hub (${poi.transportMeta?.officialCode || 'SWR'})`
+                  : poi.category === 'bus_terminal'
+                  ? `🚌 Bus Hub (${poi.transportMeta?.zoneOrOperator?.split(' ')[0] || 'KSRTC'})`
+                  : poi.category === 'airport'
+                  ? '✈️ Regional Airport'
+                  : `⏱️ ${Math.round((poi.recommendedHours || 1.5) * 60)} mins`}
+              </span>
             </div>
 
             <div className="yt-metric-cell">

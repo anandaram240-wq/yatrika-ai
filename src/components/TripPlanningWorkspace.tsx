@@ -111,10 +111,18 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
   const [transitSubTab, setTransitSubTab] = useState<'origin' | 'trains' | 'buses'>('origin');
   const [discoverSearch, setDiscoverSearch] = useState('');
   const [discoverRegion, setDiscoverRegion] = useState('all');
+  const [discoverCategory, setDiscoverCategory] = useState<'all' | 'attractions' | 'railway_station' | 'bus_terminal'>('all');
 
   const filteredDiscoverPois = useMemo(() => {
     return KARNATAKA_POIS.filter((p) => {
       if (discoverRegion !== 'all' && p.macroRegion !== discoverRegion) return false;
+      if (discoverCategory === 'attractions') {
+        if (p.category === 'railway_station' || p.category === 'bus_terminal' || p.category === 'airport') return false;
+      } else if (discoverCategory === 'railway_station') {
+        if (p.category !== 'railway_station') return false;
+      } else if (discoverCategory === 'bus_terminal') {
+        if (p.category !== 'bus_terminal') return false;
+      }
       if (discoverSearch.trim()) {
         const q = discoverSearch.toLowerCase();
         return (
@@ -125,7 +133,7 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
       }
       return true;
     });
-  }, [discoverSearch, discoverRegion]);
+  }, [discoverSearch, discoverRegion, discoverCategory]);
 
   const originTrains = useMemo(() => {
     const list = getTrainsForOrigin(userOrigin.id);
@@ -292,7 +300,7 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
 
               {/* Sequential Destination Stops */}
               {itineraryStops.map((stop, idx) => {
-                const photoMeta = getAuthenticDestinationPhoto(stop.id);
+                const photoMeta = getAuthenticDestinationPhoto(stop.id, stop.category, stop.name, stop.district);
                 const nextLeg = route.legs[idx + 1];
                 const weather = stopsWeather.get(stop.id);
 
@@ -307,6 +315,12 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                             alt={stop.name}
                             className="yt-stop-card-thumb"
                             onClick={() => onSelectPoiDetail(stop.id)}
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              if (!target.src.startsWith('data:image/svg+xml')) {
+                                target.src = photoMeta.imageUrl;
+                              }
+                            }}
                           />
 
                           <div className="yt-stop-card-info">
@@ -353,7 +367,15 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                             <div className="yt-stop-subline">
                               <span>📍 {stop.district} District</span>
                               <span>•</span>
-                              <span>⏱️ {stop.recommendedHours || 1.5}h visit</span>
+                              {stop.category === 'railway_station' ? (
+                                <span className="font-semibold text-[#7C3AED]">🚆 Railway Interchange ({stop.transportMeta?.officialCode || 'SWR'})</span>
+                              ) : stop.category === 'bus_terminal' ? (
+                                <span className="font-semibold text-[#DC2626]">🚌 Bus Interchange ({stop.transportMeta?.zoneOrOperator?.split(' ')[0] || 'KSRTC'})</span>
+                              ) : stop.category === 'airport' ? (
+                                <span className="font-semibold text-[#3B82F6]">✈️ Regional Airport</span>
+                              ) : (
+                                <span>⏱️ {stop.recommendedHours || 1.5}h visit</span>
+                              )}
                               {weather && <span>• {weather.emoji} {weather.tempC}°C</span>}
                             </div>
 
@@ -726,11 +748,43 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                     </button>
                   ))}
                 </div>
+
+                {/* Category Filter Chips */}
+                <div className="yt-discover-region-chips" style={{ marginTop: 6 }}>
+                  <button
+                    type="button"
+                    className={`yt-dchip ${discoverCategory === 'all' ? 'active' : ''}`}
+                    onClick={() => setDiscoverCategory('all')}
+                  >
+                    ✨ All Places
+                  </button>
+                  <button
+                    type="button"
+                    className={`yt-dchip ${discoverCategory === 'attractions' ? 'active' : ''}`}
+                    onClick={() => setDiscoverCategory('attractions')}
+                  >
+                    🏰 Attractions & Heritage
+                  </button>
+                  <button
+                    type="button"
+                    className={`yt-dchip ${discoverCategory === 'railway_station' ? 'active' : ''}`}
+                    onClick={() => setDiscoverCategory('railway_station')}
+                  >
+                    🚆 Railway Stations
+                  </button>
+                  <button
+                    type="button"
+                    className={`yt-dchip ${discoverCategory === 'bus_terminal' ? 'active' : ''}`}
+                    onClick={() => setDiscoverCategory('bus_terminal')}
+                  >
+                    🚌 Bus Terminals
+                  </button>
+                </div>
               </div>
 
               <div className="yt-discover-items-list">
                 {filteredDiscoverPois.slice(0, 30).map((poi) => {
-                  const photo = getAuthenticDestinationPhoto(poi.id);
+                  const photo = getAuthenticDestinationPhoto(poi.id, poi.category, poi.name, poi.district);
                   const isAlreadyInTrip = itineraryStops.some((s) => s.id === poi.id);
 
                   return (
@@ -740,6 +794,12 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                         alt={poi.name}
                         className="yt-dcard-thumb"
                         onClick={() => onSelectPoiDetail(poi.id)}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.src.startsWith('data:image/svg+xml')) {
+                            target.src = photo.imageUrl;
+                          }
+                        }}
                       />
                       <div className="yt-dcard-info">
                         <div className="yt-dcard-kannada font-kannada">{poi.nameKannada}</div>
@@ -749,7 +809,15 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                         <div className="yt-dcard-meta">
                           <span>📍 {poi.district}</span>
                           <span>•</span>
-                          <span>⏱️ {poi.recommendedHours || 1.5}h</span>
+                          {poi.category === 'railway_station' ? (
+                            <span className="font-semibold text-[#7C3AED]">🚆 Railway Interchange ({poi.transportMeta?.officialCode || 'SWR'})</span>
+                          ) : poi.category === 'bus_terminal' ? (
+                            <span className="font-semibold text-[#DC2626]">🚌 Bus Interchange ({poi.transportMeta?.zoneOrOperator?.split(' ')[0] || 'KSRTC'})</span>
+                          ) : poi.category === 'airport' ? (
+                            <span className="font-semibold text-[#3B82F6]">✈️ Regional Airport</span>
+                          ) : (
+                            <span>⏱️ {poi.recommendedHours || 1.5}h</span>
+                          )}
                         </div>
                       </div>
 

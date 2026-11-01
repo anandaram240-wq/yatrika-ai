@@ -22,6 +22,7 @@ export const TrainJourneyPlanner: React.FC<TrainJourneyPlannerProps> = ({
 }) => {
   const [fromStation, setFromStation] = useState(initialFrom);
   const [toStation, setToStation] = useState(initialTo);
+  const [journeyDate, setJourneyDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
 
   const searchResponse = TrainSearchService.search({
     fromStationCodeOrCity: fromStation,
@@ -47,8 +48,33 @@ export const TrainJourneyPlanner: React.FC<TrainJourneyPlannerProps> = ({
         </div>
       </div>
 
-      {/* From / To Controls */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-5">
+      {/* Distinction Pillars Banner */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4 p-3 bg-white rounded-xl border border-[#E8DFD3] text-xs">
+        <div className="flex items-center gap-2 text-[#4A443C]">
+          <span className="text-sm">📋</span>
+          <div>
+            <strong className="block text-[#1A1714]">ಅಧಿಕೃತ ವೇಳಾಪಟ್ಟಿ</strong>
+            <span className="text-[11px] text-[#7A7369]">SWR Published Timetable</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 text-[#4A443C]">
+          <span className="text-sm">🛰️</span>
+          <div>
+            <strong className="block text-[#1A1714]">ಲೈವ್ ಸ್ಟೇಟಸ್ ತನಿಖೆ</strong>
+            <span className="text-[11px] text-[#7A7369]">NTES GPS Train Tracking</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 text-[#4A443C]">
+          <span className="text-sm">🎫</span>
+          <div>
+            <strong className="block text-[#1A1714]">ಬುಕಿಂಗ್ ಸಂಪರ್ಕ</strong>
+            <span className="text-[11px] text-[#7A7369]">Official IRCTC Portal</span>
+          </div>
+        </div>
+      </div>
+
+      {/* From / To / Date Controls */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-5">
         <div>
           <label className="block text-xs font-medium text-[#7A7369] mb-1">ಪ್ರಾರಂಭದ ನಿಲ್ದಾಣ • From Station</label>
           <select
@@ -83,6 +109,17 @@ export const TrainJourneyPlanner: React.FC<TrainJourneyPlannerProps> = ({
             <option value="MYS">MYS - Mysuru Junction (Vande Bharat)</option>
             <option value="UBL">UBL - SSS Hubballi Junction</option>
           </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-[#7A7369] mb-1">ಪ್ರಯಾಣದ ದಿನಾಂಕ • Journey Date</label>
+          <input
+            type="date"
+            value={journeyDate}
+            onChange={(e) => setJourneyDate(e.target.value)}
+            min={new Date().toISOString().split('T')[0]}
+            className="w-full text-sm bg-white border border-[#D5C9B8] rounded-xl px-3 py-2 text-[#1A1714] focus:outline-none focus:ring-1 focus:ring-[#2B4C3F]"
+          />
         </div>
       </div>
 

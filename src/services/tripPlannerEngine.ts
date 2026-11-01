@@ -103,7 +103,7 @@ export function parseTripFromQueryString(search: string): ShareableTripState {
     : [];
 
   const defaultPreset = CURATED_CIRCUIT_PRESETS[0];
-  const stopIds = validStopIds.length >= 2 ? validStopIds : defaultPreset.stopIds;
+  const stopIds = validStopIds.length >= 1 ? validStopIds : defaultPreset.stopIds;
   const days = Math.max(1, Math.min(14, Number(params.get('days')) || defaultPreset.days));
   const travellers = Math.max(1, Math.min(12, Number(params.get('travellers')) || 2));
   const rawTier = params.get('tier') as BudgetTier;

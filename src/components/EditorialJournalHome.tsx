@@ -6,7 +6,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { KARNATAKA_POIS, KARNATAKA_GATEWAY_ORIGINS, UserOriginOption } from '../data/karnatakaTravelRegistry';
-import { KARNATAKA_AUTHENTIC_PHOTOS } from '../data/karnatakaPhotoRegistry';
+import { getAuthenticDestinationPhoto } from '../data/karnatakaPhotoRegistry';
 import { VERIFIED_KARNATAKA_STAYS } from '../stays/accommodationRegistry';
 import { VERIFIED_KARNATAKA_RESTAURANTS } from '../dining/restaurantRegistry';
 
@@ -63,11 +63,8 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
     }
   };
 
-  const getPoiPhoto = (poiId: string) => {
-    if (KARNATAKA_AUTHENTIC_PHOTOS[poiId]) {
-      return KARNATAKA_AUTHENTIC_PHOTOS[poiId].imageUrl;
-    }
-    return 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Chennakeshava_temple_Belur_761.jpg';
+  const getPoiPhoto = (poiId: string, category?: string, name?: string, district?: string) => {
+    return getAuthenticDestinationPhoto(poiId, category, name, district).imageUrl;
   };
 
   return (
@@ -496,7 +493,7 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
         <div className="yt-destinations-grid">
           {filteredPois.slice(0, 16).map((poi) => {
             const isAdded = itineraryStopIds.includes(poi.id);
-            const photoUrl = getPoiPhoto(poi.id);
+            const photoUrl = getPoiPhoto(poi.id, poi.category, poi.name, poi.district);
             return (
               <article key={poi.id} className="yt-dest-card">
                 <div
@@ -505,7 +502,19 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
                   role="button"
                   tabIndex={0}
                 >
-                  <img src={photoUrl} alt={poi.name} className="yt-dest-img" loading="lazy" />
+                  <img
+                    src={photoUrl}
+                    alt={poi.name}
+                    className="yt-dest-img"
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      const fallback = getAuthenticDestinationPhoto(poi.id, poi.category, poi.name, poi.district);
+                      if (!target.src.startsWith('data:image/svg+xml')) {
+                        target.src = fallback.imageUrl;
+                      }
+                    }}
+                  />
                   <span className="yt-dest-badge">{poi.category.replace('_', ' ')}</span>
                   <span className="yt-dest-district">{poi.district}</span>
                 </div>
@@ -521,7 +530,13 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
 
                   <div className="yt-dest-footer">
                     <span className="yt-dest-time">
-                      ⏱️ {Math.round((poi.recommendedHours || 1.5) * 60)}m visit
+                      {poi.category === 'railway_station'
+                        ? `🚆 Railway Interchange (${poi.transportMeta?.officialCode || 'SWR'})`
+                        : poi.category === 'bus_terminal'
+                        ? `🚌 Bus Interchange (${poi.transportMeta?.zoneOrOperator?.split(' ')[0] || 'KSRTC'})`
+                        : poi.category === 'airport'
+                        ? '✈️ Regional Airport'
+                        : `⏱️ ${Math.round((poi.recommendedHours || 1.5) * 60)}m visit`}
                     </span>
                     <button
                       type="button"

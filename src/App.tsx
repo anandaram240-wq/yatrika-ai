@@ -272,10 +272,10 @@ export function App() {
     },
   }), [userOrigin]);
 
-  const fullRouteStops = useMemo<KarnatakaPOI[]>(
-    () => [originPoi, ...itineraryStops],
-    [originPoi, itineraryStops]
-  );
+  const fullRouteStops = useMemo<KarnatakaPOI[]>(() => {
+    const filtered = itineraryStops.filter((s) => s.id !== originPoi.id);
+    return [originPoi, ...filtered];
+  }, [originPoi, itineraryStops]);
 
   const [route, setRoute] = useState<ComputedTripRoute>(() =>
     buildFallbackRoadCorridor(fullRouteStops)
@@ -997,7 +997,13 @@ export function App() {
 
   const handleShareTrip = () => {
     if (typeof window !== 'undefined') {
-      navigator.clipboard.writeText(window.location.href);
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(window.location.href).catch(() => {});
+        }
+      } catch (e) {
+        // Fallback
+      }
       setShareCopied(true);
       setTimeout(() => setShareCopied(false), 2000);
     }

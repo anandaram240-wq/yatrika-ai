@@ -270,6 +270,17 @@ export const BusSearchWorkspace: React.FC<BusSearchWorkspaceProps> = ({
                       ಟ್ರಿಪ್‌ಗೆ ಸೇರಿಸಿ (+ Add to Trip)
                     </button>
                   )}
+                  {schedule.operatorId === 'BMTC' && handoff.playStoreUrl && (
+                    <a
+                      href={handoff.playStoreUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 text-xs rounded-lg border border-[#D5C9B8] hover:bg-[#FAF7F2] transition-colors text-[#4A443C]"
+                      title="Download official Namma BMTC 2.0 Android app for live bus tracking"
+                    >
+                      📲 ನಮ್ಮ BMTC ಆ್ಯಪ್
+                    </a>
+                  )}
                   <a
                     href={handoff.handoffUrl}
                     target="_blank"

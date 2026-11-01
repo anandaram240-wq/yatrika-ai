@@ -202,51 +202,141 @@ export interface ParsedAiTripPrompt {
 export function parseNaturalLanguageTripPrompt(prompt: string): ParsedAiTripPrompt {
   const p = prompt.toLowerCase();
 
-  // Extract Days
+  // Extract Days (English & Kannada numerals/words)
   let days = 3;
-  const daysMatch = p.match(/(\d+)\s*(?:day|days|d)/);
+  const daysMatch = p.match(/(\d+)\s*(?:day|days|d|ದಿನ)/);
   if (daysMatch) {
     days = Math.max(1, Math.min(10, parseInt(daysMatch[1], 10)));
+  } else if (p.includes('ಒಂದು ದಿನ') || p.includes('೧ ದಿನ')) {
+    days = 1;
+  } else if (p.includes('ಎರಡು ದಿನ') || p.includes('೨ ದಿನ')) {
+    days = 2;
+  } else if (p.includes('ಮೂರು ದಿನ') || p.includes('೩ ದಿನ')) {
+    days = 3;
+  } else if (p.includes('ನಾಲ್ಕು ದಿನ') || p.includes('೪ ದಿನ')) {
+    days = 4;
+  } else if (p.includes('ಐದು ದಿನ') || p.includes('೫ ದಿನ')) {
+    days = 5;
+  } else if (p.includes('ಆರು ದಿನ') || p.includes('೬ ದಿನ') || p.includes('ವಾರ')) {
+    days = 7;
   }
 
-  // Extract Travellers
+  // Extract Travellers (English & Kannada)
   let travellers = 2;
-  const travMatch = p.match(/(\d+)\s*(?:person|people|traveller|travellers|adults)/);
+  const travMatch = p.match(/(\d+)\s*(?:person|people|traveller|travellers|adults|ಜನ|ಮಂದಿ)/);
   if (travMatch) {
     travellers = Math.max(1, Math.min(12, parseInt(travMatch[1], 10)));
-  } else if (p.includes('solo')) {
+  } else if (p.includes('solo') || p.includes('ಒಬ್ಬರೇ') || p.includes('ಏಕಾಂಗಿ')) {
     travellers = 1;
-  } else if (p.includes('family') || p.includes('group')) {
+  } else if (p.includes('ಇಬ್ಬರು') || p.includes('ದಂಪತಿ') || p.includes('couple')) {
+    travellers = 2;
+  } else if (p.includes('ಮೂವರು')) {
+    travellers = 3;
+  } else if (p.includes('ನಾಲ್ವರು') || p.includes('family') || p.includes('group') || p.includes('ಕುಟುಂಬ') || p.includes('ಗೆಳೆಯರು')) {
     travellers = 4;
   }
 
-  // Extract Tier / Budget
+  // Extract Tier / Budget (English & Kannada)
   let tier: BudgetTier = 'comfort';
-  if (p.includes('budget') || p.includes('cheap') || p.includes('backpacker') || p.includes('hostel') || p.includes('under 3000') || p.includes('under 4000') || p.includes('under 5000')) {
+  if (
+    p.includes('budget') ||
+    p.includes('cheap') ||
+    p.includes('backpacker') ||
+    p.includes('hostel') ||
+    p.includes('under 3000') ||
+    p.includes('under 4000') ||
+    p.includes('under 5000') ||
+    p.includes('5000') ||
+    p.includes('ಐದು ಸಾವಿರ') ||
+    p.includes('ಬಜೆಟ್') ||
+    p.includes('ಕಡಿಮೆ ವೆಚ್ಚ') ||
+    p.includes('ಉಚಿತ')
+  ) {
     tier = 'backpacker';
-  } else if (p.includes('luxury') || p.includes('resort') || p.includes('premium') || p.includes('5-star')) {
+  } else if (
+    p.includes('luxury') ||
+    p.includes('resort') ||
+    p.includes('premium') ||
+    p.includes('5-star') ||
+    p.includes('ಐಷಾರಾಮಿ') ||
+    p.includes('ಪ್ರೀಮಿಯಂ')
+  ) {
     tier = 'premium';
   }
 
-  // Match Circuits / Stops
-  let stopIds: string[] = CURATED_CIRCUIT_PRESETS[0].stopIds;
+  // Find circuits safely by canonical id
+  const unescoCircuit = CURATED_CIRCUIT_PRESETS.find((c) => c.id === 'circuit-unesco-hampi-badami') || CURATED_CIRCUIT_PRESETS[2];
+  const coastCircuit = CURATED_CIRCUIT_PRESETS.find((c) => c.id === 'circuit-karavali-malnad-coast') || CURATED_CIRCUIT_PRESETS[3];
+  const royalCircuit = CURATED_CIRCUIT_PRESETS.find((c) => c.id === 'circuit-royal-mysuru-coorg') || CURATED_CIRCUIT_PRESETS[1];
+  const goldenCircuit = CURATED_CIRCUIT_PRESETS.find((c) => c.id === 'circuit-golden-bengaluru-mullayanagiri') || CURATED_CIRCUIT_PRESETS[0];
+
+  let stopIds: string[] = goldenCircuit.stopIds;
   let summary = `Generated a ${days}-day ${tier} itinerary for ${travellers} travellers.`;
 
-  if (p.includes('hampi') || p.includes('unesco') || p.includes('badami') || p.includes('boulder')) {
-    stopIds = CURATED_CIRCUIT_PRESETS[1].stopIds;
-    summary = `Optimized ${days}-day UNESCO Empire Trail with overnight Hampi Express and Chalukya caves for ${travellers} people.`;
-  } else if (p.includes('coast') || p.includes('beach') || p.includes('gokarna') || p.includes('udupi') || p.includes('waterfall') || p.includes('jog')) {
-    stopIds = CURATED_CIRCUIT_PRESETS[2].stopIds;
+  if (
+    p.includes('hampi') ||
+    p.includes('ಹಂಪಿ') ||
+    p.includes('ಹಂಪಿಗೆ') ||
+    p.includes('unesco') ||
+    p.includes('badami') ||
+    p.includes('ಬಾದಾಮಿ') ||
+    p.includes('hosapete') ||
+    p.includes('ಹೊಸಪೇಟೆ') ||
+    p.includes('ಪಟ್ಟದಕಲ್ಲು') ||
+    p.includes('ಐಹೊಳೆ')
+  ) {
+    stopIds = unescoCircuit.stopIds;
+    summary = `Optimized ${days}-day UNESCO Empire Trail (Hampi, Badami, Pattadakal) with SWR rail and heritage corridors for ${travellers} travellers.`;
+  } else if (
+    p.includes('coast') ||
+    p.includes('beach') ||
+    p.includes('gokarna') ||
+    p.includes('ಗೋಕರ್ಣ') ||
+    p.includes('udupi') ||
+    p.includes('ಉಡುಪಿ') ||
+    p.includes('ಕರಾವಳಿ') ||
+    p.includes('waterfall') ||
+    p.includes('jog') ||
+    p.includes('ಜೋಗ') ||
+    p.includes('ಮಂಗಳೂರು')
+  ) {
+    stopIds = coastCircuit.stopIds;
     summary = `Assembled ${days}-day Karavali Coastal & Malnad Waterfalls circuit connecting Udupi, Gokarna, and Jog Falls.`;
-  } else if (p.includes('coorg') || p.includes('mysore') || p.includes('mysuru') || p.includes('palace') || p.includes('safari') || p.includes('kabini')) {
-    stopIds = CURATED_CIRCUIT_PRESETS[0].stopIds;
+  } else if (
+    p.includes('chikkamagaluru') ||
+    p.includes('ಚಿಕ್ಕಮಗಳೂರು') ||
+    p.includes('mullayanagiri') ||
+    p.includes('ಮುಳ್ಳಯ್ಯನಗಿರಿ') ||
+    p.includes('belur') ||
+    p.includes('ಬೇಲೂರು') ||
+    p.includes('halebidu') ||
+    p.includes('ಹಳೇಬೀಡು') ||
+    p.includes('ಶೆಟ್ಟಿಹಳ್ಳಿ')
+  ) {
+    stopIds = goldenCircuit.stopIds;
+    summary = `Crafted ${days}-day Golden Coffee & Hoysala Trail across Belur, Shettihalli, and Mullayanagiri peak.`;
+  } else if (
+    p.includes('coorg') ||
+    p.includes('ಕೂರ್ಗ್') ||
+    p.includes('ಕೊಡಗು') ||
+    p.includes('madikeri') ||
+    p.includes('ಮಡಿಕೇರಿ') ||
+    p.includes('mysore') ||
+    p.includes('ಮೈಸೂರು') ||
+    p.includes('ಮೈಸೂರಿಗೆ') ||
+    p.includes('palace') ||
+    p.includes('safari') ||
+    p.includes('kabini')
+  ) {
+    stopIds = royalCircuit.stopIds;
     summary = `Tailored ${days}-day Royal Mysuru, Kabini Safari & Misty Coorg circuit with Vande Bharat rail connections.`;
   } else {
-    // Custom keyword search across all POIs
+    // Custom keyword search across all POIs (English and Kannada names)
     const matches = KARNATAKA_POIS.filter(
       (poi) =>
         p.includes(poi.district.toLowerCase()) ||
         p.includes(poi.name.toLowerCase().split(' ')[0]) ||
+        p.includes(poi.nameKannada) ||
         p.includes(poi.category)
     );
     if (matches.length >= 2) {

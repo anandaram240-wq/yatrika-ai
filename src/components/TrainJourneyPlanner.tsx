@@ -23,6 +23,20 @@ export const TrainJourneyPlanner: React.FC<TrainJourneyPlannerProps> = ({
   const [fromStation, setFromStation] = useState(initialFrom);
   const [toStation, setToStation] = useState(initialTo);
   const [journeyDate, setJourneyDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
+  const [copiedTrainNumber, setCopiedTrainNumber] = useState<string | null>(null);
+
+  const handleCopyTrainDetails = (train: any) => {
+    const text = `Train ${train.trainNumber}: ${train.trainName} | From: ${train.originCode} (${train.departureTime}) | To: ${train.destinationCode} (${train.arrivalTime}) | Date: ${journeyDate}`;
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+    } catch (e) {
+      // Graceful fallback
+    }
+    setCopiedTrainNumber(train.trainNumber);
+    setTimeout(() => setCopiedTrainNumber(null), 2500);
+  };
 
   const searchResponse = TrainSearchService.search({
     fromStationCodeOrCity: fromStation,
@@ -230,6 +244,14 @@ export const TrainJourneyPlanner: React.FC<TrainJourneyPlannerProps> = ({
                       ಟ್ರಿಪ್‌ಗೆ ಸೇರಿಸಿ (+ Add to Trip)
                     </button>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => handleCopyTrainDetails(train)}
+                    className="px-3 py-1.5 text-xs rounded-lg border border-[#D5C9B8] hover:bg-[#FAF7F2] transition-colors text-[#4A443C]"
+                    title="Copy train number, schedule and stations for IRCTC"
+                  >
+                    {copiedTrainNumber === train.trainNumber ? '✓ ಕಾಪಿ ಆಗಿದೆ! (Copied)' : '📋 ವಿವರ ಕಾಪಿ (Copy)'}
+                  </button>
                   <a
                     href={train.ntesRunningStatusUrl}
                     target="_blank"

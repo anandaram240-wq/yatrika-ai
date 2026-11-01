@@ -308,7 +308,7 @@ export function calculateMultiStopRoadRoute(
     const fallbackUrl = `${MAP_PROVIDER_CONFIG.osrmBaseUrl}/route/v1/driving/${coordsParam}?${qs}`;
 
     const timeoutController = new AbortController();
-    const timeoutId = setTimeout(() => timeoutController.abort(), 8000);
+    const timeoutId = setTimeout(() => timeoutController.abort(), 3000);
     if (signal) {
       if (signal.aborted) {
         timeoutController.abort();

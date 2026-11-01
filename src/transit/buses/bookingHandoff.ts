@@ -13,6 +13,8 @@ export interface BookingHandoffPayload {
   serviceNumber?: string;
   shaktiEligible: boolean;
   handoffUrl: string;
+  playStoreUrl?: string;
+  appStoreUrl?: string;
   instructionsKannada: string;
   instructionsEnglish: string;
   disclaimer: string;
@@ -27,23 +29,31 @@ export class BusBookingHandoff {
     shaktiEligible: boolean = false
   ): BookingHandoffPayload {
     let handoffUrl = 'https://ksrtc.in/oprs-web/guest/home.do';
+    let playStoreUrl: string | undefined = 'https://play.google.com/store/apps/details?id=com.ksrtc.awatar';
+    let appStoreUrl: string | undefined = undefined;
     let instructionsEnglish = 'You will be redirected to the official KSRTC Awatar portal. Please select your boarding point and seat number.';
     let instructionsKannada = 'ನಿಮ್ಮನ್ನು ಅಧಿಕೃತ ಕೆಎಸ್‌ಆರ್‌ಟಿಸಿ ಅವತಾರ್ ಪೋರ್ಟಲ್‌ಗೆ ಕೊಂಡೊಯ್ಯಲಾಗುತ್ತದೆ. ದಯವಿಟ್ಟು ಬೋರ್ಡಿಂಗ್ ಪಾಯಿಂಟ್ ಮತ್ತು ಸೀಟ್ ಆಯ್ಕೆಮಾಡಿ.';
 
     if (operatorId === 'BMTC') {
       handoffUrl = 'https://mybmtc.karnataka.gov.in/';
-      instructionsEnglish = 'BMTC city buses and Vayu Vajra airport passes can be purchased directly on the bus or via the official Namma BMTC app.';
-      instructionsKannada = 'ಬಿಎಂಟಿಸಿ ನಗರ ಬಸ್ ಮತ್ತು ವಾಯು ವಜ್ರ ಟಿಕೆಟ್‌ಗಳನ್ನು ನೇರವಾಗಿ ಬಸ್ಸಿನಲ್ಲಿ ಅಥವಾ ನಮ್ಮ ಬಿಎಂಟಿಸಿ ಆ್ಯಪ್ ಮೂಲಕ ಪಡೆಯಬಹುದು.';
+      playStoreUrl = 'https://play.google.com/store/apps/details?id=com.bmtc.bmtcavls.two';
+      appStoreUrl = 'https://apps.apple.com/in/app/namma-bmtc-2-0/id6808674938';
+      instructionsEnglish = 'BMTC live tracking and timetable planning is provided exclusively via the official Namma BMTC 2.0 app. Tickets and airport Vayu Vajra passes are purchased on-bus.';
+      instructionsKannada = 'ಬಿಎಂಟಿಸಿ ಲೈವ್ ಬಸ್ ಟ್ರ್ಯಾಕಿಂಗ್ ಮತ್ತು ವೇಳಾಪಟ್ಟಿಗಾಗಿ ಅಧಿಕೃತ ನಮ್ಮ ಬಿಎಂಟಿಸಿ ೨.೦ ಆ್ಯಪ್ ಬಳಸಿ. ಟಿಕೆಟ್‌ಗಳನ್ನು ಬಸ್ಸಿನಲ್ಲಿ ಖರೀದಿಸಬಹುದು.';
     } else if (operatorId === 'NWKRTC') {
       handoffUrl = 'https://nwkrtc.karnataka.gov.in/';
-      instructionsEnglish = 'You will be redirected to the official NWKRTC reservation portal. Select origin, destination, and proceed with payment.';
-      instructionsKannada = 'ನಿಮ್ಮನ್ನು ವಾಯವ್ಯ ಕರ್ನಾಟಕ ರಸ್ತೆ ಸಾರಿಗೆ ಸಂಸ್ಥೆಯ ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್‌ಗೆ ಕೊಂಡೊಯ್ಯಲಾಗುತ್ತದೆ.';
+      playStoreUrl = 'https://play.google.com/store/apps/details?id=com.ksrtc.awatar';
+      instructionsEnglish = 'NWKRTC long-distance seat bookings are integrated with the centralized KSRTC AWATAR portal.';
+      instructionsKannada = 'ವಾಯವ್ಯ ಕರ್ನಾಟಕ ರಸ್ತೆ ಸಾರಿಗೆ ಸಂಸ್ಥೆಯ ಮುಂಗಡ ಆಸನ ಕಾಯ್ದಿರಿಸುವಿಕೆ ಅಧಿಕೃತ ಅವತಾರ್ ಪೋರ್ಟಲ್ ಮೂಲಕ ನಡೆಯುತ್ತದೆ.';
     } else if (operatorId === 'KKRTC') {
-      handoffUrl = 'https://kkrtc.karnataka.gov.in/';
-      instructionsEnglish = 'You will be redirected to the official KKRTC portal for Kalyana Karnataka routes.';
-      instructionsKannada = 'ನಿಮ್ಮನ್ನು ಕಲ್ಯಾಣ ಕರ್ನಾಟಕ ಸಾರಿಗೆ ನಿಗಮದ ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ಗೆ ಕೊಂಡೊಯ್ಯಲಾಗುತ್ತದೆ.';
+      // Passenger portal link (not employee portal)
+      handoffUrl = 'https://kkrtc.karnataka.gov.in/english';
+      playStoreUrl = 'https://play.google.com/store/apps/details?id=com.ksrtc.awatar';
+      instructionsEnglish = 'Official KKRTC passenger portal. Online inter-city seat reservations are processed through KSRTC AWATAR.';
+      instructionsKannada = 'ಕಲ್ಯಾಣ ಕರ್ನಾಟಕ ಸಾರಿಗೆ ನಿಗಮದ ಅಧಿಕೃತ ಪ್ರಯಾಣಿಕರ ಪೋರ್ಟಲ್. ಮುಂಗಡ ಆಸನ ಬುಕಿಂಗ್ ಅವತಾರ್ ವ್ಯವಸ್ಥೆಯಡಿ ಲಭ್ಯವಿದೆ.';
     } else if (operatorId === 'VRL') {
       handoffUrl = 'https://www.vrlbus.in/';
+      playStoreUrl = 'https://play.google.com/store/apps/details?id=com.vrlgroup';
       instructionsEnglish = 'You will be redirected to the verified VRL Travels reservation portal.';
       instructionsKannada = 'ವಿಆರ್‌ಎಲ್ ಟ್ರಾವೆಲ್ಸ್ ಅಧಿಕೃತ ಬುಕಿಂಗ್ ವೆಬ್‌ಸೈಟ್‌ಗೆ ತೆರಳುತ್ತಿದ್ದೀರಿ.';
     }
@@ -60,6 +70,8 @@ export class BusBookingHandoff {
       journeyDate,
       shaktiEligible,
       handoffUrl,
+      playStoreUrl,
+      appStoreUrl,
       instructionsKannada,
       instructionsEnglish,
       disclaimer: 'YatriKa AI does not handle payment processing or issue tickets directly. All bookings occur securely on the transport operator’s official website.',

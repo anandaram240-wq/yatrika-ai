@@ -34,7 +34,19 @@ export const EditorialNavbar: React.FC<EditorialNavbarProps> = ({
   return (
     <nav className="yt-navbar">
       {/* Brand Identity */}
-      <div className="yt-navbar-brand" onClick={() => onSelectView('explore')} role="button" tabIndex={0}>
+      <div
+        className="yt-navbar-brand cursor-pointer"
+        onClick={() => onSelectView('explore')}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelectView('explore');
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="YatriKa Home — Navigate to Discover Journal"
+      >
         <div className="yt-brand-monogram font-kannada">ಯಾ</div>
         <div className="yt-brand-text">
           <div className="yt-brand-name">

@@ -31,7 +31,7 @@ describe('YatriKa AI V8 — Railways & Last-Mile Mobility Suite', () => {
     });
 
     expect(hampiTrainSearch.directTrains.length).toBeGreaterThanOrEqual(1);
-    const hampiExp = hampiTrainSearch.directTrains.find((t) => t.train.trainNumber.includes('16591'));
+    const hampiExp = hampiTrainSearch.directTrains.find((t) => t.train.trainNumber.includes('16592'));
     expect(hampiExp).toBeDefined();
     expect(hampiExp?.train.departureTime).toBe('21:50');
     expect(hampiExp?.irctcBookingUrl).toContain('irctc.co.in');

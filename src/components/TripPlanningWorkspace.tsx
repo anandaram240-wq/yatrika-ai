@@ -183,15 +183,17 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
               <span className="yt-doc-stat-lbl">km</span>
             </div>
             <div className="yt-doc-stat-div">•</div>
-            <div
-              className="yt-doc-stat"
+            <button
+              type="button"
+              className="yt-doc-stat yt-doc-stat-btn"
               onClick={() => setDays(days >= 7 ? 1 : days + 1)}
-              title="Click to adjust duration"
-              style={{ cursor: 'pointer' }}
+              title={uiLanguage === 'kn' ? 'ದಿನಗಳನ್ನು ಬದಲಿಸಲು ಒತ್ತಿ' : 'Click to adjust trip duration'}
+              aria-label={uiLanguage === 'kn' ? `ಪ್ರವಾಸದ ಅವಧಿ: ${days} ದಿನಗಳು. ಬದಲಿಸಲು ಒತ್ತಿ.` : `Trip duration: ${days} days. Click to cycle duration.`}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
             >
               <span className="yt-doc-stat-num">{days}</span>
               <span className="yt-doc-stat-lbl">{uiLanguage === 'kn' ? 'ದಿನಗಳು (ಬದಲಿಸಿ)' : 'Days (tap)'}</span>
-            </div>
+            </button>
             <div className="yt-doc-stat-div">•</div>
             <div className="yt-doc-stat">
               <span className="yt-doc-stat-num text-emerald">₹{netTotalBudgetInr.toLocaleString('en-IN')}</span>

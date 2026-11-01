@@ -48,7 +48,7 @@ export interface KarnatakaTrainScheduleV8 {
 export const VERIFIED_KARNATAKA_TRAINS: KarnatakaTrainScheduleV8[] = [
   // 1A. Train 16592: Hampi Express (Northbound: Bengaluru -> Hosapete / Hampi)
   {
-    trainNumber: '16592 / 16591',
+    trainNumber: '16592',
     trainName: 'Hampi Express (Northbound: SBC to HPT)',
     trainNameKannada: 'ಹಂಪಿ ಎಕ್ಸ್‌ಪ್ರೆಸ್ (ಉತ್ತರಮುಖಿ: ಬೆಂಗಳೂರು - ಹೊಸಪೇಟೆ)',
     trainType: 'express',

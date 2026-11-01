@@ -113,6 +113,13 @@ export function classifyKannadaIntent(rawVoiceInput: string): VoiceIntentResult 
   // Determine circuit matching if geographic markers are present (accounting for Kannada vibhakti declensions)
   let targetCircuitId: string | undefined = undefined;
   if (
+    lower.includes('ಸುವರ್ಣ') ||
+    lower.includes('golden') ||
+    ((lower.includes('ಬೇಲೂರು') || lower.includes('belur') || lower.includes('ಹಾಸನ') || lower.includes('hassan')) &&
+      (lower.includes('ಮುಳ್ಳಯ್ಯನಗಿರಿ') || lower.includes('ಚಿಕ್ಕಮಗಳೂರ') || lower.includes('mullayanagiri') || lower.includes('chikmagalur')))
+  ) {
+    targetCircuitId = 'circuit-golden-bengaluru-mullayanagiri';
+  } else if (
     lower.includes('ಚಿಕ್ಕಮಗಳೂರ') ||
     lower.includes('ಚಿಕ್ಕಮಗಳೂರಿ') ||
     lower.includes('ಮುಳ್ಳಯ್ಯನಗಿರಿ') ||

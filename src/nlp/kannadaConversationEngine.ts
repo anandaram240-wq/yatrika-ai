@@ -87,7 +87,7 @@ export class KannadaConversationEngine {
     ) {
       const intermediateReply =
         'ಖಂಡಿತ, ನಿಮ್ಮ ಪ್ರಯಾಣದ ಸಮಯ ಮತ್ತು ಆಸಕ್ತಿಗೆ ಅನುಗುಣವಾಗಿ ಮಾರ್ಗದಲ್ಲಿರುವ ಸೂಕ್ತ ತಾಣಗಳನ್ನು (ಉದಾ: ಹಾಸನ, ಬೇಲೂರು) ಸೇರಿಸುತ್ತಿದ್ದೇನೆ.';
-      this.memory.addViaStop({ id: 'poi-belur-temple', nameKannada: 'ಬೇಲೂರು ಚೆನ್ನಕೇಶವ ದೇವಾಲಯ', nameEnglish: 'Belur Chennakeshava Temple' });
+      this.memory.addViaStop({ id: 'poi-belur-halebidu', nameKannada: 'ಬೇಲೂರು ಚೆನ್ನಕೇಶವ ದೇವಾಲಯ', nameEnglish: 'Belur Chennakeshava & Halebidu Temples' });
       this.memory.addTurn('assistant', intermediateReply);
 
       return {
@@ -145,6 +145,21 @@ export class KannadaConversationEngine {
           nameKannada: v.place.name,
           nameEnglish: v.matchedAlias,
         });
+      });
+    }
+
+    // Check context stops mentioned along corridor (e.g. Hassan, Belur, Chikkamagaluru)
+    if (parsed.contexts && parsed.contexts.length > 0) {
+      parsed.contexts.forEach((c) => {
+        const isAlreadyOrigin = parsed.origin?.place.id === c.place.id;
+        const isAlreadyDest = parsed.destination?.place.id === c.place.id;
+        if (!isAlreadyOrigin && !isAlreadyDest) {
+          this.memory.addViaStop({
+            id: c.place.id,
+            nameKannada: c.place.name,
+            nameEnglish: c.matchedAlias,
+          });
+        }
       });
     }
 

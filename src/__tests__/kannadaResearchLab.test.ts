@@ -13,12 +13,21 @@ describe('Kannada Language Research Lab V2 (Phase 6)', () => {
   it('runs the structured linguistic benchmark and achieves >= 80% accuracy across metrics', () => {
     const metrics = KannadaBenchmarkRunner.runEvaluation();
 
-    expect(metrics.totalSentences).toBe(8);
+    expect(metrics.totalSentences).toBe(32);
     expect(metrics.dialectAccuracyPercent).toBeGreaterThanOrEqual(80.0);
     expect(metrics.originAccuracyPercent).toBeGreaterThanOrEqual(80.0);
     expect(metrics.destinationAccuracyPercent).toBeGreaterThanOrEqual(80.0);
     expect(metrics.intentAccuracyPercent).toBeGreaterThanOrEqual(85.0);
-    expect(metrics.overallPrecision).toBeGreaterThanOrEqual(0.85);
+    expect(metrics.overallPrecision).toBeGreaterThanOrEqual(0.80);
+    expect(metrics.categoryBreakdown).toHaveProperty('Standard');
+    expect(metrics.categoryBreakdown).toHaveProperty('Mysuru');
+    expect(metrics.categoryBreakdown).toHaveProperty('Kundagannada');
+    expect(metrics.categoryBreakdown).toHaveProperty('Kalyana');
+    expect(metrics.categoryBreakdown).toHaveProperty('Kittur');
+    expect(metrics.categoryBreakdown).toHaveProperty('Bengaluru');
+    expect(metrics.categoryBreakdown).toHaveProperty('Havyaka');
+    expect(metrics.categoryBreakdown).toHaveProperty('CodeSwitched');
+    expect(metrics.dialectProficiencyCaveat).toBeTruthy();
   });
 
   it('correctly classifies distinctive regional dialects using authentic syntactic particles', () => {

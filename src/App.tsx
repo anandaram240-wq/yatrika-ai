@@ -55,6 +55,8 @@ import { YatrikaOperationsCenter } from './operations/operationsCenter';
 import { ParetoTravelOptimizer } from './research/paretoOptimizer';
 import { ReleaseReadinessEvaluator } from './release/releaseReadiness';
 import { KARNATAKA_PILOT_CIRCUITS } from './pilot/pilotValidationProtocol';
+import { OnboardingTourModal } from './components/OnboardingTourModal';
+import { EntityClarificationModal, AmbiguityCandidate } from './components/EntityClarificationModal';
 
 // High-resolution curated photography for each Karnataka POI
 const POI_PHOTO_MAP: Record<string, string> = {
@@ -283,6 +285,20 @@ export function App() {
   const [isOpsCenterModalOpen, setIsOpsCenterModalOpen] = useState<boolean>(false);
   const [isReleaseGatesModalOpen, setIsReleaseGatesModalOpen] = useState<boolean>(false);
 
+  // V5 Usability & Accessibility States
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('guide') === '1') return true;
+      if (urlParams.get('guide') === '0') return false;
+      return !localStorage.getItem('yatrika_onboarding_seen');
+    }
+    return false;
+  });
+  const [uiLanguage, setUiLanguage] = useState<'kn' | 'en'>('kn');
+  const [clarificationData, setClarificationData] = useState<{ query: string; candidates: AmbiguityCandidate[] } | null>(null);
+  const [isOnline, setIsOnline] = useState<boolean>(() => (typeof navigator !== 'undefined' ? navigator.onLine : true));
+
   const vehicleMarkerRef = useRef<maplibregl.Marker | null>(null);
   const vehicleElRef = useRef<HTMLDivElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
@@ -347,6 +363,18 @@ export function App() {
       .catch(() => setRoute(buildFallbackRoadCorridor(fullRouteStops)));
     return () => controller.abort();
   }, [fullRouteStops]);
+
+  // Monitor network online / offline transitions
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Fetch live real-time weather from Open-Meteo for origin
   useEffect(() => {
@@ -1172,9 +1200,55 @@ export function App() {
     setTimeout(handleFitAllStops, 150);
   };
 
+  const handleSelectClarificationCandidate = (candidateId: string) => {
+    setClarificationData(null);
+    if (candidateId === 'origin-hassan') {
+      const hassanOrigin = KARNATAKA_GATEWAY_ORIGINS.find((o) => o.id === 'origin-hassan');
+      if (hassanOrigin) setUserOrigin(hassanOrigin);
+    } else {
+      handleAddStop(candidateId);
+    }
+    setActiveTab('timeline');
+    setAiStatusBanner(`ತಾಣ ಸ್ಪಷ್ಟೀಕರಣ: ${candidateId} ಯಶಸ್ವಿಯಾಗಿ ಸೇರಿಸಲಾಗಿದೆ.`);
+  };
+
+  const handleCloseOnboarding = () => {
+    setIsOnboardingOpen(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('yatrika_onboarding_seen', 'true');
+    }
+  };
+
   const handleRunAiPrompt = (e: React.FormEvent) => {
     e.preventDefault();
     if (!aiPromptInput.trim()) return;
+
+    // Entity ambiguity check for single prompt
+    const cleanPrompt = aiPromptInput.toLowerCase().trim();
+    if (cleanPrompt === 'belur' || cleanPrompt === 'ಬೇಲೂರು') {
+      setClarificationData({
+        query: aiPromptInput,
+        candidates: [
+          {
+            id: 'poi-belur-halebidu',
+            name: 'Belur Chennakeshava & Halebidu Hoysaleswara Temples',
+            nameKannada: 'ಬೇಲೂರು ಚೆನ್ನಕೇಶವ ಮತ್ತು ಹಳೇಬೀಡು ಹೊಯ್ಸಳೇಶ್ವರ ದೇವಾಲಯ',
+            district: 'Hassan',
+            category: 'heritage',
+            description: '12th-century UNESCO World Heritage Sacred Ensembles of the Hoysalas',
+          },
+          {
+            id: 'origin-hassan',
+            name: 'Hassan City & Transit Hub',
+            nameKannada: 'ಹಾಸನ ನಗರ ಮತ್ತು ರೈಲ್ವೆ / ಬಸ್ ಸಾರಿಗೆ ಕೇಂದ್ರ',
+            district: 'Hassan',
+            category: 'transit',
+            description: 'Gateway city connecting NH-75 expressway towards Belur & Western Ghats',
+          },
+        ],
+      });
+      return;
+    }
 
     // 1. Contextual Kannada Conversation Engine
     if (/[\u0C80-\u0CFF]/.test(aiPromptInput) || aiPromptInput.toLowerCase().includes('ninda') || aiPromptInput.toLowerCase().includes('bekku')) {
@@ -1337,7 +1411,11 @@ export function App() {
             type="text"
             value={aiPromptInput}
             onChange={(e) => setAiPromptInput(e.target.value)}
-            placeholder="Ask AI: '4 days under ₹5000 for UNESCO Hampi & waterfalls for 2 people'..."
+            placeholder={
+              uiLanguage === 'kn'
+                ? "ಕೇಳಿ: '೪ ದಿನಗಳ ಯುನೆಸ್ಕೋ ಹಂಪಿ & ಜಲಪಾತಗಳ ಪ್ರವಾಸ ₹5000 ಬಜೆಟ್‌ನಲ್ಲಿ'..."
+                : "Ask AI: '4 days under ₹5000 for UNESCO Hampi & waterfalls for 2 people'..."
+            }
             aria-label="Natural language trip planner prompt"
           />
           <button
@@ -1363,15 +1441,35 @@ export function App() {
             🎙️
           </button>
           <button type="submit" className="nt-omnibar-btn">
-            ✨ Generate Trip
+            ✨ {uiLanguage === 'kn' ? 'ಪ್ರವಾಸ ರಚಿಸಿ' : 'Generate Trip'}
           </button>
         </form>
 
         {/* Live Route & Budget Summary + Share */}
         <div className="nt-header-actions">
+          {!isOnline && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 5,
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                color: '#b91c1c',
+                borderRadius: 999,
+                padding: '4px 10px',
+                fontSize: 11,
+                fontWeight: 700,
+              }}
+              title="Device offline - Running local cache and emergency pass mode"
+            >
+              🛰️ {uiLanguage === 'kn' ? 'ಆಫ್‌ಲೈನ್' : 'Offline'}
+            </span>
+          )}
+
           <div className="nt-stat-pill">
             <span>
-              <strong>{itineraryStops.length}</strong> Stops
+              <strong>{itineraryStops.length}</strong> {uiLanguage === 'kn' ? 'ತಾಣಗಳು' : 'Stops'}
             </span>
             <span>•</span>
             <span>
@@ -1382,6 +1480,35 @@ export function App() {
               ₹{netTotalBudgetInr.toLocaleString('en-IN')}
             </span>
           </div>
+
+          <button
+            type="button"
+            className="nt-btn-outline"
+            onClick={() => setUiLanguage((prev) => (prev === 'kn' ? 'en' : 'kn'))}
+            title="Toggle Primary Language (ಕನ್ನಡ / English)"
+            style={{ fontWeight: 800, padding: '5px 10px', fontSize: 11.5, background: '#ffffff' }}
+          >
+            🌐 {uiLanguage === 'kn' ? 'ಕನ್ನಡ (KN)' : 'English (EN)'}
+          </button>
+
+          <button
+            type="button"
+            className="nt-btn-outline"
+            onClick={() => setIsOnboardingOpen(true)}
+            title="Open Usability Guide & System Overview"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              background: '#f0fdf4',
+              borderColor: '#bbf7d0',
+              color: '#166534',
+              fontWeight: 700,
+              fontSize: 12,
+            }}
+          >
+            <span>👋 {uiLanguage === 'kn' ? 'ಮಾರ್ಗದರ್ಶಿ' : 'Guide'}</span>
+          </button>
 
           <button
             type="button"
@@ -1422,7 +1549,7 @@ export function App() {
             title="Open Offline Survival Mode & Emergency Directory"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
           >
-            <span>📡 Offline Pack</span>
+            <span>📡 {uiLanguage === 'kn' ? 'ಆಫ್‌ಲೈನ್ ಪ್ಯಾಕ್' : 'Offline Pack'}</span>
           </button>
 
           <button
@@ -1434,7 +1561,7 @@ export function App() {
               setTimeout(() => setShareCopied(false), 2000);
             }}
           >
-            {shareCopied ? '✓ Link Copied' : '🔗 Share'}
+            {shareCopied ? '✓ Copied' : '🔗 Share'}
           </button>
 
           <button type="button" className="nt-btn-primary" onClick={handleDownloadMarkdown}>
@@ -1466,7 +1593,7 @@ export function App() {
                 style={{ color: '#059669', borderColor: '#a7f3d0', background: '#ecfdf5' }}
                 onClick={() => setStopIds(optimizeStopSequence(itineraryStops).map((s) => s.id))}
               >
-                ⚡ Auto-Optimize Route
+                ⚡ {uiLanguage === 'kn' ? 'ಸ್ವಯಂ ಮಾರ್ಗ ಆಪ್ಟಿಮೈಸ್' : 'Auto-Optimize Route'}
               </button>
             </div>
 
@@ -1477,28 +1604,28 @@ export function App() {
                 className={`nt-mode-tab ${activeTab === 'timeline' ? 'active' : ''}`}
                 onClick={() => setActiveTab('timeline')}
               >
-                🗺️ Visual Itinerary ({itineraryStops.length})
+                🗺️ {uiLanguage === 'kn' ? 'ವೇಳಾಪಟ್ಟಿ' : 'Visual Itinerary'} ({itineraryStops.length})
               </button>
               <button
                 type="button"
                 className={`nt-mode-tab ${activeTab === 'trains' ? 'active' : ''}`}
                 onClick={() => setActiveTab('trains')}
               >
-                🚆 Trains & KSRTC
+                🚆 {uiLanguage === 'kn' ? 'ರೈಲು & ಬಸ್ ಸಂಚಾರ' : 'Trains & KSRTC'}
               </button>
               <button
                 type="button"
                 className={`nt-mode-tab ${activeTab === 'budget' ? 'active' : ''}`}
                 onClick={() => setActiveTab('budget')}
               >
-                ₹ Budget & Shakti
+                ₹ {uiLanguage === 'kn' ? 'ವೆಚ್ಚ & ಶಕ್ತಿ ಯೋಜನೆ' : 'Budget & Shakti'}
               </button>
               <button
                 type="button"
                 className={`nt-mode-tab ${activeTab === 'discover' ? 'active' : ''}`}
                 onClick={() => setActiveTab('discover')}
               >
-                + Add Places ({KARNATAKA_POIS.length})
+                + {uiLanguage === 'kn' ? 'ತಾಣಗಳ ಶೋಧನೆ' : 'Add Places'} ({KARNATAKA_POIS.length})
               </button>
             </div>
           </div>
@@ -3310,6 +3437,21 @@ export function App() {
           </div>
         </div>
       )}
+
+      {/* ================= USABILITY ONBOARDING & CLARIFICATION MODALS ================= */}
+      <OnboardingTourModal
+        isOpen={isOnboardingOpen}
+        onClose={handleCloseOnboarding}
+        onLaunchGoldenJourney={() => handleRunJuryScenario('GOLDEN')}
+      />
+
+      <EntityClarificationModal
+        isOpen={Boolean(clarificationData)}
+        rawQuery={clarificationData?.query || ''}
+        candidates={clarificationData?.candidates || []}
+        onSelectCandidate={handleSelectClarificationCandidate}
+        onCancel={() => setClarificationData(null)}
+      />
     </div>
   );
 }

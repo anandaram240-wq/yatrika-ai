@@ -50,6 +50,33 @@ export class EntityResolver {
       this.registerAliases(poi.name, entry);
       this.registerAliases(poi.nameKannada, entry);
       this.registerAliases(poi.id, entry);
+
+      // Register historical and vernacular aliases for flagship corridor
+      if (poi.id === 'poi-belur-halebidu') {
+        this.registerAliases('belur', entry);
+        this.registerAliases('ಬೇಲೂರು', entry);
+        this.registerAliases('velapura', entry);
+        this.registerAliases('chennakeshava', entry);
+        this.registerAliases('ಚೆನ್ನಕೇಶವ', entry);
+        this.registerAliases('halebidu', entry);
+        this.registerAliases('ಹಳೇಬೀಡು', entry);
+        this.registerAliases('dwarasamudra', entry);
+        this.registerAliases('poi-belur-temple', entry);
+      } else if (poi.id === 'poi-shettihalli-church') {
+        this.registerAliases('shettihalli', entry);
+        this.registerAliases('ಶೆಟ್ಟಿಹಳ್ಳಿ', entry);
+        this.registerAliases('submerged church', entry);
+        this.registerAliases('ಶೆಟ್ಟಿಹಳ್ಳಿ ಚರ್ಚ್', entry);
+      } else if (poi.id === 'poi-hirekolale-lake') {
+        this.registerAliases('hirekolale', entry);
+        this.registerAliases('ಹಿರೇಕೊಳಲೆ', entry);
+        this.registerAliases('hirekolale lake', entry);
+      } else if (poi.id === 'poi-mullayanagiri') {
+        this.registerAliases('mullayanagiri', entry);
+        this.registerAliases('ಮುಳ್ಳಯ್ಯನಗಿರಿ', entry);
+        this.registerAliases('mullayyanagiri peak', entry);
+        this.registerAliases('poi-mullayanagiri-peak', entry);
+      }
     });
   }
 

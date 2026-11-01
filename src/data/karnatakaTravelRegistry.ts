@@ -3905,8 +3905,18 @@ export const CURATED_CIRCUIT_PRESETS: CuratedCircuitPreset[] = [
   },
 ];
 
+const POI_ID_ALIASES: Record<string, string> = {
+  'poi-belur-temple': 'poi-belur-halebidu',
+  'poi-belur': 'poi-belur-halebidu',
+  'poi-mullayanagiri-peak': 'poi-mullayanagiri',
+  'poi-shettihalli': 'poi-shettihalli-church',
+  'poi-hirekolale': 'poi-hirekolale-lake',
+  'poi-hassan-shettihalli': 'poi-shettihalli-church',
+};
+
 export function getPoiById(id: string): KarnatakaPOI | undefined {
-  return KARNATAKA_POIS.find((p) => p.id === id);
+  const canonicalId = POI_ID_ALIASES[id] || id;
+  return KARNATAKA_POIS.find((p) => p.id === canonicalId);
 }
 
 export interface UserOriginOption {

@@ -10,7 +10,10 @@ export type KannadaDialect =
   | 'Kalyana'
   | 'Kittur'
   | 'Mysuru'
-  | 'Bengaluru';
+  | 'Bengaluru'
+  | 'Havyaka'
+  | 'Standard'
+  | 'CodeSwitched';
 
 export interface DialectClassificationResult {
   detectedDialect: KannadaDialect;
@@ -22,11 +25,14 @@ export interface DialectClassificationResult {
 export class DialectConfidenceEvaluator {
   private static readonly DIALECT_LEXICON: Record<KannadaDialect, string[]> = {
     Kundagannada: ['ಮಾರ್‍ರೆ', 'ಮಾರ್ರೆ', 'ಕಾಣಿ', 'ಏನ್ಲಾ', 'ಹೌದನ್ಲಾ', 'ಎಂಚ', 'ಬರ್‍ತಿರಾ', 'ಮಾರಾಯ್ರೆ'],
-    Arebhashe: ['ಬಪ್ಪ', 'ಪೋಪ', 'ಎಲ್ಗೆ', 'ಹೊಳೆ', 'ಮನೆಗೆ', 'ಕುಡ್ಲ', 'ತಿಂಪ'],
+    Arebhashe: ['ಬಪ್ಪ', 'ಪೋಪ', 'ಎಲ್ಗೆ', 'ಹೊಳೆ', 'ಕುಡ್ಲ', 'ತಿಂಪ'],
     Kalyana: ['ಆಯಿತ್ರಿ', 'ಬರ್ತೇವ್ರಿ', 'ಹೌದ್ರಿ', 'ಜಲ್ದಿ', 'ಖರೇ', 'ಚಲೋ', 'ಖುಲ್ಲಾ', 'ಮಾಡ್ತೀರಿ'],
-    Kittur: ['ಯಾಕ್ರಿ', 'ಏನ್ರಿಪಾ', 'ಹೋಗೂಣು', 'ಬರೂಣು', 'ದಂಡಿ', 'ಅಲ್ರೀ', 'ಚಲೋ ಐತಿ'],
+    Kittur: ['ಯಾಕ್ರಿ', 'ಏನ್ರಿಪಾ', 'ಹೋಗೂಣು', 'ಬರೂಣು', 'ದಂಡಿ', 'ಅಲ್ರೀ', 'ಚಲೋ ಐತಿ', 'ಹ್ಯಾಂಗ'],
     Mysuru: ['ಕಣ್ರೀ', 'ಮೇಷ್ಟ್ರೇ', 'ಹೋಗೋಣ', 'ಬಂದ್ವಿ', 'ಆಯ್ತು', 'ಅಲ್ವಾ', 'ಸ್ವಾಮಿ'],
     Bengaluru: ['ಗುರು', 'ಬಾ ಗುರು', 'ಮೆಟ್ರೋ', 'ಟ್ರಾಫಿಕ್', 'ಮಗಾ', 'ಬ್ರೋ', 'ಸೀನ್'],
+    Havyaka: ['ಎಂತದು', 'ಕೂಳಿ', 'ಉಂಬೋಣ', 'ಹೊರೆಟ್ಟಿರಾ', 'ಹಾಂಗೆ', 'ಹಿಂಗೇ', 'ಎಲ್ಲೆ', 'ಅಪ್ಪಚ್ಚಿ'],
+    Standard: ['ಹೇಗಿದ್ದೀರಾ', 'ನಮಸ್ಕಾರ', 'ಪ್ರವಾಸ', 'ಯೋಜನೆ', 'ದರ್ಶನ', 'ಮಾಹಿತಿ', 'ದಯವಿಟ್ಟು', 'ವೇಳಾಪಟ್ಟಿ'],
+    CodeSwitched: ['plan', 'trip', 'weekend', 'budget', 'route', 'darshan', 'viewpoint', 'resort', 'hotel', 'drive'],
   };
 
   public static classifyDialect(utterance: string): DialectClassificationResult {
@@ -38,7 +44,18 @@ export class DialectConfidenceEvaluator {
       Kittur: { count: 0, markers: [] },
       Mysuru: { count: 0, markers: [] },
       Bengaluru: { count: 0, markers: [] },
+      Havyaka: { count: 0, markers: [] },
+      Standard: { count: 0, markers: [] },
+      CodeSwitched: { count: 0, markers: [] },
     };
+
+    // Check code-switching regex
+    const hasEnglishWords = /[a-z]/i.test(utterance);
+    const hasKannadaChars = /[\u0C80-\u0CFF]/.test(utterance);
+    if (hasEnglishWords && hasKannadaChars) {
+      scores.CodeSwitched.count += 2;
+      scores.CodeSwitched.markers.push('mixed_script_code_switch');
+    }
 
     (Object.keys(this.DIALECT_LEXICON) as KannadaDialect[]).forEach((dialect) => {
       const markers = this.DIALECT_LEXICON[dialect];
@@ -56,9 +73,9 @@ export class DialectConfidenceEvaluator {
 
     const winner = ranked[0];
     if (winner.count === 0) {
-      // Default to Standard Mysuru/Old Mysuru baseline if no regional dialect particle found
+      // Default to Standard baseline if no regional dialect particle found
       return {
-        detectedDialect: 'Mysuru',
+        detectedDialect: 'Standard',
         confidence: 0.50,
         dialectMarkersFound: [],
       };

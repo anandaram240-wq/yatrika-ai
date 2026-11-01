@@ -1,7 +1,7 @@
 /**
  * src/features/voice/VoiceAssistantModal.tsx
  * Professional Editorial Voice Assistant Modal for YatriKa AI.
- * Implements full 10-state Voice State Machine with zero artificial animations.
+ * Explicitly implements UI for all 10 states of the canonical Voice State Machine.
  */
 
 import React, { useEffect, useRef } from 'react';
@@ -48,8 +48,10 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
     context,
     isListening,
     isProcessing,
-    hasError,
+    hasTranscriptReady,
     hasPreview,
+    hasError,
+    isCheckingSupport,
     startListening,
     stopListening,
     cancelListening,
@@ -259,7 +261,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
               <button
                 type="button"
                 onClick={isListening ? stopListening : startListening}
-                disabled={isProcessing}
+                disabled={isProcessing || isCheckingSupport}
                 style={{
                   width: 72,
                   height: 72,
@@ -268,7 +270,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
                   background: isListening ? '#dc2626' : '#2563eb',
                   color: '#ffffff',
                   fontSize: 28,
-                  cursor: isProcessing ? 'wait' : 'pointer',
+                  cursor: isProcessing || isCheckingSupport ? 'wait' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -279,7 +281,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
                 }}
                 aria-label={isListening ? 'Stop recording' : 'Start voice input'}
               >
-                {isProcessing ? '⏳' : isListening ? '⏹' : '🎤'}
+                {isProcessing ? '⏳' : isListening ? '⏹' : isCheckingSupport ? '🔍' : '🎤'}
               </button>
             </div>
 
@@ -291,10 +293,18 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
                   color: isListening ? '#dc2626' : '#172033',
                 }}
               >
-                {isProcessing
+                {isCheckingSupport
+                  ? isKn
+                    ? 'ಧ್ವನಿ ಸೌಲಭ್ಯ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...'
+                    : 'Checking microphone support...'
+                  : isProcessing
                   ? isKn
                     ? 'ಪ್ರವಾಸ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...'
                     : 'Analyzing travel request...'
+                  : hasTranscriptReady
+                  ? isKn
+                    ? 'ಧ್ವನಿ ದಾಖಲಾಗಿದೆ • ಪರಿಶೀಲಿಸಿ'
+                    : 'Transcript captured • Reviewing'
                   : isListening
                   ? isKn
                     ? 'ಧ್ವನಿ ಆಲಿಸಲಾಗುತ್ತಿದೆ... ಮಾತನಾಡಿ ಮುಗಿದ ಮೇಲೆ ನಿಲ್ಲಿಸಿ'

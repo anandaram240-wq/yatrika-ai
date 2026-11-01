@@ -1,177 +1,151 @@
 /**
  * src/features/voice/VoiceController.ts
- * Master Controller managing Web Speech Recognition lifecycle and audio events.
- * Enforces strict teardown, watchdog timeouts, and zero unauthorized restarts.
+ * Master Voice Controller coordinating provider lifecycle, session IDs, and speech synthesis.
  */
 
+import { ISpeechProvider } from './providers/SpeechProvider';
+import { SpeechProviderFactory } from './providers/SpeechProviderFactory';
 import { VoiceErrorHandler } from './VoiceErrorHandler';
 import { VoiceErrorDetails, VoiceLanguage } from './VoiceStateMachine';
 
 export interface VoiceControllerEvents {
-  onStart?: () => void;
-  onInterimResult?: (transcript: string) => void;
-  onFinalResult?: (transcript: string) => void;
-  onError?: (error: VoiceErrorDetails) => void;
-  onEnd?: () => void;
+  onStart?: (sessionId: string) => void;
+  onInterimResult?: (sessionId: string, transcript: string) => void;
+  onFinalResult?: (sessionId: string, transcript: string, confidence: number) => void;
+  onError?: (sessionId: string, error: VoiceErrorDetails) => void;
+  onEnd?: (sessionId: string) => void;
 }
 
 export class VoiceController {
-  private recognition: any | null = null;
-  private isListening = false;
-  private userInitiatedStop = false;
-  private timeoutWatchdog: ReturnType<typeof setTimeout> | null = null;
+  private provider: ISpeechProvider;
+  private currentSessionId: string | null = null;
   private activeLanguage: VoiceLanguage = 'kn-IN';
 
-  /**
-   * Returns true if SpeechRecognition or webkitSpeechRecognition exists
-   */
-  public isSupported(): boolean {
-    if (typeof window === 'undefined') return false;
-    return Boolean(
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition
-    );
+  constructor(provider?: ISpeechProvider) {
+    this.provider = provider || SpeechProviderFactory.getProvider('browser');
   }
 
-  /**
-   * Sets recognition language ('kn-IN' or 'en-IN')
-   */
+  public setProvider(provider: ISpeechProvider): void {
+    if (this.currentSessionId) {
+      this.cancelListening();
+    }
+    this.provider = provider;
+  }
+
+  public getProvider(): ISpeechProvider {
+    return this.provider;
+  }
+
+  public isSupported(): boolean {
+    return this.provider.isSupported;
+  }
+
   public setLanguage(lang: VoiceLanguage): void {
     this.activeLanguage = lang;
-    if (this.recognition) {
-      this.recognition.lang = lang;
-    }
   }
 
   public getLanguage(): VoiceLanguage {
     return this.activeLanguage;
   }
 
+  public getActiveSessionId(): string | null {
+    return this.currentSessionId;
+  }
+
   public getIsListening(): boolean {
-    return this.isListening;
+    return Boolean(this.currentSessionId);
   }
 
   /**
-   * Starts listening session with safety checks and watchdog timer
+   * Generates unique session identifier to isolate event streams
    */
-  public startListening(events: VoiceControllerEvents, timeoutMs = 12000): boolean {
+  public generateSessionId(): string {
+    return `voice_sess_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  }
+
+  /**
+   * Starts listening session with explicit session ID isolation
+   */
+  public async startListening(events: VoiceControllerEvents): Promise<string | null> {
     if (!this.isSupported()) {
-      events.onError?.(VoiceErrorHandler.getUnsupportedBrowserError());
-      return false;
+      const err = VoiceErrorHandler.getUnsupportedBrowserError();
+      events.onError?.('no_session', err);
+      return null;
     }
 
-    // Teardown any dangling instance
-    if (this.isListening) {
-      this.cancelListening();
+    // Cancel any stale session before creating a fresh one
+    if (this.currentSessionId) {
+      await this.cancelListening();
     }
 
-    this.userInitiatedStop = false;
+    const sessionId = this.generateSessionId();
+    this.currentSessionId = sessionId;
 
-    try {
-      const SpeechRecognitionClass =
-        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-      this.recognition = new SpeechRecognitionClass();
-      this.recognition.lang = this.activeLanguage;
-      this.recognition.continuous = false; // Single utterance mode prevents endless looping
-      this.recognition.interimResults = true;
-      this.recognition.maxAlternatives = 1;
-
-      // Watchdog timeout to prevent frozen listening states
-      this.clearWatchdog();
-      this.timeoutWatchdog = setTimeout(() => {
-        if (this.isListening) {
-          this.stopListening();
-          events.onError?.(VoiceErrorHandler.getTimeoutError());
-        }
-      }, timeoutMs);
-
-      this.recognition.onstart = () => {
-        this.isListening = true;
-        events.onStart?.();
-      };
-
-      this.recognition.onresult = (event: any) => {
-        let interimText = '';
-        let finalText = '';
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          const item = event.results[i];
-          if (item.isFinal) {
-            finalText += item[0].transcript;
-          } else {
-            interimText += item[0].transcript;
-          }
-        }
-
-        if (interimText && !finalText) {
-          events.onInterimResult?.(interimText.trim());
-        }
-
-        if (finalText) {
-          this.clearWatchdog();
-          events.onFinalResult?.(finalText.trim());
-        }
-      };
-
-      this.recognition.onerror = (domError: any) => {
-        this.clearWatchdog();
-        this.isListening = false;
-        if (!this.userInitiatedStop) {
-          events.onError?.(VoiceErrorHandler.mapSpeechError(domError));
-        }
-      };
-
-      this.recognition.onend = () => {
-        this.clearWatchdog();
-        this.isListening = false;
-        events.onEnd?.();
-      };
-
-      this.recognition.start();
-      return true;
-    } catch (err: any) {
-      this.clearWatchdog();
-      this.isListening = false;
-      events.onError?.(VoiceErrorHandler.mapSpeechError(err));
-      return false;
-    }
-  }
-
-  /**
-   * Gracefully stops recording and collects final result
-   */
-  public stopListening(): void {
-    this.userInitiatedStop = true;
-    this.clearWatchdog();
-    if (this.recognition && this.isListening) {
-      try {
-        this.recognition.stop();
-      } catch {
-        // Safe catch if already stopped
+    const started = await this.provider.start(
+      sessionId,
+      {
+        language: this.activeLanguage,
+        inactivityTimeoutMs: 7000, // Resets on speech activity
+        maxDurationMs: 45000,       // Hard session cap
+      },
+      {
+        onStart: (sId) => {
+          if (this.currentSessionId !== sId) return;
+          events.onStart?.(sId);
+        },
+        onInterimResult: (sId, text) => {
+          if (this.currentSessionId !== sId) return;
+          events.onInterimResult?.(sId, text);
+        },
+        onFinalResult: (sId, text, confidence) => {
+          if (this.currentSessionId !== sId) return;
+          events.onFinalResult?.(sId, text, confidence);
+        },
+        onError: (sId, error) => {
+          if (this.currentSessionId !== sId) return;
+          this.currentSessionId = null;
+          events.onError?.(sId, error);
+        },
+        onEnd: (sId) => {
+          if (this.currentSessionId !== sId) return;
+          this.currentSessionId = null;
+          events.onEnd?.(sId);
+        },
       }
+    );
+
+    if (!started) {
+      this.currentSessionId = null;
+      return null;
     }
-    this.isListening = false;
+
+    return sessionId;
   }
 
   /**
-   * Aborts and cancels recognition immediately without triggering results
+   * Stops listening and triggers processing of captured speech
    */
-  public cancelListening(): void {
-    this.userInitiatedStop = true;
-    this.clearWatchdog();
-    if (this.recognition) {
-      try {
-        this.recognition.abort();
-      } catch {
-        // Safe catch if already aborted
-      }
+  public async stopListening(): Promise<void> {
+    if (this.currentSessionId) {
+      const sId = this.currentSessionId;
+      await this.provider.stop(sId);
+      this.currentSessionId = null;
     }
-    this.isListening = false;
   }
 
   /**
-   * Speaks Kannada or English text using Web Speech Synthesis API
+   * Aborts listening immediately and invalidates active session
+   */
+  public async cancelListening(): Promise<void> {
+    if (this.currentSessionId) {
+      const sId = this.currentSessionId;
+      this.currentSessionId = null;
+      await this.provider.cancel(sId);
+    }
+  }
+
+  /**
+   * Speaks text in Kannada or English using Web Speech Synthesis
    */
   public speakText(text: string, lang: VoiceLanguage = 'kn-IN', onComplete?: () => void): boolean {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -180,10 +154,10 @@ export class VoiceController {
     }
 
     try {
-      window.speechSynthesis.cancel(); // Stop any pending utterance
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = lang;
-      utterance.rate = 0.95; // Slightly slower for crisp Kannada pronunciation
+      utterance.rate = 0.95;
       utterance.pitch = 1.0;
 
       utterance.onend = () => onComplete?.();
@@ -196,14 +170,6 @@ export class VoiceController {
       return false;
     }
   }
-
-  private clearWatchdog(): void {
-    if (this.timeoutWatchdog) {
-      clearTimeout(this.timeoutWatchdog);
-      this.timeoutWatchdog = null;
-    }
-  }
 }
 
-// Export singleton instance for app-wide coordination
 export const voiceControllerInstance = new VoiceController();

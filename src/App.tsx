@@ -4,7 +4,13 @@ import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './index.css';
 
-import { BasemapStyleId, getBasemapStyle } from './config/mapProviders';
+import {
+  BasemapStyleId,
+  getBasemapStyle,
+  FALLBACK_RASTER_STYLE,
+  buildGoogleMapsRouteUrl,
+  buildOpenStreetMapRouteUrl,
+} from './config/mapProviders';
 import {
   KARNATAKA_POIS,
   CURATED_CIRCUIT_PRESETS,
@@ -129,6 +135,7 @@ export function App() {
   const [shaktiWomenCount, setShaktiWomenCount] = useState<number>(1);
   const [budgetTier, setBudgetTier] = useState<BudgetTier>(initialTrip.tier);
   const [styleId, setStyleId] = useState<BasemapStyleId>('bright');
+  const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const initialTab = useMemo<'timeline' | 'trains' | 'budget' | 'discover'>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -536,7 +543,26 @@ export function App() {
   const netTotalBudgetInr = baseBudget.totalInr - shaktiInfo.shaktiDiscountInr;
 
 
-  // Initialize Real MapLibre GL JS Vector Map with Royal Heritage Route Layers
+  // External map route URLs for seamless handoff
+  const googleMapsUrl = useMemo(
+    () => buildGoogleMapsRouteUrl(userOrigin.coordinates, itineraryStops.map((s) => s.coordinates)),
+    [userOrigin.coordinates, itineraryStops]
+  );
+  const openStreetMapUrl = useMemo(
+    () => buildOpenStreetMapRouteUrl(userOrigin.coordinates, itineraryStops.map((s) => s.coordinates)),
+    [userOrigin.coordinates, itineraryStops]
+  );
+
+  // Automatic MapLibre window resize observer
+  useEffect(() => {
+    const handleResize = () => {
+      mapRef.current?.resize();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Initialize Real MapLibre GL JS Vector Map with Royal Heritage Route Layers & Watchdog
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
     const styleConfig = getBasemapStyle(styleId);
@@ -612,8 +638,42 @@ export function App() {
         }
       };
 
-      map.on('load', drawRouteLayer);
-      map.on('style.load', drawRouteLayer);
+      let watchdogTimer: ReturnType<typeof setTimeout> | null = null;
+
+      const handleReady = () => {
+        setMapStatus('ready');
+        if (watchdogTimer) {
+          clearTimeout(watchdogTimer);
+          watchdogTimer = null;
+        }
+        drawRouteLayer();
+      };
+
+      map.on('load', handleReady);
+      map.on('style.load', handleReady);
+
+      map.on('error', (err) => {
+        console.warn('MapLibre error encountered:', err);
+        if (!map.isStyleLoaded()) {
+          try {
+            map.setStyle(FALLBACK_RASTER_STYLE as any);
+          } catch {
+            setMapStatus('error');
+          }
+        }
+      });
+
+      // 4-second watchdog timer for slow/unresponsive remote vector tile servers
+      watchdogTimer = setTimeout(() => {
+        if (!map.isStyleLoaded()) {
+          console.warn('MapLibre basemap style timeout (4s); activating embedded fallback style');
+          try {
+            map.setStyle(FALLBACK_RASTER_STYLE as any);
+          } catch {
+            setMapStatus('error');
+          }
+        }
+      }, 4000);
 
       // Right-click or long-press on any map coordinate to anchor as trip starting location
       map.on('contextmenu', (e) => {
@@ -633,7 +693,7 @@ export function App() {
 
       mapRef.current = map;
     } catch {
-      // Headless / WebGL fallback handled gracefully
+      setMapStatus('error');
     }
 
     return () => {
@@ -857,7 +917,23 @@ export function App() {
   const handleSwitchStyle = (nextStyle: BasemapStyleId) => {
     setStyleId(nextStyle);
     const cfg = getBasemapStyle(nextStyle);
-    mapRef.current?.setStyle(cfg.url);
+    try {
+      mapRef.current?.setStyle(cfg.url);
+    } catch {
+      mapRef.current?.setStyle(FALLBACK_RASTER_STYLE as any);
+    }
+  };
+
+  const handleRetryMap = () => {
+    setMapStatus('loading');
+    if (mapRef.current) {
+      const cfg = getBasemapStyle(styleId);
+      try {
+        mapRef.current.setStyle(cfg.url);
+      } catch {
+        mapRef.current.setStyle(FALLBACK_RASTER_STYLE as any);
+      }
+    }
   };
 
   const handleLoadCircuit = (circuitId: string) => {
@@ -1259,6 +1335,10 @@ export function App() {
             mealsInr: baseBudget.foodInr,
             totalInr: baseBudget.totalInr,
           }}
+          mapStatus={mapStatus}
+          onRetryMap={handleRetryMap}
+          googleMapsUrl={googleMapsUrl}
+          openStreetMapUrl={openStreetMapUrl}
         />
       </div>
 

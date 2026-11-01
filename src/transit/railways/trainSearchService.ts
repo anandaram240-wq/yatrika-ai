@@ -8,6 +8,7 @@
 
 import { VERIFIED_KARNATAKA_TRAINS, KarnatakaTrainScheduleV8 } from './trainScheduleAdapter';
 import { KarnatakaRailwayStation, getStation } from './stationRegistry';
+import { validateTrainIdentity } from './trainValidator';
 
 export interface TrainSearchParams {
   fromStationCodeOrCity: string;
@@ -94,6 +95,15 @@ export class TrainSearchService {
 
       // Directional constraint: origin must occur BEFORE destination in train schedule
       return fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx;
+    }).filter((train) => {
+      // Train identity validation check: reject invalid or fabricated trains
+      const val = validateTrainIdentity({
+        trainNumber: train.trainNumber,
+        trainName: train.trainName,
+        originCode: train.originCode,
+        destinationCode: train.destinationCode,
+      });
+      return val.isValid;
     });
 
     const results: TrainSearchResult[] = matched.map((train) => {

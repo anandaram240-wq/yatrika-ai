@@ -9,12 +9,11 @@ import { KarnatakaPOI, BudgetTier, ComputedTripRoute } from '../types/nammatrip'
 import { UserOriginOption, KARNATAKA_POIS, KARNATAKA_GATEWAY_ORIGINS } from '../data/karnatakaTravelRegistry';
 import { getAuthenticDestinationPhoto } from '../data/karnatakaPhotoRegistry';
 import { LiveWeather } from '../services/liveWeatherService';
-import {
-  KARNATAKA_TRAIN_SCHEDULES,
-  KSRTC_BUS_SERVICES,
-  getTrainsForOrigin,
-} from '../services/liveTransitService';
 import { ShaktiLeg, CarbonComparison } from './ShaktiSavingsLedger';
+import {
+  buildItineraryLegsTransit,
+  ItineraryLegTransit,
+} from '../services/itineraryLegTransitService';
 
 export interface TripPlanningWorkspaceProps {
   mapContainerRef: React.RefObject<HTMLDivElement | null>;
@@ -64,6 +63,10 @@ export interface TripPlanningWorkspaceProps {
     mealsInr: number;
     totalInr: number;
   };
+  mapStatus?: 'loading' | 'ready' | 'error';
+  onRetryMap?: () => void;
+  googleMapsUrl?: string;
+  openStreetMapUrl?: string;
 }
 
 export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
@@ -107,11 +110,24 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
   shaktiLegs = [],
   carbonEstimate,
   baseBudget,
+  mapStatus = 'ready',
+  onRetryMap,
+  googleMapsUrl,
+  openStreetMapUrl,
 }) => {
-  const [transitSubTab, setTransitSubTab] = useState<'origin' | 'trains' | 'buses'>('origin');
+  const [selectedLegIndex, setSelectedLegIndex] = useState<number>(0);
+  const [transitModeFilter, setTransitModeFilter] = useState<'all' | 'trains' | 'buses' | 'road'>('all');
   const [discoverSearch, setDiscoverSearch] = useState('');
   const [discoverRegion, setDiscoverRegion] = useState('all');
   const [discoverCategory, setDiscoverCategory] = useState<'all' | 'attractions' | 'railway_station' | 'bus_terminal'>('all');
+
+  const itineraryLegs = useMemo(
+    () => buildItineraryLegsTransit(userOrigin, itineraryStops),
+    [userOrigin, itineraryStops]
+  );
+
+  const activeLeg: ItineraryLegTransit | undefined =
+    itineraryLegs[selectedLegIndex] || itineraryLegs[0];
 
   const filteredDiscoverPois = useMemo(() => {
     return KARNATAKA_POIS.filter((p) => {
@@ -135,10 +151,6 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
     });
   }, [discoverSearch, discoverRegion, discoverCategory]);
 
-  const originTrains = useMemo(() => {
-    const list = getTrainsForOrigin(userOrigin.id);
-    return list.length > 0 ? list : KARNATAKA_TRAIN_SCHEDULES.slice(0, 4);
-  }, [userOrigin.id]);
   return (
     <div className="yt-workspace-container">
       {/* ================= 40% LEFT ITINERARY FEED ================= */}
@@ -217,7 +229,7 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
               className={`yt-ws-tab ${activeTab === 'trains' ? 'active' : ''}`}
               onClick={() => setActiveTab('trains')}
             >
-              🚆 {uiLanguage === 'kn' ? 'ರೈಲು & ಬಸ್' : 'Transit & KSRTC'}
+              🚆 {uiLanguage === 'kn' ? 'ಸಾರಿಗೆ' : 'Transit Legs'} ({itineraryLegs.length})
             </button>
             <button
               type="button"
@@ -445,112 +457,254 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
             </div>
           )}
 
-          {/* ================= VIEW 2: TRANSIT (SWR TRAINS & KSRTC BUSES) ================= */}
+          {/* ================= VIEW 2: TRANSIT (LEG-BY-LEG SWR TRAINS & KSRTC BUSES) ================= */}
           {activeTab === 'trains' && (
             <div className="yt-transit-tab-content">
-              {/* Transit Mode Sub-Tabs */}
-              <div className="yt-transit-subnav">
-                <button
-                  type="button"
-                  className={`yt-tsub-btn ${transitSubTab === 'origin' ? 'active' : ''}`}
-                  onClick={() => setTransitSubTab('origin')}
-                >
-                  📍 From {userOrigin.name.split('(')[0].trim().slice(0, 14)}
-                </button>
-                <button
-                  type="button"
-                  className={`yt-tsub-btn ${transitSubTab === 'trains' ? 'active' : ''}`}
-                  onClick={() => setTransitSubTab('trains')}
-                >
-                  🚆 SWR Trains ({KARNATAKA_TRAIN_SCHEDULES.length})
-                </button>
-                <button
-                  type="button"
-                  className={`yt-tsub-btn ${transitSubTab === 'buses' ? 'active' : ''}`}
-                  onClick={() => setTransitSubTab('buses')}
-                >
-                  🚌 KSRTC Buses ({KSRTC_BUS_SERVICES.length})
-                </button>
-              </div>
-
-              {/* Trains List */}
-              {(transitSubTab === 'trains' || transitSubTab === 'origin') && (
-                <div className="yt-transit-cards-list">
-                  <div className="yt-tab-section-heading">
-                    {transitSubTab === 'origin'
-                      ? `South Western Railway Connections from ${userOrigin.name.split('(')[0].trim()}`
-                      : 'All Karnataka SWR Train Schedules'}
-                  </div>
-                  {(transitSubTab === 'origin' ? originTrains : KARNATAKA_TRAIN_SCHEDULES).map((tr) => (
-                    <div key={tr.id} className="yt-transit-item-card">
-                      <div className="yt-tcard-header">
-                        <div className="yt-tcard-badges">
-                          <span className="yt-pill-purple">🚆 #{tr.trainNumber}</span>
-                          <span className="yt-pill-blue">{tr.trainType.replace('_', ' ').toUpperCase()}</span>
-                        </div>
-                        {tr.savesHotelNight && (
-                          <span className="yt-pill-emerald">
-                            🌙 Saves ₹{tr.hotelSavingInr.toLocaleString('en-IN')} Stay
-                          </span>
-                        )}
-                      </div>
-
-                      <h4 className="yt-tcard-title">{tr.trainName}</h4>
-
-                      <div className="yt-tcard-route">
-                        {tr.originName} ({tr.originCode} • {tr.departureTime}) ➔ {tr.destinationName} ({tr.destinationCode} • {tr.arrivalTime})
-                      </div>
-
-                      <div className="yt-tcard-details">
-                        <span>⏱️ {tr.durationLabel}</span>
-                        <span>•</span>
-                        <span>🗓️ {tr.daysRunning.join(', ')}</span>
-                        <span>•</span>
-                        <span className="font-bold text-emerald">
-                          ₹{tr.fareRange.secondClass > 0 ? tr.fareRange.secondClass : tr.fareRange.chair || tr.fareRange.sleeper} onwards
-                        </span>
-                      </div>
-
-                      <div className="yt-tcard-lore">{tr.specialHighlight}</div>
-                    </div>
+              {/* Dynamic Leg Selector Strip */}
+              <div className="yt-transit-leg-selector-wrap">
+                <div className="yt-tab-section-heading">
+                  🗺️ Itinerary Transit Legs ({itineraryLegs.length} Segments)
+                </div>
+                <div className="yt-transit-leg-tabs">
+                  {itineraryLegs.map((leg, idx) => (
+                    <button
+                      key={leg.legId}
+                      type="button"
+                      className={`yt-transit-leg-tab ${selectedLegIndex === idx ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedLegIndex(idx);
+                        setTransitModeFilter('all');
+                      }}
+                    >
+                      <span className="yt-leg-badge">Leg {leg.legIndex}</span>
+                      <span className="yt-leg-title">
+                        {leg.fromName.split(' ')[0]} ➔ {leg.toName.split(' ')[0]}
+                      </span>
+                      <span className="yt-leg-dist">{leg.distanceKm} km</span>
+                    </button>
                   ))}
                 </div>
-              )}
+              </div>
 
-              {/* KSRTC Buses List */}
-              {transitSubTab === 'buses' && (
-                <div className="yt-transit-cards-list">
-                  <div className="yt-tab-section-heading">
-                    KSRTC Inter-District Bus Corridors & Shakti Scheme Eligibility
-                  </div>
-                  {KSRTC_BUS_SERVICES.map((bus) => (
-                    <div key={bus.id} className="yt-transit-item-card">
-                      <div className="yt-tcard-header">
-                        <div className="yt-tcard-badges">
-                          <span className="yt-pill-orange">🚌 {bus.serviceLabel}</span>
-                          <span className="yt-pill-blue">{bus.departureTimes.length} daily trips</span>
-                        </div>
-                        {bus.shaktiFree ? (
-                          <span className="yt-pill-emerald">
-                            ✓ Shakti Scheme: ₹0 for Women Domicile
-                          </span>
-                        ) : (
-                          <span className="yt-pill-muted">Premium AC (Non-Shakti)</span>
+              {activeLeg && (
+                <div className="yt-active-leg-container">
+                  {/* Leg Header Card */}
+                  <div className="yt-leg-summary-card">
+                    <div className="yt-lsum-header">
+                      <div>
+                        <span className="yt-doc-eyebrow">Corridor Segment {activeLeg.legIndex} of {itineraryLegs.length}</span>
+                        <h3 className="yt-lsum-title">
+                          {activeLeg.fromName} ➔ {activeLeg.toName}
+                        </h3>
+                      </div>
+                      <div className="yt-lsum-status-badge">
+                        {activeLeg.railheadStatus === 'direct_rail' && (
+                          <span className="yt-pill-purple">🚆 Direct Railhead Available</span>
+                        )}
+                        {activeLeg.railheadStatus === 'road_only_near_railhead' && (
+                          <span className="yt-pill-orange">🛣️ Road / Bus Connection</span>
+                        )}
+                        {activeLeg.railheadStatus === 'ghat_4wd_required' && (
+                          <span className="yt-pill-red">⛰️ Mountain Ghat (4WD Access)</span>
                         )}
                       </div>
+                    </div>
 
-                      <h4 className="yt-tcard-title">{bus.serviceLabel}</h4>
-                      <div className="yt-tcard-route">
-                        {bus.originCity} ({bus.departureTimes[0]}) ➔ {bus.destinationCity}
+                    <div className="yt-lsum-metrics">
+                      <span>🛣️ <strong>{activeLeg.distanceKm} km</strong></span>
+                      <span>•</span>
+                      <span>⏱️ <strong>{activeLeg.roadAndTaxi.estimatedDriveTimeLabel}</strong></span>
+                      <span>•</span>
+                      <span>🛣️ <em>{activeLeg.roadAndTaxi.majorHighway}</em></span>
+                    </div>
+
+                    {/* Railhead Reality Notice Banner */}
+                    {activeLeg.railheadNotice && (
+                      <div className={`yt-railhead-notice-box ${activeLeg.railheadStatus}`}>
+                        <div className="yt-rnotice-icon">
+                          {activeLeg.railheadStatus === 'direct_rail' ? 'ℹ️' : activeLeg.railheadStatus === 'ghat_4wd_required' ? '⛰️' : '⚠️'}
+                        </div>
+                        <div className="yt-rnotice-text">{activeLeg.railheadNotice}</div>
                       </div>
+                    )}
 
-                      <div className="yt-tcard-details">
-                        <span>🛣️ {bus.durationLabel}</span>
-                        <span>•</span>
-                        <span className="font-bold text-emerald">Fare: ₹{bus.fareInr}</span>
+                    {/* Mode Sub-Filter Bar with Dynamic Counts */}
+                    <div className="yt-transit-subnav" style={{ marginTop: 14 }}>
+                      <button
+                        type="button"
+                        className={`yt-tsub-btn ${transitModeFilter === 'all' ? 'active' : ''}`}
+                        onClick={() => setTransitModeFilter('all')}
+                      >
+                        All Options ({activeLeg.trains.length + activeLeg.buses.length + 1})
+                      </button>
+                      <button
+                        type="button"
+                        className={`yt-tsub-btn ${transitModeFilter === 'trains' ? 'active' : ''}`}
+                        onClick={() => setTransitModeFilter('trains')}
+                      >
+                        🚆 SWR Trains ({activeLeg.trains.length})
+                      </button>
+                      <button
+                        type="button"
+                        className={`yt-tsub-btn ${transitModeFilter === 'buses' ? 'active' : ''}`}
+                        onClick={() => setTransitModeFilter('buses')}
+                      >
+                        🚌 KSRTC Buses ({activeLeg.buses.length})
+                      </button>
+                      <button
+                        type="button"
+                        className={`yt-tsub-btn ${transitModeFilter === 'road' ? 'active' : ''}`}
+                        onClick={() => setTransitModeFilter('road')}
+                      >
+                        🚗 Road & Taxi
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 1. SWR Trains List */}
+                  {(transitModeFilter === 'all' || transitModeFilter === 'trains') && (
+                    <div className="yt-transit-cards-list">
+                      <div className="yt-tab-section-heading">
+                        🚆 South Western Railway Options for Leg {activeLeg.legIndex} ({activeLeg.trains.length} verified)
+                      </div>
+                      {activeLeg.trains.length === 0 ? (
+                        <div className="yt-empty-transit-card">
+                          <p className="yt-empty-transit-p">
+                            <strong>No passenger rail line on this leg.</strong> {activeLeg.toName} is reached via verified KSRTC express buses or registered taxi transfers from the nearest junction.
+                          </p>
+                        </div>
+                      ) : (
+                        activeLeg.trains.map((tr) => (
+                          <div key={tr.trainNumber} className="yt-transit-item-card">
+                            <div className="yt-tcard-header">
+                              <div className="yt-tcard-badges">
+                                <span className="yt-pill-purple">🚆 #{tr.trainNumber}</span>
+                                <span className="yt-pill-blue">{tr.trainType}</span>
+                              </div>
+                              <span className="yt-pill-emerald">
+                                Verified IRCTC / NTES
+                              </span>
+                            </div>
+
+                            <h4 className="yt-tcard-title">{tr.trainName}</h4>
+                            <div className="yt-tcard-route">
+                              {tr.originName} ({tr.departureTime}) ➔ {tr.destinationName} ({tr.arrivalTime})
+                            </div>
+
+                            <div className="yt-tcard-details">
+                              <span>⏱️ {tr.durationLabel}</span>
+                              <span>•</span>
+                              <span>🗓️ {tr.daysRunning.join(', ')}</span>
+                              <span>•</span>
+                              <span className="font-bold text-emerald">
+                                ₹{tr.fareStartingInr} onwards
+                              </span>
+                              <span>•</span>
+                              <span>Classes: {tr.classesAvailable.join(', ')}</span>
+                            </div>
+
+                            <div className="yt-tcard-lore">{tr.specialHighlight}</div>
+                            {tr.lastMileNote && (
+                              <div className="yt-tcard-lastmile">
+                                📍 <strong>Transfer Advice:</strong> {tr.lastMileNote}
+                              </div>
+                            )}
+
+                            <div className="yt-tcard-actions">
+                              <a
+                                href={tr.bookingUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="yt-btn-tcard-link irctc"
+                              >
+                                🎟️ Book on IRCTC ↗
+                              </a>
+                              <a
+                                href={tr.liveStatusUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="yt-btn-tcard-link ntes"
+                              >
+                                📡 NTES Live Status ↗
+                              </a>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  )}
+
+                  {/* 2. KSRTC Buses List */}
+                  {(transitModeFilter === 'all' || transitModeFilter === 'buses') && (
+                    <div className="yt-transit-cards-list">
+                      <div className="yt-tab-section-heading">
+                        🚌 KSRTC State Transport Buses for Leg {activeLeg.legIndex} ({activeLeg.buses.length} verified)
+                      </div>
+                      {activeLeg.buses.map((bus, bIdx) => (
+                        <div key={`${bus.serviceLabel}-${bIdx}`} className="yt-transit-item-card">
+                          <div className="yt-tcard-header">
+                            <div className="yt-tcard-badges">
+                              <span className="yt-pill-orange">🚌 {bus.serviceLabel}</span>
+                              <span className="yt-pill-blue">{bus.departureFrequency}</span>
+                            </div>
+                            {bus.shaktiFree ? (
+                              <span className="yt-pill-emerald">
+                                ✓ Shakti Scheme: ₹0 for Women Domicile
+                              </span>
+                            ) : (
+                              <span className="yt-pill-muted">Premium AC (Non-Shakti)</span>
+                            )}
+                          </div>
+
+                          <h4 className="yt-tcard-title">{bus.serviceLabel} ({bus.operator})</h4>
+                          <div className="yt-tcard-route">
+                            {bus.boardingPoint} ➔ {bus.alightingPoint}
+                          </div>
+
+                          <div className="yt-tcard-details">
+                            <span>⏱️ {bus.durationLabel}</span>
+                            <span>•</span>
+                            <span className="font-bold text-emerald">Fare: ₹{bus.fareInr}</span>
+                            <span>•</span>
+                            <span>Route: {bus.routeVia}</span>
+                          </div>
+
+                          <div className="yt-tcard-actions">
+                            <a
+                              href={bus.bookingUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="yt-btn-tcard-link ksrtc"
+                            >
+                              🚌 KSRTC Online OPRS ↗
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 3. Road & Taxi Transfer */}
+                  {(transitModeFilter === 'all' || transitModeFilter === 'road') && (
+                    <div className="yt-transit-cards-list">
+                      <div className="yt-tab-section-heading">
+                        🚗 Road, Highway & Private Taxi Tariff
+                      </div>
+                      <div className="yt-transit-item-card">
+                        <div className="yt-tcard-header">
+                          <span className="yt-pill-blue">🛣️ Highway Corridor</span>
+                          <span className="font-bold text-emerald">
+                            Est. Taxi: ₹{activeLeg.roadAndTaxi.taxiFareEstimateInr.toLocaleString('en-IN')}
+                          </span>
+                        </div>
+                        <h4 className="yt-tcard-title">{activeLeg.roadAndTaxi.majorHighway}</h4>
+                        <div className="yt-tcard-route">{activeLeg.roadAndTaxi.routeDescription}</div>
+                        <div className="yt-tcard-lore" style={{ marginTop: 8 }}>
+                          {activeLeg.roadAndTaxi.localTransferAdvice}
+                        </div>
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
@@ -650,19 +804,19 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                   <h4 className="yt-bbreak-title">Estimated Category Breakdown</h4>
                   <div className="yt-bbreak-rows">
                     <div className="yt-bbreak-row">
-                      <span>🏨 Accommodation ({days - 1} nights)</span>
+                      <span>🏨 Accommodation ({days - 1} nights × {travellers} {travellers === 1 ? 'person' : 'people'})</span>
                       <span>₹{baseBudget.stayInr.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="yt-bbreak-row">
-                      <span>🚌 Transport (Gross)</span>
+                      <span>🚌 Transport (Road & Transit for {route.totalDistanceKm} km)</span>
                       <span>₹{baseBudget.transportInr.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="yt-bbreak-row">
-                      <span>🏛️ Monument Entry Fees</span>
+                      <span>🏛️ Monument Entry Fees ({itineraryStops.length} stops × {travellers} {travellers === 1 ? 'person' : 'people'})</span>
                       <span>₹{baseBudget.activityInr.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="yt-bbreak-row">
-                      <span>☕ Food & Local Karnataka Dining</span>
+                      <span>☕ Food & Dining ({days} days × {travellers} {travellers === 1 ? 'person' : 'people'})</span>
                       <span>₹{baseBudget.mealsInr.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="yt-bbreak-divider" />
@@ -672,7 +826,7 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                     </div>
                     {shaktiSavingsInr > 0 && (
                       <div className="yt-bbreak-row discount">
-                        <span>Shakti Scheme Subsidy</span>
+                        <span>Shakti Scheme Subsidy ({shaktiWomenCount} {shaktiWomenCount === 1 ? 'beneficiary' : 'beneficiaries'})</span>
                         <span>- ₹{shaktiSavingsInr.toLocaleString('en-IN')}</span>
                       </div>
                     )}
@@ -681,6 +835,11 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                       <span className="text-emerald">₹{netTotalBudgetInr.toLocaleString('en-IN')}</span>
                     </div>
                   </div>
+                  {shaktiSavingsInr > 0 && (
+                    <div className="yt-shakti-formula-callout" style={{ marginTop: 12, padding: '10px 12px', background: '#eff6ff', borderRadius: 8, fontSize: '11.5px', color: '#1e40af', border: '1px solid #bfdbfe', lineHeight: 1.5 }}>
+                      ⚖️ <strong>Statutory Formula (GoK Order TD 48 TRF 2023):</strong> Free travel applies on KSRTC/NWKRTC/KKRTC Ordinary & Karnataka Sarige buses for women domiciled in Karnataka. Formula: <code>{shaktiWomenCount} eligible {shaktiWomenCount === 1 ? 'woman' : 'women'} × Non-AC Bus Distance Tariff (₹1.15/km × {route.totalDistanceKm} km) = ₹{shaktiSavingsInr.toLocaleString('en-IN')}</code>.
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -863,6 +1022,36 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
       <main className="yt-workspace-map-pane">
         <div ref={mapContainerRef} className="yt-maplibre-canvas" />
 
+        {/* Basemap Error Fallback Overlay */}
+        {mapStatus === 'error' && (
+          <div className="yt-map-error-overlay">
+            <div className="yt-map-error-card">
+              <div className="yt-map-error-icon">⚠️</div>
+              <h4 className="yt-map-error-title">Basemap Service Network Timeout</h4>
+              <p className="yt-map-error-desc">
+                Public vector basemap service encountered a network delay or timeout. Your itinerary stops and route geometry remain fully computed.
+              </p>
+              <div className="yt-map-error-actions">
+                {onRetryMap && (
+                  <button type="button" className="yt-btn-retry-map" onClick={onRetryMap}>
+                    🔄 Retry Basemap
+                  </button>
+                )}
+                {googleMapsUrl && (
+                  <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="yt-btn-ext-map google">
+                    🗺️ Open in Google Maps ↗
+                  </a>
+                )}
+                {openStreetMapUrl && (
+                  <a href={openStreetMapUrl} target="_blank" rel="noopener noreferrer" className="yt-btn-ext-map osm">
+                    🌐 Open in OpenStreetMap ↗
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Restrained Map Floating Controls */}
         <div className="yt-map-restrained-controls">
           {/* Fit Route */}
@@ -874,6 +1063,19 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
           >
             🗺️ Fit Route
           </button>
+
+          {/* External Map Directions Handoff */}
+          {googleMapsUrl && (
+            <a
+              href={googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="yt-map-ctrl-btn external-nav"
+              title="Open full driving route in Google Maps"
+            >
+              ↗ Google Maps
+            </a>
+          )}
 
           {/* Map Style Selector */}
           <div className="yt-map-style-group">

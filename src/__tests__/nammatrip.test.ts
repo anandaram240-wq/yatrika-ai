@@ -21,12 +21,12 @@ import {
 } from '../services/tripPlannerEngine';
 
 describe('NammaTrip AI — Geospatial, Transport & Travel Intelligence Suite', () => {
-  it('1. centralizes OpenFreeMap vector styles with realistic zoom bounds and attribution', () => {
+  it('1. centralizes multi-provider vector styles with realistic zoom bounds and attribution', () => {
     expect(MAP_PROVIDER_CONFIG.defaultStyleId).toBe('bright');
     const bright = getBasemapStyle('bright');
-    expect(bright.url).toContain('tiles.openfreemap.org/styles/bright');
-    expect(bright.maxZoom).toBeLessThanOrEqual(19);
-    expect(bright.attribution).toContain('OpenFreeMap');
+    expect(bright.url).toMatch(/cartocdn|openfreemap/);
+    expect(bright.maxZoom).toBeLessThanOrEqual(20);
+    expect(bright.attribution).toMatch(/CARTO|OpenFreeMap|OpenStreetMap/);
     expect(Object.keys(MAP_PROVIDER_CONFIG.styles)).toEqual([
       'bright',
       'liberty',

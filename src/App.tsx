@@ -260,7 +260,13 @@ export function App() {
   const [aiPromptInput, setAiPromptInput] = useState<string>('');
   const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(() => (isGoldenDemoInitial ? '🌟 ಸುವರ್ಣ ಪ್ರವಾಸ: ಬೆಂಗಳೂರು ➔ ಹಾಸನ (ಶೆಟ್ಟಿಹಳ್ಳಿ) ➔ ಬೇಲೂರು (ಚೆನ್ನಕೇಶವ) ➔ ಚಿಕ್ಕಮಗಳೂರು ➔ ಮುಳ್ಳಯ್ಯನಗಿರಿ' : null));
   const [shareCopied, setShareCopied] = useState<boolean>(false);
-  const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState<boolean>(false);
+  const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      return p.get('voice') === '1';
+    }
+    return false;
+  });
   const [isOfflineSurvivalOpen, setIsOfflineSurvivalOpen] = useState<boolean>(false);
 
   // User starting location states
@@ -301,6 +307,7 @@ export function App() {
   const [selectedParetoOption, setSelectedParetoOption] = useState<'FASTEST_ROUTE' | 'LOWEST_COST_SHAKTI' | 'MAX_HERITAGE' | 'LOWEST_DISRUPTION_RISK'>('FASTEST_ROUTE');
   const [isOpsCenterModalOpen, setIsOpsCenterModalOpen] = useState<boolean>(false);
   const [isReleaseGatesModalOpen, setIsReleaseGatesModalOpen] = useState<boolean>(false);
+  const [isJuryDropdownOpen, setIsJuryDropdownOpen] = useState<boolean>(false);
 
   // V5 Usability & Accessibility States
   const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(() => {
@@ -1365,7 +1372,27 @@ export function App() {
   const handleApplyVoiceIntent = (intentResult: VoiceIntentResult) => {
     if (intentResult.targetCircuitId) {
       handleLoadCircuit(intentResult.targetCircuitId);
+    } else if (intentResult.entities.destination) {
+      const destLower = intentResult.entities.destination.toLowerCase();
+      const matchedPoi = KARNATAKA_POIS.find(
+        (p) =>
+          p.name.toLowerCase().includes(destLower) ||
+          p.nameKannada.includes(intentResult.entities.destination!) ||
+          p.district.toLowerCase().includes(destLower)
+      );
+      if (matchedPoi) {
+        setStopIds((prev) => {
+          const next = [matchedPoi.id, ...prev.filter((id) => id !== matchedPoi.id)].slice(0, 5);
+          return next;
+        });
+        setSelectedPoiId(matchedPoi.id);
+      }
     }
+
+    if (intentResult.entities.durationDays) {
+      setDays(Math.max(1, Math.min(14, intentResult.entities.durationDays)));
+    }
+
     if (intentResult.entities.origin) {
       const matchOrigin = KARNATAKA_GATEWAY_ORIGINS.find(
         (o) =>
@@ -1391,8 +1418,9 @@ export function App() {
     if (intentResult.suggestedAction === 'SHOW_BUDGET') {
       setActiveTab('budget');
     }
+    setActiveTab('timeline');
     setAiStatusBanner(
-      `ಧ್ವನಿ ಪ್ರಾಂಪ್ಟ್: "${intentResult.rawTranscript}" (${intentResult.detectedDialect.replace('_', ' ')})`
+      `ಧ್ವನಿ ಪ್ರಾಂಪ್ಟ್ ಸ್ವೀಕರಿಸಲಾಗಿದೆ: "${intentResult.rawTranscript}"`
     );
   };
 
@@ -1453,19 +1481,20 @@ export function App() {
               background: '#eff6ff',
               border: '1px solid #bfdbfe',
               color: '#2563eb',
-              borderRadius: '50%',
-              width: 32,
-              height: 32,
+              borderRadius: 20,
+              padding: '4px 10px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              gap: 5,
               cursor: 'pointer',
+              fontSize: 12,
+              fontWeight: 700,
               marginRight: 6,
-              fontSize: 14,
               flexShrink: 0,
             }}
           >
-            🎙️
+            <span>🎙️</span>
+            <span style={{ fontSize: 11.5 }}>{uiLanguage === 'kn' ? 'ಧ್ವನಿ' : 'Voice'}</span>
           </button>
           <button type="submit" className="nt-omnibar-btn">
             ✨ {uiLanguage === 'kn' ? 'ಪ್ರವಾಸ ರಚಿಸಿ' : 'Generate Trip'}
@@ -1535,38 +1564,6 @@ export function App() {
             }}
           >
             <span>👋 {uiLanguage === 'kn' ? 'ಮಾರ್ಗದರ್ಶಿ' : 'Guide'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsOpsCenterModalOpen(true)}
-            title="YatriKa AI V4 Live Operations Center & Telemetry"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              background: '#ecfdf5',
-              border: '1px solid #a7f3d0',
-              color: '#065f46',
-              borderRadius: 999,
-              padding: '5px 12px',
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
-          >
-            <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
-            <span>Ops Center (7/7)</span>
-          </button>
-
-          <button
-            type="button"
-            className="nt-btn-outline"
-            onClick={() => setIsReleaseGatesModalOpen(true)}
-            title="V4 Release Governance & Pilot Evaluation (14/14 Gates Passed)"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fffbeb', border: '1px solid #fef3c7', color: '#b45309' }}
-          >
-            <span>🏆 V4 Gates</span>
           </button>
 
           <button
@@ -2812,75 +2809,186 @@ export function App() {
               ))}
             </div>
 
-            {/* Jury-Ready Demonstration System Pill */}
-            <div className="nt-map-glass-pill" style={{ background: '#fef3c7', borderColor: '#fde68a' }}>
-              <span style={{ fontWeight: 800, color: '#92400e' }}>🎯 Jury Demos:</span>
+            {/* Professional Jury Demonstration Showcase */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, position: 'relative' }}>
               <button
                 type="button"
                 onClick={() => handleRunJuryScenario('GOLDEN')}
                 style={{
                   border: 'none',
-                  background: 'linear-gradient(135deg, #ea580c, #b45309)',
-                  color: '#fff',
-                  padding: '3px 10px',
-                  borderRadius: 6,
-                  fontSize: 11,
+                  background: '#ea580c',
+                  color: '#ffffff',
+                  padding: '5px 12px',
+                  borderRadius: 20,
+                  fontSize: 11.5,
                   fontWeight: 800,
                   cursor: 'pointer',
-                  boxShadow: '0 1px 4px rgba(234, 88, 12, 0.4)',
+                  boxShadow: '0 2px 6px rgba(234, 88, 12, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 5,
                 }}
                 title="The Golden User Journey: Bengaluru -> Hassan -> Belur -> Chikkamagaluru -> Mullayanagiri"
               >
-                🌟 Golden Journey
+                <span>🌟</span>
+                <span>Golden Journey</span>
               </button>
-              <button
-                type="button"
-                onClick={() => handleRunJuryScenario('A')}
-                style={{ border: 'none', background: '#ea580c', color: '#fff', padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
-                title="Scenario A: Kannada Speech-to-Plan"
-              >
-                A: Speech NLP
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRunJuryScenario('B')}
-                style={{ border: 'none', background: '#d97706', color: '#fff', padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
-                title="Scenario B: Ghat Hazard & Detour"
-              >
-                B: Ghat Detour
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRunJuryScenario('C')}
-                style={{ border: 'none', background: '#2563eb', color: '#fff', padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
-                title="Scenario C: Smart Scheduling & Darshan Windows"
-              >
-                C: Darshan Window
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRunJuryScenario('D')}
-                style={{ border: 'none', background: '#059669', color: '#fff', padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
-                title="Scenario D: Multimodal Transit & Shakti ₹0"
-              >
-                D: Shakti ₹0
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRunJuryScenario('E')}
-                style={{ border: 'none', background: '#475569', color: '#fff', padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
-                title="Scenario E: Zero-Connectivity GhatOffline"
-              >
-                E: Offline SOS
-              </button>
-              <button
-                type="button"
-                onClick={() => handleRunJuryScenario('RESET')}
-                style={{ border: '1px solid #cbd5e1', background: '#fff', color: '#64748b', padding: '3px 6px', borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: 'pointer' }}
-                title="Reset Complete Demo Environment"
-              >
-                🔄 Reset
-              </button>
+
+              <div style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsJuryDropdownOpen(!isJuryDropdownOpen)}
+                  style={{
+                    border: '1px solid #cbd5e1',
+                    background: '#ffffff',
+                    color: '#172033',
+                    padding: '5px 10px',
+                    borderRadius: 20,
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 5,
+                    boxShadow: '0 1px 3px rgba(15, 23, 42, 0.08)',
+                  }}
+                  title="Open Hackathon Demonstration Scenarios"
+                >
+                  <span>🎯 Demos</span>
+                  <span style={{ fontSize: 9 }}>{isJuryDropdownOpen ? '▲' : '▼'}</span>
+                </button>
+
+                {isJuryDropdownOpen && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      right: 0,
+                      marginTop: 6,
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: 12,
+                      boxShadow: '0 12px 28px -4px rgba(15, 23, 42, 0.18)',
+                      padding: 8,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 4,
+                      minWidth: 260,
+                      zIndex: 99,
+                    }}
+                  >
+                    <div style={{ fontSize: 10.5, fontWeight: 700, color: '#64748b', padding: '4px 8px', textTransform: 'uppercase' }}>
+                      Jury Scenarios
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleRunJuryScenario('A');
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#172033', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f1f5f9')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      🎙️ A: Kannada Speech NLP
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleRunJuryScenario('B');
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#172033', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f1f5f9')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      ⛰️ B: Ghat Hazard & Detour
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleRunJuryScenario('C');
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#172033', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f1f5f9')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      ⏱️ C: Darshan & Opening Windows
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleRunJuryScenario('D');
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#172033', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f1f5f9')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      🚌 D: Multimodal Transit & Shakti ₹0
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleRunJuryScenario('E');
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#172033', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f1f5f9')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      📡 E: Zero-Connectivity GhatSOS
+                    </button>
+
+                    <div style={{ height: 1, background: '#e2e8f0', margin: '4px 0' }} />
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsOpsCenterModalOpen(true);
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#065f46', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#ecfdf5')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      ⚙️ Operations Center Telemetry
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsReleaseGatesModalOpen(true);
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 12, fontWeight: 600, color: '#b45309', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#fffbeb')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      🏆 Release Governance Gates
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleRunJuryScenario('RESET');
+                        setIsJuryDropdownOpen(false);
+                      }}
+                      style={{ border: 'none', background: 'transparent', textAlign: 'left', padding: '6px 8px', borderRadius: 6, fontSize: 11.5, fontWeight: 700, color: '#dc2626', cursor: 'pointer' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#fef2f2')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      🔄 Reset Demo State
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

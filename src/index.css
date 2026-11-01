@@ -7,7 +7,7 @@
   --bg-surface: #ffffff;
   --bg-subtle: #f1f5f9;
   --bg-hover: #e2e8f0;
-  --text-primary: #0f172a;
+  --text-primary: #172033;
   --text-secondary: #475569;
   --text-muted: #64748b;
   --border-light: #e2e8f0;
@@ -22,12 +22,12 @@
   --accent-emerald-soft: #ecfdf5;
   --accent-purple: #7c3aed;
   --accent-purple-soft: #f5f3ff;
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.14);
-  --radius-card: 14px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+  --radius-card: 12px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
   --radius-pill: 9999px;
 }
 
@@ -83,11 +83,10 @@ body, html, #root {
   background: var(--bg-app);
 }
 
-/* Top Glassmorphic Command Header */
+/* Top Command Header - Clean Editorial Travel Design */
 .nt-topbar {
-  height: 68px;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
+  height: 64px;
+  background: #ffffff;
   border-bottom: 1px solid var(--border-light);
   display: flex;
   align-items: center;
@@ -96,7 +95,7 @@ body, html, #root {
   gap: 16px;
   z-index: 30;
   flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .nt-brand {
@@ -107,17 +106,18 @@ body, html, #root {
 }
 
 .nt-logo-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--brand-primary);
+  border: 1.5px solid #1d4ed8;
   color: #ffffff;
   font-weight: 800;
   font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
 }
 
 .nt-brand-title {

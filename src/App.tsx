@@ -57,6 +57,7 @@ import { BusSearchWorkspace } from './components/BusSearchWorkspace';
 import { TrainJourneyPlanner } from './components/TrainJourneyPlanner';
 import { StayDiscoveryWorkspace } from './components/StayDiscoveryWorkspace';
 import { TransportDirectoryWorkspace } from './components/TransportDirectoryWorkspace';
+import { speechService } from './utils/speech';
 
 // High-resolution curated photography for each Karnataka POI
 // Geodesic distance calculation between two [lng, lat] coordinates in kilometers
@@ -216,6 +217,14 @@ export function App() {
 
   // World-Class Cinematic 60 FPS Route Tour Simulation States
   const [isTourActive, setIsTourActive] = useState<boolean>(false);
+  const [isTourPaused, setIsTourPaused] = useState<boolean>(false);
+  const [tourProgressRatio, setTourProgressRatio] = useState<number>(0);
+  const [tourSpeedMultiplier, setTourSpeedMultiplier] = useState<1 | 2 | 5>(1);
+  const [isCameraChase, setIsCameraChase] = useState<boolean>(true);
+  const [telemetrySpeed, setTelemetrySpeed] = useState<number>(78);
+  const [telemetryAltitude, setTelemetryAltitude] = useState<number>(840);
+  const [arrivedStop, setArrivedStop] = useState<KarnatakaPOI | null>(null);
+  const celebratedStopIdsRef = useRef<Set<string>>(new Set());
   const [isOpsCenterModalOpen, setIsOpsCenterModalOpen] = useState<boolean>(false);
   const [isReleaseGatesModalOpen, setIsReleaseGatesModalOpen] = useState<boolean>(false);
 
@@ -777,6 +786,8 @@ export function App() {
 
   // 60 FPS RequestAnimationFrame Simulation Loop
   const runAnimationLoop = useCallback((timestamp: number) => {
+    if (isTourPaused) return;
+
     if (!lastFrameTimeRef.current) {
       lastFrameTimeRef.current = timestamp;
     }
@@ -789,14 +800,42 @@ export function App() {
     const state = getInterpolatedState(currentDistKmRef.current);
     const isMountain = state.coord[1] >= 12.8 && state.coord[1] <= 13.8 && state.coord[0] <= 76.2;
 
-    const baseSimSpeedKmH = isMountain ? 65 : 90;
-    const deltaDistKm = (baseSimSpeedKmH / 3600) * (deltaMs / 1000);
+    const baseSimSpeedKmH = isMountain ? 65 : 95;
+    const effectiveSpeedKmH = baseSimSpeedKmH * tourSpeedMultiplier;
+    const deltaDistKm = (effectiveSpeedKmH / 3600) * (deltaMs / 1000);
 
     currentDistKmRef.current += deltaDistKm;
+    const ratio = totalDist > 0 ? Math.min(1, currentDistKmRef.current / totalDist) : 0;
+    setTourProgressRatio(ratio);
+
+    // Dynamic Telemetry Readout
+    const speedGauge = isMountain
+      ? Math.round(45 * tourSpeedMultiplier + Math.sin(timestamp * 0.003) * 5)
+      : Math.round(85 * tourSpeedMultiplier + Math.sin(timestamp * 0.003) * 6);
+    setTelemetrySpeed(speedGauge);
+
+    const baseAlt = isMountain ? 1040 + Math.round(state.ratio * 890) : 840;
+    setTelemetryAltitude(baseAlt);
+
+    // Check stop milestones for arrival celebration
+    routeGeometryData.stopMilestones.forEach(({ stop, distanceKm }) => {
+      if (
+        Math.abs(currentDistKmRef.current - distanceKm) < 0.8 &&
+        !celebratedStopIdsRef.current.has(stop.id)
+      ) {
+        celebratedStopIdsRef.current.add(stop.id);
+        setArrivedStop(stop);
+        setSelectedPoiId(stop.id);
+        setTimeout(() => {
+          setArrivedStop((cur) => (cur?.id === stop.id ? null : cur));
+        }, 3500);
+      }
+    });
 
     if (currentDistKmRef.current >= totalDist) {
       currentDistKmRef.current = totalDist;
-      setIsTourActive(false);
+      setTourProgressRatio(1);
+      setIsTourPaused(true);
       if (vehicleMarkerRef.current && routeGeometryData.coords.length > 0) {
         vehicleMarkerRef.current.setLngLat(routeGeometryData.coords[routeGeometryData.coords.length - 1]);
       }
@@ -828,26 +867,34 @@ export function App() {
         });
       }
 
-      let diff = (state.bearing - currentCameraBearingRef.current) % 360;
-      if (diff < -180) diff += 360;
-      if (diff > 180) diff -= 360;
-      currentCameraBearingRef.current = (currentCameraBearingRef.current + diff * 0.10 + 360) % 360;
+      if (isCameraChase) {
+        let diff = (state.bearing - currentCameraBearingRef.current) % 360;
+        if (diff < -180) diff += 360;
+        if (diff > 180) diff -= 360;
+        currentCameraBearingRef.current = (currentCameraBearingRef.current + diff * 0.10 + 360) % 360;
 
-      map.easeTo({
-        center: state.coord,
-        zoom: isMountain ? 13.0 : 12.3,
-        pitch: 48,
-        bearing: currentCameraBearingRef.current,
-        duration: 0,
-      });
+        map.easeTo({
+          center: state.coord,
+          zoom: isMountain ? 13.0 : 12.3,
+          pitch: 48,
+          bearing: currentCameraBearingRef.current,
+          duration: 0,
+        });
+      }
     }
 
     animationFrameRef.current = requestAnimationFrame(runAnimationLoop);
-  }, [getInterpolatedState, routeGeometryData]);
+  }, [getInterpolatedState, isCameraChase, isTourPaused, routeGeometryData, tourSpeedMultiplier]);
 
   const handleStartTour = () => {
     const map = mapRef.current;
-    if (!map || routeGeometryData.coords.length < 2) return;
+    if (!map) return;
+
+    const coords =
+      routeGeometryData.coords.length >= 2
+        ? routeGeometryData.coords
+        : [userOrigin.coordinates, ...itineraryStops.map((s) => s.coordinates)];
+    if (coords.length < 2) return;
 
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
@@ -855,12 +902,15 @@ export function App() {
     }
 
     setIsTourActive(true);
+    setIsTourPaused(false);
+    celebratedStopIdsRef.current.clear();
     currentDistKmRef.current = 0;
     lastFrameTimeRef.current = null;
+    setTourProgressRatio(0);
 
     const initialBearing =
-      routeGeometryData.coords.length >= 2
-        ? getCoordBearing(routeGeometryData.coords[0], routeGeometryData.coords[1])
+      coords.length >= 2
+        ? getCoordBearing(coords[0], coords[1])
         : 0;
     currentCameraBearingRef.current = initialBearing;
 
@@ -874,24 +924,120 @@ export function App() {
       `;
       vehicleElRef.current = el;
       const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
-        .setLngLat(routeGeometryData.coords[0])
+        .setLngLat(coords[0])
         .addTo(map);
       vehicleMarkerRef.current = marker;
     } else {
-      vehicleMarkerRef.current.setLngLat(routeGeometryData.coords[0]);
+      vehicleMarkerRef.current.setLngLat(coords[0]);
     }
 
-    map.flyTo({
-      center: routeGeometryData.coords[0],
-      zoom: 12.8,
-      pitch: 48,
-      bearing: initialBearing,
-      duration: 1200,
-      essential: true,
-    });
+    try {
+      map.flyTo({
+        center: coords[0],
+        zoom: 12.8,
+        pitch: 48,
+        bearing: initialBearing,
+        duration: 1200,
+        essential: true,
+      });
+    } catch {
+      // Map camera fallback
+    }
 
     lastFrameTimeRef.current = performance.now();
     animationFrameRef.current = requestAnimationFrame(runAnimationLoop);
+  };
+
+  const handleTogglePlayPause = () => {
+    if (isTourPaused) {
+      setIsTourPaused(false);
+      lastFrameTimeRef.current = performance.now();
+      animationFrameRef.current = requestAnimationFrame(runAnimationLoop);
+    } else {
+      setIsTourPaused(true);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    }
+  };
+
+  const handleScrubTour = (percent: number) => {
+    const ratio = Math.max(0, Math.min(1, percent / 100));
+    const targetDist = ratio * routeGeometryData.totalDist;
+    currentDistKmRef.current = targetDist;
+    setTourProgressRatio(ratio);
+
+    const state = getInterpolatedState(targetDist);
+    if (vehicleMarkerRef.current) {
+      vehicleMarkerRef.current.setLngLat(state.coord);
+    }
+    if (vehicleElRef.current) {
+      vehicleElRef.current.style.transform = `rotate(${state.bearing}deg)`;
+    }
+    const map = mapRef.current;
+    if (map) {
+      const travSrc = map.getSource('nt-route-traveled') as maplibregl.GeoJSONSource | undefined;
+      if (travSrc) {
+        travSrc.setData({
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: { type: 'LineString', coordinates: state.traveledCoords },
+              properties: {},
+            },
+          ],
+        });
+      }
+      if (isCameraChase) {
+        map.jumpTo({
+          center: state.coord,
+          zoom: 12.8,
+          pitch: 48,
+          bearing: state.bearing,
+        });
+      }
+    }
+  };
+
+  const handleNextStop = () => {
+    const nextMilestone = routeGeometryData.stopMilestones.find(
+      (m) => m.distanceKm > currentDistKmRef.current + 0.5
+    );
+    if (nextMilestone) {
+      handleScrubTour((nextMilestone.distanceKm / routeGeometryData.totalDist) * 100);
+    } else {
+      handleScrubTour(100);
+    }
+  };
+
+  const handlePrevStop = () => {
+    const prevMilestones = routeGeometryData.stopMilestones.filter(
+      (m) => m.distanceKm < currentDistKmRef.current - 0.5
+    );
+    if (prevMilestones.length > 0) {
+      const prev = prevMilestones[prevMilestones.length - 1];
+      handleScrubTour((prev.distanceKm / routeGeometryData.totalDist) * 100);
+    } else {
+      handleScrubTour(0);
+    }
+  };
+
+  const handleRestartTour = () => {
+    celebratedStopIdsRef.current.clear();
+    handleScrubTour(0);
+    setIsTourPaused(false);
+    lastFrameTimeRef.current = performance.now();
+    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    animationFrameRef.current = requestAnimationFrame(runAnimationLoop);
+  };
+
+  const handleSpeakKannada = (text: string) => {
+    speechService.speak({
+      kannadaText: text,
+      onError: (err) => console.warn('Speech synthesis error:', err),
+    });
   };
 
   const handleStopTour = () => {
@@ -900,6 +1046,9 @@ export function App() {
       animationFrameRef.current = null;
     }
     setIsTourActive(false);
+    setIsTourPaused(false);
+    setArrivedStop(null);
+    celebratedStopIdsRef.current.clear();
     if (vehicleMarkerRef.current) {
       vehicleMarkerRef.current.remove();
       vehicleMarkerRef.current = null;
@@ -1324,8 +1473,23 @@ export function App() {
           mapStyleId={styleId}
           onSwitchMapStyle={handleSwitchStyle}
           isTourActive={isTourActive}
+          isTourPaused={isTourPaused}
+          tourProgressRatio={tourProgressRatio}
+          tourSpeedMultiplier={tourSpeedMultiplier}
+          isCameraChase={isCameraChase}
+          telemetrySpeed={telemetrySpeed}
+          telemetryAltitude={telemetryAltitude}
+          arrivedStop={arrivedStop}
           onStartTour={handleStartTour}
           onStopTour={handleStopTour}
+          onTogglePlayPause={handleTogglePlayPause}
+          onScrubTour={handleScrubTour}
+          onNextStop={handleNextStop}
+          onPrevStop={handlePrevStop}
+          onRestartTour={handleRestartTour}
+          onSetSpeedMultiplier={(spd) => setTourSpeedMultiplier(spd)}
+          onToggleCameraChase={() => setIsCameraChase(!isCameraChase)}
+          onSpeakText={handleSpeakKannada}
           shaktiLegs={shaktiLegs}
           carbonEstimate={carbonEstimate}
           baseBudget={{

@@ -50,10 +50,25 @@ export interface TripPlanningWorkspaceProps {
   ghatName?: string;
   mapStyleId: string;
   onSwitchMapStyle: (style: any) => void;
-  // Simulation trigger
+  // 60 FPS Cinematic Route Tour Simulation
   isTourActive: boolean;
+  isTourPaused?: boolean;
+  tourProgressRatio?: number;
+  tourSpeedMultiplier?: 1 | 2 | 5;
+  isCameraChase?: boolean;
+  telemetrySpeed?: number;
+  telemetryAltitude?: number;
+  arrivedStop?: KarnatakaPOI | null;
   onStartTour: () => void;
   onStopTour: () => void;
+  onTogglePlayPause?: () => void;
+  onScrubTour?: (percent: number) => void;
+  onNextStop?: () => void;
+  onPrevStop?: () => void;
+  onRestartTour?: () => void;
+  onSetSpeedMultiplier?: (speed: 1 | 2 | 5) => void;
+  onToggleCameraChase?: () => void;
+  onSpeakText?: (text: string) => void;
   shaktiLegs?: ShaktiLeg[];
   carbonEstimate?: CarbonComparison;
   baseBudget?: {
@@ -105,8 +120,23 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
   mapStyleId,
   onSwitchMapStyle,
   isTourActive,
+  isTourPaused = false,
+  tourProgressRatio = 0,
+  tourSpeedMultiplier = 1,
+  isCameraChase = true,
+  telemetrySpeed = 78,
+  telemetryAltitude = 840,
+  arrivedStop = null,
   onStartTour,
   onStopTour,
+  onTogglePlayPause,
+  onScrubTour,
+  onNextStop,
+  onPrevStop,
+  onRestartTour,
+  onSetSpeedMultiplier,
+  onToggleCameraChase,
+  onSpeakText,
   shaktiLegs = [],
   carbonEstimate,
   baseBudget,
@@ -1048,6 +1078,151 @@ export const TripPlanningWorkspace: React.FC<TripPlanningWorkspaceProps> = ({
                   </a>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Waypoint Arrival Celebration Toast on Map */}
+        {arrivedStop && (
+          <div className="nt-waypoint-celebration-toast" role="alert" aria-live="polite">
+            <img
+              src={getAuthenticDestinationPhoto(arrivedStop.id, arrivedStop.category, arrivedStop.name, arrivedStop.district).thumbnailUrl}
+              alt={arrivedStop.name}
+              className="nt-waypoint-thumb"
+            />
+            <div className="nt-waypoint-meta">
+              <span className="nt-waypoint-tag">🎯 {uiLanguage === 'kn' ? 'ಗಮ್ಯಸ್ಥಾನ ತಲುಪಿದೆ' : 'Arrived at Destination'}</span>
+              <span className="nt-waypoint-name">{arrivedStop.name}</span>
+              <span className="nt-waypoint-kn font-kannada">{arrivedStop.nameKannada}</span>
+            </div>
+            {arrivedStop.localPhrase && onSpeakText && (
+              <button
+                type="button"
+                className="nt-voice-btn"
+                style={{ marginLeft: 'auto' }}
+                onClick={() => onSpeakText(arrivedStop.localPhrase.kannada)}
+                title="Listen in Kannada"
+                aria-label="Listen in Kannada"
+              >
+                🔊 {uiLanguage === 'kn' ? 'ಆಲಿಸಿ' : 'Listen'}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* 60 FPS Cinematic Route Tour Flight Deck (HUD) */}
+        {isTourActive && (
+          <div className="nt-tour-flight-deck" role="region" aria-label="3D Route Tour Flight Deck Controls">
+            {/* Telemetry Row */}
+            <div className="nt-tour-telemetry-row">
+              <div className="nt-tour-telemetry-badge" title="Simulated speed along corridor">
+                <span>🚗</span>
+                <span>{telemetrySpeed} km/h</span>
+              </div>
+              <div className="nt-tour-telemetry-badge" title="Terrain elevation above sea level">
+                <span>⛰️</span>
+                <span>Elev: {telemetryAltitude} m</span>
+              </div>
+              <span className="nt-tour-location-text">
+                📍 {activeCircuitTitle || 'Karnataka Travel Corridor'} {ghatName ? `• ${ghatName}` : ''}
+              </span>
+              <button
+                type="button"
+                onClick={onStopTour}
+                className="nt-tour-icon-btn"
+                title="Close Simulation Tour"
+                aria-label="Exit route tour"
+                style={{ width: 28, height: 28, fontSize: 11 }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Scrubber Progress Slider */}
+            <div className="nt-tour-scrubber-wrap">
+              <span style={{ fontSize: 11, fontWeight: 700, color: '#fde68a', minWidth: 32 }}>
+                {Math.round(tourProgressRatio * 100)}%
+              </span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                step="0.1"
+                value={Math.round(tourProgressRatio * 1000) / 10}
+                onChange={(e) => onScrubTour?.(parseFloat(e.target.value))}
+                className="nt-tour-slider"
+                aria-label="Route tour progress scrubber"
+              />
+              <span style={{ fontSize: 11, color: '#cbd5e1', minWidth: 64, textAlign: 'right' }}>
+                {(route.totalDistanceKm * tourProgressRatio).toFixed(1)} / {route.totalDistanceKm.toFixed(1)} km
+              </span>
+            </div>
+
+            {/* Actions & Telemetry Controls */}
+            <div className="nt-tour-actions-row">
+              <div className="nt-tour-btn-group">
+                <button
+                  type="button"
+                  onClick={onPrevStop}
+                  className="nt-tour-icon-btn"
+                  title="Previous Waypoint (⏮)"
+                  aria-label="Previous Waypoint"
+                >
+                  ⏮
+                </button>
+                <button
+                  type="button"
+                  onClick={onTogglePlayPause}
+                  className="nt-tour-play-btn"
+                  title={isTourPaused ? 'Resume Simulation (▶)' : 'Pause Simulation (❚❚)'}
+                  aria-label={isTourPaused ? 'Resume Simulation' : 'Pause Simulation'}
+                >
+                  {isTourPaused ? '▶' : '❚❚'}
+                </button>
+                <button
+                  type="button"
+                  onClick={onNextStop}
+                  className="nt-tour-icon-btn"
+                  title="Next Waypoint (⏭)"
+                  aria-label="Next Waypoint"
+                >
+                  ⏭
+                </button>
+                <button
+                  type="button"
+                  onClick={onRestartTour}
+                  className="nt-tour-icon-btn"
+                  title="Restart Simulation (↺)"
+                  aria-label="Restart tour from beginning"
+                >
+                  ↺
+                </button>
+              </div>
+
+              <div className="nt-tour-btn-group">
+                <span style={{ fontSize: 11, color: '#a8a29e', marginRight: 4 }}>Speed:</span>
+                {([1, 2, 5] as const).map((spd) => (
+                  <button
+                    key={spd}
+                    type="button"
+                    onClick={() => onSetSpeedMultiplier?.(spd)}
+                    className={`nt-tour-speed-pill ${tourSpeedMultiplier === spd ? 'active' : ''}`}
+                    aria-label={`${spd}x simulation speed`}
+                  >
+                    {spd}x
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={onToggleCameraChase}
+                className={`nt-tour-mode-btn ${isCameraChase ? 'active' : ''}`}
+                title="Toggle 3D chase camera or free map navigation"
+                aria-label={isCameraChase ? 'Switch to Free Camera mode' : 'Switch to 3D Chase Camera mode'}
+              >
+                <span>{isCameraChase ? '🎥 3D Chase' : '🗺️ Free Cam'}</span>
+              </button>
             </div>
           </div>
         )}

@@ -33,7 +33,9 @@ export interface ProviderRegistryConfig {
 
 const env = (import.meta as unknown as { env?: Record<string, string | undefined> }).env ?? {};
 
-// CARTO Global Basemaps (Ultra-fast CDN, zero auth required, 99.99% uptime)
+export const MAPTILER_API_KEY = env.VITE_MAPTILER_API_KEY || env.VITE_MAPTILER_KEY || '';
+
+// CARTO Global Basemaps (Ultra-fast CDN, zero auth required, 99.99% uptime, CORS enabled)
 export const CARTO_VOYAGER_STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
 export const CARTO_POSITRON_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 export const CARTO_DARK_MATTER_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
@@ -41,92 +43,160 @@ export const CARTO_DARK_MATTER_STYLE = 'https://basemaps.cartocdn.com/gl/dark-ma
 const CARTO_ATTRIBUTION =
   '© <a href="https://carto.com/attributions" target="_blank" rel="noreferrer">CARTO</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>';
 
+const MAPTILER_ATTRIBUTION =
+  '© <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noreferrer">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>';
+
 /**
  * Built-in self-contained raster fallback style specification.
- * Used if vector style JSON download times out or encounters network restrictions.
+ * Uses CARTO Voyager raster tiles (which do NOT block browser referers, unlike raw osm.org).
+ * Prevents "Access Blocked / Tile Usage Policy" placeholder images.
  */
 export const FALLBACK_RASTER_STYLE = {
   version: 8 as const,
   sources: {
-    'osm-tiles': {
+    'carto-raster-tiles': {
       type: 'raster' as const,
       tiles: [
-        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+        'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+        'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+        'https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
       ],
       tileSize: 256,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: CARTO_ATTRIBUTION,
     },
   },
   layers: [
     {
-      id: 'osm-tiles-layer',
+      id: 'carto-raster-tiles-layer',
       type: 'raster' as const,
-      source: 'osm-tiles',
+      source: 'carto-raster-tiles',
       minzoom: 0,
       maxzoom: 19,
     },
   ],
 };
 
+function getStyleUrl(styleId: BasemapStyleId): { url: string; attribution: string } {
+  if (MAPTILER_API_KEY) {
+    switch (styleId) {
+      case 'bright':
+        return {
+          url: `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_API_KEY}`,
+          attribution: MAPTILER_ATTRIBUTION,
+        };
+      case 'liberty':
+        return {
+          url: `https://api.maptiler.com/maps/outdoor-v2/style.json?key=${MAPTILER_API_KEY}`,
+          attribution: MAPTILER_ATTRIBUTION,
+        };
+      case 'positron':
+        return {
+          url: `https://api.maptiler.com/maps/dataviz-light/style.json?key=${MAPTILER_API_KEY}`,
+          attribution: MAPTILER_ATTRIBUTION,
+        };
+      case 'dark':
+        return {
+          url: `https://api.maptiler.com/maps/dataviz-dark/style.json?key=${MAPTILER_API_KEY}`,
+          attribution: MAPTILER_ATTRIBUTION,
+        };
+      case 'fiord':
+        return {
+          url: `https://api.maptiler.com/maps/topo-v2/style.json?key=${MAPTILER_API_KEY}`,
+          attribution: MAPTILER_ATTRIBUTION,
+        };
+    }
+  }
+
+  // High-uptime CARTO vector styles by default
+  switch (styleId) {
+    case 'bright':
+      return {
+        url: env.VITE_MAP_STYLE_URL || CARTO_VOYAGER_STYLE,
+        attribution: CARTO_ATTRIBUTION,
+      };
+    case 'liberty':
+      return {
+        url: CARTO_VOYAGER_STYLE,
+        attribution: CARTO_ATTRIBUTION,
+      };
+    case 'positron':
+      return {
+        url: CARTO_POSITRON_STYLE,
+        attribution: CARTO_ATTRIBUTION,
+      };
+    case 'dark':
+    case 'fiord':
+      return {
+        url: CARTO_DARK_MATTER_STYLE,
+        attribution: CARTO_ATTRIBUTION,
+      };
+  }
+}
+
 export const MAP_PROVIDER_CONFIG: ProviderRegistryConfig = {
-  mapProviderName: env.VITE_MAP_PROVIDER || 'carto',
+  mapProviderName: MAPTILER_API_KEY ? 'maptiler' : (env.VITE_MAP_PROVIDER || 'carto'),
   defaultStyleId: 'bright',
   fallbackStyleId: 'positron',
   styles: {
     bright: {
       id: 'bright',
       label: 'Day (Vibrant Streets)',
-      description: 'High-contrast street, topography, and highway cartography powered by Carto Voyager',
-      url: env.VITE_MAP_STYLE_URL || CARTO_VOYAGER_STYLE,
+      description: MAPTILER_API_KEY
+        ? 'High-contrast street and highway cartography powered by MapTiler Cloud'
+        : 'High-contrast street, topography, and highway cartography powered by Carto Voyager',
+      url: getStyleUrl('bright').url,
       minZoom: 2,
       maxZoom: 20,
       supports3DBuildings: true,
-      supportsTerrain: false,
-      attribution: CARTO_ATTRIBUTION,
+      supportsTerrain: !!MAPTILER_API_KEY,
+      attribution: getStyleUrl('bright').attribution,
     },
     liberty: {
       id: 'liberty',
       label: 'Outdoors & Terrain',
-      description: 'Detailed general-purpose cartography with parks, peaks, and heritage corridors',
-      url: CARTO_VOYAGER_STYLE,
+      description: MAPTILER_API_KEY
+        ? 'Topographic terrain with elevation contours and national parks'
+        : 'Detailed general-purpose cartography with parks, peaks, and heritage corridors',
+      url: getStyleUrl('liberty').url,
       minZoom: 2,
       maxZoom: 20,
       supports3DBuildings: true,
-      supportsTerrain: false,
-      attribution: CARTO_ATTRIBUTION,
+      supportsTerrain: !!MAPTILER_API_KEY,
+      attribution: getStyleUrl('liberty').attribution,
     },
     positron: {
       id: 'positron',
       label: 'Light Minimal',
       description: 'Clean light canvas that maximizes POI marker and route legibility',
-      url: CARTO_POSITRON_STYLE,
+      url: getStyleUrl('positron').url,
       minZoom: 2,
       maxZoom: 20,
       supports3DBuildings: false,
       supportsTerrain: false,
-      attribution: CARTO_ATTRIBUTION,
+      attribution: getStyleUrl('positron').attribution,
     },
     dark: {
       id: 'dark',
       label: 'Night Drive',
       description: 'Low-glare dark vector cartography for evening route planning',
-      url: CARTO_DARK_MATTER_STYLE,
+      url: getStyleUrl('dark').url,
       minZoom: 2,
       maxZoom: 20,
       supports3DBuildings: false,
       supportsTerrain: false,
-      attribution: CARTO_ATTRIBUTION,
+      attribution: getStyleUrl('dark').attribution,
     },
     fiord: {
       id: 'fiord',
       label: 'Coastal & Ghat Slate',
       description: 'Deep slate palette highlighting hydrography and regional corridors',
-      url: CARTO_DARK_MATTER_STYLE,
+      url: getStyleUrl('fiord').url,
       minZoom: 2,
       maxZoom: 20,
       supports3DBuildings: false,
       supportsTerrain: false,
-      attribution: CARTO_ATTRIBUTION,
+      attribution: getStyleUrl('fiord').attribution,
     },
   },
   // Bounding box encompassing all 31 districts of Karnataka (Bidar to Chamarajanagar, Karwar to Kolar)

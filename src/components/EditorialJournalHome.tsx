@@ -7,6 +7,8 @@
 import React, { useState, useMemo } from 'react';
 import { KARNATAKA_POIS, KARNATAKA_GATEWAY_ORIGINS, UserOriginOption } from '../data/karnatakaTravelRegistry';
 import { KARNATAKA_AUTHENTIC_PHOTOS } from '../data/karnatakaPhotoRegistry';
+import { VERIFIED_KARNATAKA_STAYS } from '../stays/accommodationRegistry';
+import { VERIFIED_KARNATAKA_RESTAURANTS } from '../dining/restaurantRegistry';
 
 export interface EditorialJournalHomeProps {
   uiLanguage: 'kn' | 'en';
@@ -544,6 +546,109 @@ export const EditorialJournalHome: React.FC<EditorialJournalHomeProps> = ({
             </button>
           </div>
         )}
+      </section>
+
+      {/* ================= 4.5 VERIFIED STAYS & HOMESTAYS SHOWCASE ================= */}
+      <section className="yt-section yt-catalog-section" style={{ borderTop: '1px solid #E8DFD3', paddingTop: '3rem' }}>
+        <div className="yt-section-header">
+          <div className="yt-section-kicker">
+            {uiLanguage === 'kn' ? 'ಅಧಿಕೃತ ತಂಗುದಾಣಗಳು • Verified Stays' : 'Authentic Hospitality'}
+          </div>
+          <h2 className="yt-section-title">
+            {uiLanguage === 'kn' ? 'ಕೆಎಸ್‌ಟಿಡಿಸಿ ಮಯೂರ & ನೋಂದಾಯಿತ ಹೋಮ್‌ಸ್ಟೇಗಳು' : 'KSTDC Mayura Hotels & Registered Homestays'}
+          </h2>
+          <p className="yt-section-subtitle">
+            {uiLanguage === 'kn'
+              ? 'ಪ್ರತಿಯೊಂದು ತಂಗುದಾಣವು ಸರ್ಕಾರಿ ನೋಂದಣಿ ಐಡಿ ಹಾಗೂ ಅಧಿಕೃತ ದರಗಳನ್ನು ಹೊಂದಿರುತ್ತದೆ. ಯಾವುದೇ ಹೆಚ್ಚುವರಿ ಕಮಿಷನ್ ಇಲ್ಲ.'
+              : 'Every property carries an authentic government registration ID and verified statutory tariffs. Direct booking with no middleman markup.'}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
+          {VERIFIED_KARNATAKA_STAYS.slice(0, 4).map((stay) => (
+            <div
+              key={stay.id}
+              className="bg-white rounded-2xl overflow-hidden border border-[#E8DFD3] hover:border-[#D5C9B8] transition-all flex flex-col justify-between shadow-sm"
+            >
+              <div>
+                <div className="relative h-44 w-full bg-[#1A1714]">
+                  <img src={stay.photoUrl} alt={stay.name} loading="lazy" className="w-full h-full object-cover" />
+                  <div className="absolute top-2.5 left-2.5 bg-[#2B4C3F] text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-sm">
+                    {stay.category === 'kstdc_mayura' ? 'KSTDC Mayura' : stay.category === 'jungle_lodges' ? 'Jungle Lodges' : 'Govt Homestay'}
+                  </div>
+                  <div className="absolute bottom-2 left-2.5 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded text-[11px] text-white">
+                    📍 {stay.servesDestinationName} ({stay.distanceToDestinationKm} km)
+                  </div>
+                </div>
+
+                <div className="p-4 space-y-2">
+                  <h3 className="font-serif text-base font-medium text-[#1A1714] line-clamp-1">{stay.name}</h3>
+                  <p className="text-xs text-[#7A7369] font-kannada">{stay.nameKannada}</p>
+                  <p className="text-xs text-[#4A443C] line-clamp-2">{stay.description}</p>
+                </div>
+              </div>
+
+              <div className="p-4 pt-3 border-t border-[#F4EFEA] flex items-center justify-between">
+                <div>
+                  <span className="text-base font-serif font-semibold text-[#1A1714]">₹{stay.priceRangeInr.min}</span>
+                  <span className="text-[11px] text-[#7A7369]"> / ರಾತ್ರಿ</span>
+                </div>
+                <a
+                  href={stay.officialBookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 text-xs rounded-lg bg-[#A44A28] text-white font-medium hover:bg-[#8B3E22] transition-colors"
+                >
+                  ಬುಕಿಂಗ್ ↗
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= 4.6 AUTHENTIC KARNATAKA GASTRONOMY & GI CULINARY TRAIL ================= */}
+      <section className="yt-section yt-catalog-section" style={{ borderTop: '1px solid #E8DFD3', paddingTop: '3rem' }}>
+        <div className="yt-section-header">
+          <div className="yt-section-kicker">
+            {uiLanguage === 'kn' ? 'ಆಹಾರ ಪರಂಪರೆ • Heritage Gastronomy' : 'Culinary Traditions'}
+          </div>
+          <h2 className="yt-section-title">
+            {uiLanguage === 'kn' ? 'ಕರ್ನಾಟಕದ ಜಿಐ ಮಾನ್ಯತೆಯ ಪಾರಂಪರಿಕ ಊಟೋಪಹಾರ' : 'GI-Certified Gastronomy & Iconic Eateries'}
+          </h2>
+          <p className="yt-section-subtitle">
+            {uiLanguage === 'kn'
+              ? 'ಧಾರವಾಡ ಪೇಡಾ, ಮೈಸೂರು ಮೈಲಾರಿ ದೋಸೆ, ಮಂಗಳೂರು ಕರಾವಳಿ ಊಟ ಹಾಗೂ ಮಲೆನಾಡಿನ ಅಕ್ಕಿ ರೊಟ್ಟಿ.'
+              : 'Discover genuine culinary institutions celebrated for geographical indications (GI) and ancestral recipes.'}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+          {VERIFIED_KARNATAKA_RESTAURANTS.slice(0, 3).map((dine) => (
+            <div key={dine.id} className="bg-white rounded-2xl p-5 border border-[#E8DFD3] shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start mb-2">
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]">
+                    {dine.giTagAssociated ? '🏆 GI ಮಾನ್ಯತೆ' : 'ಪಾರಂಪರಿಕ ತಾಣ'}
+                  </span>
+                  <span className="text-xs text-[#166534] font-medium">{dine.isPureVeg ? 'ಶುದ್ಧ ಸಸ್ಯಾಹಾರಿ' : 'ಕರಾವಳಿ ಊಟ'}</span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1714]">{dine.name}</h3>
+                <p className="text-xs text-[#7A7369] font-kannada">{dine.nameKannada}</p>
+                <p className="text-xs text-[#4A443C] mt-2 leading-relaxed">{dine.culturalNote}</p>
+                <div className="mt-3 p-2.5 rounded-xl bg-[#FAF7F2] border border-[#F4EFEA] text-xs">
+                  <span className="font-semibold text-[#A44A28]">🌟 ಪ್ರಸಿದ್ಧ ತಿನಿಸು: </span>
+                  <span>{dine.signatureDishes.join(', ')}</span>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-[#F4EFEA] flex justify-between items-center text-xs text-[#7A7369]">
+                <span>📍 {dine.townOrCity}, {dine.district}</span>
+                <span className="font-semibold text-[#1A1714]">~₹{dine.pricePerPersonEstimateInr}/ವ್ಯಕ್ತಿಗೆ</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ================= 5. CULTURAL & TRANSIT LEDGER NOTES ================= */}

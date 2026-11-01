@@ -47,6 +47,9 @@ import { EditorialJournalHome } from './components/EditorialJournalHome';
 import { TripPlanningWorkspace } from './components/TripPlanningWorkspace';
 import { DestinationDetailDrawer } from './components/DestinationDetailDrawer';
 import { EditorialVoiceModal } from './features/voice/EditorialVoiceModal';
+import { BusSearchWorkspace } from './components/BusSearchWorkspace';
+import { TrainJourneyPlanner } from './components/TrainJourneyPlanner';
+import { StayDiscoveryWorkspace } from './components/StayDiscoveryWorkspace';
 
 // High-resolution curated photography for each Karnataka POI
 // Geodesic distance calculation between two [lng, lat] coordinates in kilometers
@@ -142,6 +145,8 @@ export function App() {
     }
     return 'explore';
   });
+
+  const [transitHubTab, setTransitHubTab] = useState<'buses' | 'trains' | 'stays'>('buses');
 
   // Selected POI for the Destination Detail Dossier Drawer
   const [detailPoiId, setDetailPoiId] = useState<string | null>(() => {
@@ -1033,6 +1038,95 @@ export function App() {
             }, 120);
           }}
         />
+      )}
+
+      {/* ================= 2.5 TRANSIT & STAYS FULFILLMENT HUB ================= */}
+      {currentView === 'transit' && (
+        <main className="yt-transit-hub-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style={{ minHeight: 'calc(100vh - 68px)' }}>
+          {/* Hub Navigation Banner */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#E8DFD3] mb-6 gap-3">
+            <div>
+              <span className="text-xs uppercase tracking-widest text-[#A44A28] font-semibold">
+                {uiLanguage === 'kn' ? 'ಕರ್ನಾಟಕ ಸಾರಿಗೆ & ತಂಗುದಾಣ ಕೇಂದ್ರ' : 'Karnataka Travel Intelligence & Fulfillment'}
+              </span>
+              <h1 className="font-serif text-3xl font-normal text-[#1A1714] mt-1">
+                {uiLanguage === 'kn' ? 'ಸಾರಿಗೆ & ಅಧಿಕೃತ ಬುಕಿಂಗ್ ಸಂಪರ್ಕ' : 'Transit, Railways & Verified Stays'}
+              </h1>
+              <p className="text-xs text-[#7A7369] mt-1">
+                {uiLanguage === 'kn'
+                  ? 'KSRTC, BMTC, NWKRTC, KKRTC, ಭಾರತೀಯ ರೈಲ್ವೆ (SWR) ಹಾಗೂ KSTDC ಮಯೂರ ಅಧಿಕೃತ ಸಂಪರ್ಕ.'
+                  : 'Official published schedules and verified booking handoffs for state transport corporations, railways and government lodges.'}
+              </p>
+            </div>
+
+            {/* Hub Sub-Tabs */}
+            <div className="flex items-center gap-2 bg-[#FAF7F2] p-1.5 rounded-xl border border-[#E8DFD3]">
+              <button
+                type="button"
+                onClick={() => setTransitHubTab('buses')}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                  transitHubTab === 'buses'
+                    ? 'bg-[#A44A28] text-white shadow-sm'
+                    : 'text-[#7A7369] hover:text-[#1A1714]'
+                }`}
+              >
+                🚌 {uiLanguage === 'kn' ? 'ಬಸ್ ಸಾರಿಗೆ (KSRTC)' : 'Buses (KSRTC & Corp)'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setTransitHubTab('trains')}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                  transitHubTab === 'trains'
+                    ? 'bg-[#2B4C3F] text-white shadow-sm'
+                    : 'text-[#7A7369] hover:text-[#1A1714]'
+                }`}
+              >
+                🚆 {uiLanguage === 'kn' ? 'ರೈಲು (SWR / IRCTC)' : 'Trains (SWR)'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setTransitHubTab('stays')}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                  transitHubTab === 'stays'
+                    ? 'bg-[#1A1714] text-white shadow-sm'
+                    : 'text-[#7A7369] hover:text-[#1A1714]'
+                }`}
+              >
+                🏨 {uiLanguage === 'kn' ? 'ತಂಗುದಾಣಗಳು (Stays)' : 'Stays & Homestays'}
+              </button>
+            </div>
+          </div>
+
+          {/* Active Tab View */}
+          {transitHubTab === 'buses' && (
+            <BusSearchWorkspace
+              initialOrigin={userOrigin.name.split('(')[0].trim()}
+              initialDestination="Belur"
+              onSelectBus={(busItem) => {
+                setAiStatusBanner(`🚌 ಸಾರಿಗೆ ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ: ${busItem.schedule.serviceName} (${busItem.schedule.departureTime})`);
+              }}
+            />
+          )}
+
+          {transitHubTab === 'trains' && (
+            <TrainJourneyPlanner
+              initialFrom="SBC"
+              initialTo="HPT"
+              onSelectTrain={(trainRes) => {
+                setAiStatusBanner(`🚆 ರೈಲು ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ: ${trainRes.train.trainName} (#${trainRes.train.trainNumber})`);
+              }}
+            />
+          )}
+
+          {transitHubTab === 'stays' && (
+            <StayDiscoveryWorkspace
+              initialDestination={userOrigin.name.split('(')[0].trim()}
+              onSelectStay={(stay) => {
+                setAiStatusBanner(`🏨 ತಂಗುದಾಣ ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ: ${stay.name}`);
+              }}
+            />
+          )}
+        </main>
       )}
 
       {/* ================= 3. TRIP PLANNING WORKSPACE (40/60 SPLIT SCREEN) ================= */}

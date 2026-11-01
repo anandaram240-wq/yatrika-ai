@@ -1,5 +1,6 @@
 /* src/index.css — YatriKa AI Modern Daylight & Glassmorphic Design System (Baseline fa2dd28) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700;800&display=swap');
+@import './styles/editorialDesignSystem.css';
 
 :root {
   color-scheme: light !important;

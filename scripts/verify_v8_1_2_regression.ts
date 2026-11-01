@@ -79,6 +79,11 @@ async function runRegression() {
     await page.waitForTimeout(800);
     await page.screenshot({ path: path.join(OUT_DIR, `after_rail_sbc_${vp.name}.png`) });
 
+    // C. Kempegowda Bus Station (Majestic KSRTC)
+    await page.goto(`${BASE_URL}/?view=workspace&detail=bus-majestic&guide=0`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(800);
+    await page.screenshot({ path: path.join(OUT_DIR, `after_bus_majestic_${vp.name}.png`) });
+
     await page.close();
   }
 
@@ -241,6 +246,26 @@ async function runRegression() {
     if (!hampiExp) throw new Error('SWR Train 16592 Hampi Express missing from SBC schedule');
 
     return `Platform transparency active: "${platformNotice.trim()}" | Authentic SWR Train: #${hampiExp.trim()}`;
+  });
+
+  // 5.5 Kempegowda Bus Station (Majestic KSRTC) Dossier
+  console.log('\n--- 5.5 Kempegowda Bus Station (Majestic) Dossier ---');
+  await page.goto(`${BASE_URL}/?view=workspace&detail=bus-majestic&guide=0`, { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(800);
+
+  await recordAssertion('Bus Terminal Dossier', 'Verify Official Bus Terminal Identity & Shakti Scheme', async () => {
+    const title = await page.locator('aside[aria-label*="Dossier"] h2').first().textContent();
+    if (!title?.includes('Kempegowda Bus Station') && !title?.includes('ಕೆಂಪೇಗೌಡ ಬಸ್ ನಿಲ್ದಾಣ')) {
+      throw new Error(`Unexpected bus station title: ${title}`);
+    }
+
+    const shaktiBadge = await page.locator('aside[aria-label*="Dossier"]').getByText('ಶಕ್ತಿ ಯೋಜನೆ').first().textContent();
+    if (!shaktiBadge) throw new Error('Shakti scheme badge missing from KSRTC terminal');
+
+    const awatarBtn = await page.locator('aside[aria-label*="Dossier"]').getByText('KSRTC ಅವತಾರ್ ಬುಕಿಂಗ್ ಪೋರ್ಟಲ್').first().textContent();
+    if (!awatarBtn) throw new Error('KSRTC Awatar booking portal button missing');
+
+    return `Verified Bus Terminal Identity: "${title?.trim()}" | Shakti Scheme: "${shaktiBadge?.trim()}" | Booking: "${awatarBtn?.trim()}"`;
   });
 
   // 6. Drawer Closure & Background Map Integrity

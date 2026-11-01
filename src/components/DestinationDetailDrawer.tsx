@@ -67,9 +67,13 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
   if (!poi) return null;
 
   const isRailwayStation = poi.category === 'railway_station';
+  const isBusTerminal = poi.category === 'bus_terminal';
+  const isHeritagePoi = !isRailwayStation && !isBusTerminal;
 
   // State
-  const [activeSubTab, setActiveSubTab] = useState<string>(isRailwayStation ? 'facilities' : 'visiting');
+  const [activeSubTab, setActiveSubTab] = useState<string>(
+    isRailwayStation ? 'facilities' : isBusTerminal ? 'buses' : 'visiting'
+  );
   const [isFullscreenPhotoOpen, setIsFullscreenPhotoOpen] = useState<boolean>(false);
   const [copiedActionFeedback, setCopiedActionFeedback] = useState<string | null>(null);
 
@@ -130,6 +134,13 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
         { id: 'trains', label: 'SWR Timetable', kannadaLabel: 'ರೈಲುಗಳು', count: connectingTrains.length },
         { id: 'sources', label: 'Sources', kannadaLabel: 'ಮೂಲ ದಾಖಲೆ' },
       ]
+    : isBusTerminal
+    ? [
+        { id: 'buses', label: 'Bus Corridors', kannadaLabel: 'ಬಸ್ ಸೇವೆಗಳು', count: poi.transportMeta?.majorConnections?.length || 4 },
+        { id: 'facilities', label: 'Amenities', kannadaLabel: 'ಸೌಲಭ್ಯಗಳು' },
+        { id: 'access', label: 'Terminal Access', kannadaLabel: 'ಸಂಪರ್ಕ ಮಾರ್ಗ' },
+        { id: 'sources', label: 'Sources', kannadaLabel: 'ಮೂಲ ದಾಖಲೆ' },
+      ]
     : [
         { id: 'visiting', label: 'Visiting Info', kannadaLabel: 'ವಿವರ' },
         { id: 'transit', label: 'How to Reach', kannadaLabel: 'ಸಾರಿಗೆ' },
@@ -180,7 +191,7 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
             {/* Category and Region Badges */}
             <div className="flex items-center gap-1.5 pointer-events-auto">
               <span className="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white border border-white/20">
-                {isRailwayStation ? '🚆 Railway Hub' : compDest?.category ? compDest.category.replace('_', ' ') : poi.category.replace('_', ' ')}
+                {isRailwayStation ? '🚆 Railway Hub' : isBusTerminal ? '🚌 Bus Terminal' : compDest?.category ? compDest.category.replace('_', ' ') : poi.category.replace('_', ' ')}
               </span>
               <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#1A1714] border border-white/40 shadow-xs">
                 {poi.macroRegion}
@@ -249,6 +260,14 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
                   <span className="font-mono font-semibold text-[#166534]">Zone: SWR ({stationCode})</span>
                 </>
               )}
+              {isBusTerminal && (
+                <>
+                  <span>•</span>
+                  <span className="font-mono font-semibold text-[#DC2626]">
+                    Operator: {poi.transportMeta?.zoneOrOperator || 'KSRTC'}
+                  </span>
+                </>
+              )}
             </div>
 
             {/* Calm, Professional Status Hierarchy (No Emoji Salad) */}
@@ -265,6 +284,20 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
                     variant="published"
                     label="Published Timetable"
                     timestamp="Oct 2026"
+                  />
+                </>
+              ) : isBusTerminal ? (
+                <>
+                  <StatusIndicator
+                    variant="official"
+                    label={poi.transportMeta?.zoneOrOperator || 'State Road Transport Corporation'}
+                    kannadaLabel="ಕರ್ನಾಟಕ ಸಾರಿಗೆ"
+                    timestamp="Active Terminal"
+                  />
+                  <StatusIndicator
+                    variant="confirmed"
+                    label="Shakti Scheme Hub (ಶಕ್ತಿ ಯೋಜನೆ)"
+                    timestamp="Govt of Karnataka"
                   />
                 </>
               ) : (
@@ -313,6 +346,23 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
                 <div className="col-span-2 sm:col-span-1">
                   <span className="text-[11px] text-[#7A7369] block">Helpline (ಸಹಾಯವಾಣಿ)</span>
                   <span className="font-mono font-bold text-sm text-[#166534]">139 (Indian Rail)</span>
+                </div>
+              </>
+            ) : isBusTerminal ? (
+              <>
+                <div>
+                  <span className="text-[11px] text-[#7A7369] block">Terminal Code (ಕೋಡ್)</span>
+                  <span className="font-mono font-bold text-sm text-[#1A1714]">
+                    {poi.transportMeta?.officialCode || 'KSRTC-BUS'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[11px] text-[#7A7369] block">Shakti Scheme (ಶಕ್ತಿ ಯೋಜನೆ)</span>
+                  <span className="font-semibold text-sm text-[#166534]">ಉಚಿತ ಪ್ರಯಾಣ (Non-AC)</span>
+                </div>
+                <div className="col-span-2 sm:col-span-1">
+                  <span className="text-[11px] text-[#7A7369] block">Awatar Call Center</span>
+                  <span className="font-mono font-bold text-sm text-[#1A1714]">080-49596666</span>
                 </div>
               </>
             ) : (
@@ -564,8 +614,128 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
             </div>
           )}
 
+          {/* === C.1 BUS TERMINAL: CORRIDORS TAB === */}
+          {isBusTerminal && activeSubTab === 'buses' && (
+            <div className="space-y-3">
+              {/* Shakti Scheme Banner */}
+              <div className="p-3 bg-[#ECFDF5] rounded-xl border border-[#A7F3D0] text-xs text-[#065F46] space-y-1">
+                <div className="font-semibold flex items-center gap-1.5">
+                  <span>✨</span>
+                  <span>ಶಕ್ತಿ ಯೋಜನೆ • Karnataka Shakti Scheme (Zero-Fare for Women)</span>
+                </div>
+                <p className="text-[11px] leading-relaxed text-[#047857]">
+                  ಕರ್ನಾಟಕ ಮೂಲದ ಮಹಿಳೆಯರಿಗೆ ಕೆಎಸ್ಆರ್ಟಿಸಿ, ಬಿಎಂಟಿಸಿ, ಕಲ್ಯಾಣ ಹಾಗೂ ವಾಯವ್ಯ ಸಾರಿಗೆ ಸಂಸ್ಥೆಗಳ ನಗರ ಹಾಗೂ ಸಾಮಾನ್ಯ ವೇಗದೂತ (Non-AC) ಬಸ್‌ಗಳಲ್ಲಿ ಉಚಿತ ಪ್ರಯಾಣ ಮಾನ್ಯವಾಗಿದೆ. ಆಧಾರ್ ಅಥವಾ ಕರ್ನಾಟಕ ವಾಸಸ್ಥಳ ದೃಢೀಕರಣ ದಾಖಲೆ ಕಡ್ಡಾಯ.
+                </p>
+              </div>
+
+              {/* Major Bus Corridors */}
+              <section className="bg-white rounded-xl p-4 border border-[#E8DFD3] space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-[#F4EFEA]">
+                  <h3 className="font-serif text-sm font-semibold text-[#1A1714]">
+                    ಪ್ರಮುಖ ಮಾರ್ಗಗಳು • Major Intercity Bus Corridors
+                  </h3>
+                  <span className="text-[10px] font-mono bg-[#FAF7F2] text-[#4A443C] px-2 py-0.5 rounded border border-[#E8DFD3]">
+                    {poi.transportMeta?.zoneOrOperator || 'KSRTC'}
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-xs">
+                  {(poi.transportMeta?.majorConnections || ['Bengaluru', 'Mysuru', 'Hubballi', 'Mangaluru']).map((route, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-2.5 bg-[#FAF7F2] rounded-lg border border-[#F4EFEA]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#DC2626] font-bold text-sm">🚌</span>
+                        <span className="font-medium text-[#1A1714]">{route}</span>
+                      </div>
+                      <span className="text-[10px] bg-white px-2 py-0.5 rounded border border-[#E8DFD3] text-[#7A7369]">
+                        ದಿನಂಪ್ರತಿ ಸೇವೆಗಳು
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {poi.transportMeta?.referenceFareNote && (
+                  <div className="p-2.5 bg-white rounded-lg border border-[#E8DFD3] text-[11px] text-[#4A443C]">
+                    💰 <strong>ದರ ಮಾರ್ಗದರ್ಶಿ (Fare Guide):</strong> {poi.transportMeta.referenceFareNote}
+                  </div>
+                )}
+
+                <div className="pt-2 flex items-center justify-between gap-2 border-t border-[#F4EFEA]">
+                  <a
+                    href={poi.transportMeta?.bookingPortalUrl || 'https://ksrtc.in'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full text-center py-2 px-3 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-medium text-xs rounded-xl transition-colors shadow-xs"
+                  >
+                    KSRTC ಅವತಾರ್ ಬುಕಿಂಗ್ ಪೋರ್ಟಲ್ (Awatar 4.0) ↗
+                  </a>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* === C.2 BUS TERMINAL: FACILITIES TAB === */}
+          {isBusTerminal && activeSubTab === 'facilities' && (
+            <div className="space-y-4">
+              <section className="bg-white rounded-xl p-4 border border-[#E8DFD3] space-y-3">
+                <h3 className="font-serif text-sm font-semibold text-[#1A1714] pb-2 border-b border-[#F4EFEA]">
+                  ನಿಲ್ದಾಣ ಸೌಲಭ್ಯಗಳು • Verified Terminal Amenities
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div className="p-2.5 bg-[#FAF7F2] rounded-lg border border-[#F4EFEA]">
+                    <strong className="block text-[#1A1714]">✓ ಮುಂಗಡ ಬುಕಿಂಗ್ ಕೌಂಟರ್</strong>
+                    <span className="text-[11px] text-[#7A7369]">Awatar 4.0 Computerized Reservation</span>
+                  </div>
+                  <div className="p-2.5 bg-[#FAF7F2] rounded-lg border border-[#F4EFEA]">
+                    <strong className="block text-[#1A1714]">✓ ಪ್ರಯಾಣಿಕರ ವಿಶ್ರಾಂತಿ ಗೃಹ</strong>
+                    <span className="text-[11px] text-[#7A7369]">Waiting Hall & Rest Area</span>
+                  </div>
+                  <div className="p-2.5 bg-[#FAF7F2] rounded-lg border border-[#F4EFEA]">
+                    <strong className="block text-[#1A1714]">✓ ಲಗೇಜ್ ಕ್ಲಾಕ್‌ರೂಮ್</strong>
+                    <span className="text-[11px] text-[#7A7369]">24/7 Cloakroom & Luggage Depository</span>
+                  </div>
+                  <div className="p-2.5 bg-[#FAF7F2] rounded-lg border border-[#F4EFEA]">
+                    <strong className="block text-[#1A1714]">✓ ಪ್ರೀಪೇಯ್ಡ್ ಆಟೋ ಸ್ಟ್ಯಾಂಡ್</strong>
+                    <span className="text-[11px] text-[#7A7369]">Traffic Police Pre-paid Auto Stand</span>
+                  </div>
+                  <div className="p-2.5 bg-[#FAF7F2] rounded-lg border border-[#F4EFEA]">
+                    <strong className="block text-[#1A1714]">✓ ಶುದ್ಧ ಕುಡಿಯುವ ನೀರು (RO)</strong>
+                    <span className="text-[11px] text-[#7A7369]">Free Purified RO Drinking Water</span>
+                  </div>
+                  <div className="p-2.5 bg-[#FAF7F2] rounded-lg border border-[#F4EFEA]">
+                    <strong className="block text-[#1A1714]">✓ ಗಾಲಿಕುರ್ಚಿ ಇಳಿಜಾರು (Ramp)</strong>
+                    <span className="text-[11px] text-[#7A7369]">Wheelchair Accessible Terminal Bays</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* === C.3 BUS TERMINAL: ACCESS TAB === */}
+          {isBusTerminal && activeSubTab === 'access' && (
+            <div className="space-y-4">
+              <section className="bg-white rounded-xl p-4 border border-[#E8DFD3] space-y-2">
+                <h3 className="font-serif text-sm font-semibold text-[#1A1714] pb-2 border-b border-[#F4EFEA]">
+                  ಸಂಪರ್ಕ ಮತ್ತು ನಗರ ಸಾರಿಗೆ • Terminal Access
+                </h3>
+                <InformationRow
+                  label="Local Transit Access"
+                  kannadaLabel="ನಗರ ಸಾರಿಗೆ ಸಂಪರ್ಕ"
+                  value={poi.entryFeeInr.feeNote || 'Direct connectivity to city bus routes & local autos'}
+                  verified
+                />
+                <InformationRow
+                  label="Operating Corporation"
+                  kannadaLabel="ನಿರ್ವಹಣಾ ಸಂಸ್ಥೆ"
+                  value={poi.transportMeta?.zoneOrOperator || 'Karnataka State Road Transport Corporation'}
+                  note="Government of Karnataka Public Undertaking"
+                  verified
+                />
+              </section>
+            </div>
+          )}
+
           {/* === D. HERITAGE / TOURIST DESTINATION: VISITING TAB === */}
-          {!isRailwayStation && activeSubTab === 'visiting' && (
+          {isHeritagePoi && activeSubTab === 'visiting' && (
             <div className="space-y-4">
               {/* Cultural Overview */}
               <section className="bg-white rounded-xl p-4 border border-[#E8DFD3] space-y-2">
@@ -653,7 +823,7 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
           )}
 
           {/* === E. HOW TO REACH (TRANSIT) TAB === */}
-          {!isRailwayStation && activeSubTab === 'transit' && (
+          {isHeritagePoi && activeSubTab === 'transit' && (
             <div className="space-y-4">
               <section className="bg-white rounded-xl p-4 border border-[#E8DFD3] space-y-2">
                 <h3 className="font-serif text-sm font-semibold text-[#1A1714] pb-2 border-b border-[#F4EFEA]">
@@ -711,7 +881,7 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
           )}
 
           {/* === F. STAYS TAB === */}
-          {!isRailwayStation && activeSubTab === 'stays' && (
+          {isHeritagePoi && activeSubTab === 'stays' && (
             <div className="space-y-3">
               <h3 className="font-serif text-sm font-semibold text-[#1A1714]">
                 🏨 ದೃಢೀಕೃತ ತಂಗುದಾಣಗಳು • Verified Lodges & Homestays
@@ -754,7 +924,7 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
           )}
 
           {/* === G. FOOD & DINING TAB === */}
-          {!isRailwayStation && activeSubTab === 'dining' && (
+          {isHeritagePoi && activeSubTab === 'dining' && (
             <div className="space-y-3">
               <h3 className="font-serif text-sm font-semibold text-[#1A1714]">
                 🍲 ಸ್ಥಳೀಯ ಆಹಾರ ಪರಂಪರೆ • Regional Dining Heritage
@@ -788,7 +958,7 @@ export const DestinationDetailDrawer: React.FC<DestinationDetailDrawerProps> = (
           )}
 
           {/* === H. NEARBY SITES TAB === */}
-          {!isRailwayStation && activeSubTab === 'nearby' && (
+          {isHeritagePoi && activeSubTab === 'nearby' && (
             <div className="space-y-3">
               <h3 className="font-serif text-sm font-semibold text-[#1A1714]">
                 🏛️ ಹತ್ತಿರದ ಸರ್ಕ್ಯೂಟ್ ತಾಣಗಳು • Nearby Circuit Sites

@@ -1384,6 +1384,58 @@
   margin-top: 8px;
 }
 
+.yt-drawer-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.yt-drawer-action-btn.add {
+  background: #A44A28;
+  color: #ffffff;
+  border: 1px solid #8A3E22;
+  box-shadow: 0 1px 3px rgba(164, 74, 40, 0.25);
+}
+
+.yt-drawer-action-btn.add:hover {
+  background: #8A3E22;
+  box-shadow: 0 3px 8px rgba(164, 74, 40, 0.35);
+  transform: translateY(-1px);
+}
+
+.yt-drawer-action-btn.add:active {
+  transform: translateY(0);
+}
+
+.yt-drawer-action-btn.remove {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+  box-shadow: 0 1px 2px rgba(153, 27, 27, 0.08);
+}
+
+.yt-drawer-action-btn.remove:hover {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+  color: #7F1D1D;
+  box-shadow: 0 2px 6px rgba(153, 27, 27, 0.15);
+  transform: translateY(-1px);
+}
+
+.yt-drawer-action-btn.remove:active {
+  transform: translateY(0);
+}
+
 .yt-btn-add-trip {
   background: var(--yt-brand-blue);
   color: #ffffff;

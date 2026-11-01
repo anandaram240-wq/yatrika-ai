@@ -1,5 +1,5 @@
-/* src/index.css — YatriKa AI Modern Daylight & Glassmorphic Design System (Baseline fa2dd28) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
 @import './styles/editorialDesignSystem.css';
 
 :root {
@@ -36,6 +36,33 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+@layer base {
+  /* Universal Button & Interactive Form Element Reset (Prevents Browser Default White/Bevel Styling) */
+  button, input[type="button"], input[type="submit"], input[type="reset"] {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    background-color: transparent;
+    text-align: inherit;
+    text-transform: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:focus-visible {
+    outline: 2px solid #A44A28;
+    outline-offset: 2px;
+  }
 }
 
 body, html, #root {

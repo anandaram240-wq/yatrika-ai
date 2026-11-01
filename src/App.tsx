@@ -224,8 +224,24 @@ export function App() {
   }, []);
 
   const [activeCircuitId, setActiveCircuitId] = useState<string>(CURATED_CIRCUIT_PRESETS[0].id);
-  const [stopIds, setStopIds] = useState<string[]>(initialTrip.stopIds);
-  const [days, setDays] = useState<number>(initialTrip.days);
+  const isGoldenDemoInitial = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      return p.get('demo')?.toLowerCase() === 'golden';
+    }
+    return false;
+  }, []);
+
+  const [stopIds, setStopIds] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('demo')?.toLowerCase() === 'golden') {
+        return ['poi-shettihalli-church', 'poi-belur-halebidu', 'poi-hirekolale-lake', 'poi-mullayanagiri'];
+      }
+    }
+    return initialTrip.stopIds;
+  });
+  const [days, setDays] = useState<number>(isGoldenDemoInitial ? 3 : initialTrip.days);
   const [travellers, setTravellers] = useState<number>(initialTrip.travellers);
   const [shaktiWomenCount, setShaktiWomenCount] = useState<number>(1);
   const [budgetTier, setBudgetTier] = useState<BudgetTier>(initialTrip.tier);
@@ -240,9 +256,9 @@ export function App() {
     return 'timeline';
   }, []);
   const [activeTab, setActiveTab] = useState<'timeline' | 'trains' | 'budget' | 'discover'>(initialTab);
-  const [selectedPoiId, setSelectedPoiId] = useState<string>(initialTrip.stopIds[0] || 'poi-mysore-palace');
+  const [selectedPoiId, setSelectedPoiId] = useState<string>(() => (isGoldenDemoInitial ? 'poi-belur-halebidu' : initialTrip.stopIds[0] || 'poi-mysore-palace'));
   const [aiPromptInput, setAiPromptInput] = useState<string>('');
-  const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(null);
+  const [aiStatusBanner, setAiStatusBanner] = useState<string | null>(() => (isGoldenDemoInitial ? '🌟 ಸುವರ್ಣ ಪ್ರವಾಸ: ಬೆಂಗಳೂರು ➔ ಹಾಸನ (ಶೆಟ್ಟಿಹಳ್ಳಿ) ➔ ಬೇಲೂರು (ಚೆನ್ನಕೇಶವ) ➔ ಚಿಕ್ಕಮಗಳೂರು ➔ ಮುಳ್ಳಯ್ಯನಗಿರಿ' : null));
   const [shareCopied, setShareCopied] = useState<boolean>(false);
   const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState<boolean>(false);
   const [isOfflineSurvivalOpen, setIsOfflineSurvivalOpen] = useState<boolean>(false);

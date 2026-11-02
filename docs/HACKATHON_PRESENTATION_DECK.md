@@ -56,23 +56,23 @@
 ---
 
 ### SLIDE 5: OUR APPROACH & METHODOLOGY
-- **The 8-Workspace Architecture:**
-  1. **Workspace A (Discover Karnataka):** Multilingual query resolution to canonical destination bounding boxes.
+- **The 8-Workspace Architecture (Sections 10–30):**
+  1. **Workspace A (Discover Karnataka):** Multilingual query resolution across 31 Karnataka districts with 4 administrative divisions.
   2. **Workspace B (Interactive Explorer):** 3D terrain map, 4 geographic clusters (Sacred Centre, Royal Centre, Vittala Complex, Natural & Cultural), and monument drawer.
-  3. **Workspace C (Journey Builder):** Cluster-coherent monument sequencing preventing erratic zigzagging across the 26 km² ruins.
-  4. **Workspace D (Feasibility Engine):** Transit hub selection (SBC, HPT, MYS, BLR, VDY, Hubballi) with deterministic viability verdicts.
-  5. **Workspace E (Transport & Last-Mile):** Authentic rail trunks, KSRTC Kamalapura shuttles, and Gejjala Mantapa EV buggies.
-  6. **Workspace F (Accommodation Discovery):** Categorized by strict UNESCO archaeological buffer compliance zones.
-  7. **Workspace G (Safety & Awareness):** Real warnings on Tungabhadra river whirlpools, granite afternoon heat, 6 PM dusk descent, and emergency 112/1363 helplines.
-  8. **Workspace H (Source & Evidence Explorer):** Transparent attribution matrix for all photos, data, and government sources.
+  3. **Workspace C (Journey Builder & 7-Step Wizard):** Guided 7-step setup wizard with non-blocking geolocation, cluster-coherent sequencing, and decoupled budget/class selection.
+  4. **Workspace D (Feasibility Engine & Detours):** 10-rule deterministic feasibility engine, transit hub selection (SBC, HPT, MYS, BLR, VDY, Hubballi), and verified Along-My-Route detours (Belur, Halebidu, Chitradurga).
+  5. **Workspace E (Transport & Last-Mile):** Strict separation of PRS Reserved (16591/16592 Hampi Express) vs Unreserved services, physical class validation (only showing classes physically present on the rake), and verified KSRTC AWATAR/IRCTC handoffs.
+  6. **Workspace F (Accommodation & Honest Ledger):** 8-status verification badge taxonomy (KSTDC Hotel Mayura Bhuvaneshwari, JLR Sloth Bear Resort), UNESCO buffer compliance, and 6-state honest ledger accounting without fabricating combined totals.
+  7. **Workspace G (Safety & Awareness Layer):** 3 evidence-backed historical records (Matanga Hill rescue, Sanapur canal incident, Tungabhadra dam hydrological discharge), non-colour-alone symbols (`[▲]`, `[◆]`, `[≈]`), and direct 112 ERSS integration.
+  8. **Workspace H (Source & Evidence Explorer):** Transparent attribution matrix for all photos (Wikimedia Commons CC BY-SA), data registries, and government sources.
 
 ---
 
 ### SLIDE 6: TECH STACK & ARCHITECTURE DIAGRAM
-- **Frontend Core:** React 19.0.0, Vite 6.0.0, TypeScript 5.7.2 (Strict Mode)
+- **Frontend Core:** React 19.0.0, Vite 6.4.5, TypeScript 5.7.2 (Strict Mode)
 - **Styling:** Tailwind CSS v4.0.0, Custom Heritage CSS Tokens, WCAG 2.2 AA Reduced Motion
-- **Cartography & 3D Terrain:** MapLibre GL JS v6.16.0 with MapTiler `raster-dem` elevation tiles
-- **Quality Assurance:** Vitest (46 suites / 288 tests, 100% pass), Playwright E2E browser automation
+- **Cartography & 3D Terrain:** MapLibre GL JS v5.16.0 with MapTiler `raster-dem` elevation tiles
+- **Quality Assurance:** Vitest (47 suites / 305 tests, 100% pass), Playwright E2E browser automation (4/4 passed)
 - **Architecture Diagram:**
   ```mermaid
   flowchart LR

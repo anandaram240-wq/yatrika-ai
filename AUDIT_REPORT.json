@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-11-02T12:21:05.974Z",
+  "versions": {
+    "react": "^19.0.0",
+    "vite": "^6.0.0",
+    "typescript": "~5.7.2",
+    "tailwindcss": "^4.0.0",
+    "maplibreGl": "^6.16.0",
+    "cesium": "NOT_FOUND",
+    "firebase": "NOT_FOUND",
+    "router": "NOT_FOUND"
+  },
+  "uiLibraries": [
+    "lucide-react"
+  ],
+  "deadControls": []
+}

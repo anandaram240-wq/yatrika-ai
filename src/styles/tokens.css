@@ -1,0 +1,23 @@
+/* src/styles/tokens.css */
+@layer base {
+  :root {
+    --accent-vijayanagara: #d97736;
+    --accent-tungabhadra: #2a9d8f;
+    --karnataka-gold: #e9c46a;
+    --karnataka-crimson: #c1121f;
+    --karnataka-sun: #f4a261;
+    --granite-900: #1a1a1e;
+    --granite-800: #26262b;
+    --granite-700: #383840;
+    --granite-100: #f4f4f6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

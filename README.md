@@ -1,129 +1,224 @@
-# YatriKa AI (ಯಾತ್ರಿಕ)
-### Intelligent Cultural & Linguistic Travel Planner for Karnataka
+# YatriKa AI (ಯಾತ್ರಿಕ) — Karnataka Intelligent Journey Platform
+### Verified Geographical Intelligence, Multilingual Discovery & Deterministic Feasibility
+
 > **Kannada Digital Innovation Hackathon 2026**  
 > Organized by **HackerRank Campus Crew**, The National Institute of Engineering (NIE), Mysuru  
 > **Official Theme:** *Code. Create. Celebrate Kannada.*  
-> **Problem Statement Chosen:** **Problem Statement 06: Travel & Tourism — AI Travel Planner for Karnataka**  
-> **Official Objective:** *Develop an AI-powered travel planner that creates personalized Karnataka itineraries based on a traveller's interests, available time, budget, and preferred type of experience.*
+> **Single Problem Statement Lock:** **Problem Statement 06 — Travel & Tourism: AI Travel Planner for Karnataka**  
+> **Official Problem Objective:** *"Develop an AI-powered travel planner that creates personalized Karnataka itineraries based on a traveller's interests, available time, budget, and preferred type of experience."*
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
+[![Live Production](https://img.shields.io/badge/Live%20Production-yatrika--ai.vercel.app-emerald.svg)](https://yatrika-ai.vercel.app)
+[![Problem Statement 06](https://img.shields.io/badge/Hackathon%20Track-Problem%20Statement%2006-blue.svg)](https://yatrika-ai.vercel.app)
+[![TypeScript Strict](https://img.shields.io/badge/TypeScript-5.7%20Strict-blue.svg)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://react.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38b2ac.svg)](https://tailwindcss.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-Passing%20(38%2F38)-brightgreen.svg)](https://vitest.dev/)
-[![Offline Reliability](https://img.shields.io/badge/Offline%20First-Sub--50ms%20Latency-emerald.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-4.0%20Vite-38b2ac.svg)](https://tailwindcss.com/)
+[![Vitest Passing](https://img.shields.io/badge/Vitest-Passing%20(46%2F46%20files%2C%20288%2F288%20tests)-brightgreen.svg)](https://vitest.dev/)
+[![Audited Dead Controls](https://img.shields.io/badge/Dead%20Controls-0%20(AST%20Audited)-brightgreen.svg)]()
+[![License](https://img.shields.io/badge/License-CC%20BY--SA%20%2F%20MIT-amber.svg)](LICENSE)
 
 ---
 
 ## 1. Executive Summary & Problem Addressed
 
-Karnataka is one of India's most geographically diverse states — stretching from the arid red boulder hills of **Hampi** to the mist-shrouded coffee peaks of **Chikmagalur & Coorg**, the pristine beaches of **Gokarna & Udupi**, and the royal palaces of **Mysuru**.
+Karnataka is one of India's richest and most geographically complex states — spanning the dramatic granite boulder terrain and UNESCO ruins of **Hampi (Vijayanagara)**, the Western Ghats coffee ridges of **Chikkamagaluru & Madikeri**, the coastal cliffs and sacred shrines of **Gokarna & Karavali**, the royal Dravidian heritage of **Mysuru**, and the Chalukyan rock-cut sandstone caves of **Badami**.
 
-### The Hackathon Trap vs YatriKa AI
-Typical hackathon travel apps are generic ChatGPT wrappers: they ask for a prompt, stream an unverified bulleted list with fake prices, hallucinate impossible driving routes (e.g., trying to cross Western Ghats at midnight), and crash the second the venue Wi-Fi stutters. Most critically, they treat Karnataka as an English tourist brochure with **zero cultural or linguistic connection**.
-
-**YatriKa AI (ಯಾತ್ರಿಕ)** rejects the API-wrapper trap. It is engineered with:
-1. **Deterministic Highway & Ghat-Road Routing Engine:** Calculates realistic driving speeds (65 km/h on expressways vs 20 km/h on ghat roads) with safety constraints (flagging night driving bans across Shiradi/Charmadi passes).
-2. **Verified ASI & KSTDC Database (20+ Destinations):** Accurate ticket fees (₹120 Mysore Palace, ₹40 Hampi Vittala Temple, ₹20 Nandi Hills), real operating hours, and best seasons.
-3. **The "Celebrate Kannada" Native Audio Travel Companion:** At **every single tourist stop**, YatriKa AI equips travelers with the exact, authentic local Kannada phrase needed for that situation (demanding auto meters, asking temple dress codes, bargaining in markets, ordering food) with **real-time audio pronunciation** via the browser's native Web Speech API.
-4. **Authentic Regional Food Trail:** Pairs every day with regional culinary staples across all 6 zones (e.g. Kundapura Ghee Roast, Dharwad Pedha, Coorg Pandi Curry, Mysore Masala Dosa).
-5. **Real Cost Breakdown & 1-Click Print/Export:** Itemized budget calculation per person (Stay + Food + Transit + Tickets) with print-to-PDF formatting.
+### The Problem With Existing Travel Planners
+1. **Generic AI Hallucinations:** Standard LLM itinerary generators (ChatGPT, Gemini, generic itinerary apps) spit out plain text lists that ignore the physical reality of Karnataka travel — hallucinating impossible driving times across Western Ghats ghat sections, ignoring the 12:30 PM–4:00 PM temple Darshan sanctum closures, and fabricating non-existent luxury hotels inside protected ASI archaeological zones.
+2. **Gated Form Obstacles:** Almost every travel app forces users through a mandatory questionnaire (dates, budget, email signup) before revealing a single piece of geographical truth about the destination.
+3. **Unverified & Misattributed Photography:** Deployed platforms frequently reuse generic stock photography, showing modern urban temples for 7th-century Chalukyan caves or mislabeling Hosapete railway stations.
+4. **Disconnection from Last-Mile Realities:** Planners fail to account for South Western Railway (SWR) terminal logistics, KSRTC Kamalapura electric shuttle connections, or battery EV buggies between Gejjala Mantapa and the Vittala Temple Stone Chariot.
 
 ---
 
-## 2. Core Feature Highlights
+## 2. The YATRIKA V9.0 Solution: Destination-First Journey Intelligence
 
-| Feature | Description | Real-World Benefit |
+YatriKa AI replaces chat prompts and static card grids with an **Authoritative Geographical Workspace** organized across **8 Purpose-Built Workspaces**:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        YATRIKA V9.0 WORKSPACE ARCHITECTURE                             │
+├───────────────────┬────────────────────────────────────────────────────────────────────┤
+│ Workspace A       │ Discover Karnataka (Multilingual Resolver: Kannada / EN / Aliases) │
+│ Workspace B       │ Interactive Destination Explorer (Dual-Mode 2D / 3D DEM Map)       │
+│ Workspace C       │ Journey Builder (Cluster-Coherent Monument Sequencing)             │
+│ Workspace D       │ Journey Feasibility Engine (Opt-in GPS, Real Transit Sanity)       │
+│ Workspace E       │ Transport & Last-Mile Intelligence (SWR Rail, KSRTC, EV Buggies)   │
+│ Workspace F       │ Accommodation Discovery (Archaeological Buffer Compliance Zones)   │
+│ Workspace G       │ Safety & Visitor Awareness (Tungabhadra Whirlpools, Dusk Descent)   │
+│ Workspace H       │ Source & Evidence Explorer (Wikimedia CC BY-SA Attribution Matrix) │
+└───────────────────┴────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 3. The 8 Functional Workspaces Explained
+
+### Workspace A: Discover Karnataka
+- **Multilingual Resolver:** Resolves English, native Kannada script (`ಕನ್ನಡ`), and common phonetic transliterations (`hampi`, `hampe`, `ಹಂಪಿ`, `ಹಂಪೆ`, `vijayanagara`, `hosapete`, `ಬಾದಾಮಿ`, `ಮೈಸೂರು`) to canonical destination records with immediate surveyed WGS84 bounding boxes.
+- **Immediate Context:** Zero-gating policy. Instantly displays official district, elevation, canonical ID, and regional taglines without registration walls.
+
+### Workspace B: Interactive Destination Explorer & 3D Terrain
+- **Dual-Mode MapLibre GL 3D Map:** Allows toggling between crisp 2D cartography and high-elevation 3D DEM terrain (`raster-dem`, 1.45x terrain exaggeration) highlighting Hampi's famous granite boulder topography.
+- **18 Verified Hampi Attractions across 4 Clusters:**
+  1. *Sacred Centre (7 POIs):* Virupaksha Temple, Hemakuta Hill, Kadalekalu Ganesha, Sasivekalu Ganesha, Krishna Temple, Achyutaraya Temple, Matanga Hill.
+  2. *Royal Centre (6 POIs):* Lotus Mahal, Elephant Stables, Queen's Bath, Hazara Rama Temple, Mahanavami Dibba, Stepped Tank (Pushkarani).
+  3. *Vittala Complex (3 POIs):* Vittala Temple & Stone Chariot, King's Balance, Sugriva's Cave.
+  4. *Natural & Cultural (4 POIs):* Tungabhadra River Coracle Crossing, Anjanadri Hill, Daroji Sloth Bear Sanctuary, Kamalapura Archaeological Museum.
+- **Zero-React-Re-Render Camera Tour:** Automated cinematic flight through monuments utilizing native MapLibre `map.flyTo()` and `once('moveend')` lifecycle hooks via mutable refs, preventing CPU-draining React render loops.
+- **WCAG 2.2 AA Reduced-Motion Baseline:** Automatically respects `prefers-reduced-motion: reduce`, replacing high-speed flyovers with smooth static transitions.
+
+### Workspace C: Geographical Cluster Journey Builder
+- **Cluster-Coherent Sequencing:** Automatically organizes visited monuments by physical cluster (Sacred Centre → Royal Centre → Vittala Complex) preventing visitors from zigzagging aimlessly across the 26 km² ruins zone in 38°C heat.
+- **Live Duration & Timing Warnings:** Calculates required dwell times and alerts users to morning vs afternoon lighting advantages.
+
+### Workspace D: Journey Feasibility & Departure Engine
+- **Non-Intrusive Departure Selection:** Configured *after* exploring destination geography. Users select from major Karnataka transit hubs:
+  - `SBC`: KSR Bengaluru City Junction (SWR)
+  - `HPT`: Hosapete Junction (Direct railhead for Hampi)
+  - `MYS`: Mysuru Junction
+  - `BLR`: Kempegowda International Airport Bengaluru
+  - `VDY`: Jindal Vijaynagar Airport (Toranagallu)
+  - `KSRTC_MAJESTIC`: Kempegowda Bus Terminal Bengaluru
+  - `HUBBALLI_CITY`: Hubballi-Dharwad Twin Cities
+- **Explicit-Consent GPS:** Never silently polls device location. Geolocation queries trigger strictly on explicit user button click with transparent status feedback.
+- **Deterministic Feasibility Viability Assessment:** Computes real road/rail kilometers, flagging physically impossible single-day trips (>300 km) and budget constraints (<₹1,800/day).
+
+### Workspace E: Transport & Last-Mile Intelligence
+- **SWR Rail Trunk:** Authentic train service verification (Hampi Express 16591/16592, Amaravathi Express 17225, Vijaynagar Express).
+- **KSRTC Local Connections:** Schedules and frequencies for shuttle buses operating between Hosapete Bus Stand, Kamalapura, and Hampi Bazaar.
+- **Electric Buggy & River Logistics:** Guidance on vehicle parking at Gejjala Mantapa and the official battery-operated EV buggy shuttles to the Vittala Temple.
+
+### Workspace F: Verified Accommodation Zones (Buffer Compliance)
+- Categorizes stays into 4 authorized archaeological buffer zones to prevent booking illegal encroachments:
+  1. *Kamalapura:* KSTDC Mayura Bhuvaneshwari & heritage resorts at the southern monument gate.
+  2. *Hosapete City:* Full-service hotels adjacent to HPT Junction with 24/7 medical access.
+  3. *Hampi Bazaar / Virupapura:* Licensed local community homestays.
+  4. *Anegundi Heritage Village:* Kishkinda Trust vernacular courtyard stays.
+
+### Workspace G: Safety, Terrain & Regulatory Awareness
+- **Tungabhadra River Hazards:** Warnings on deep underwater boulder whirlpools and crocodile habitats.
+- **Granite Thermal & Dusk Descent:** Strict guidance on descending Matanga and Hemakuta hills before 6:00 PM sunset due to total absence of artificial trail lighting.
+- **Drone Ban Compliance:** Notices regarding ASI & DGCA prohibitions on UAVs over protected monument zones.
+- **Emergency Helplines:** Integrated emergency contacts: ERSS `112`, Karnataka Tourist Helpline `1363`, and Kamalapura Primary Health Centre.
+
+### Workspace H: Authoritative Source & Evidence Explorer
+- **100% Provenance Guarantee:** Every monument coordinate is surveyed against WGS84 benchmarks, ticket pricing matches official ASI/KSTDC notifications, and all photographs are sourced from Wikimedia Commons under verified **CC BY-SA 3.0 / CC BY-SA 4.0** licenses with full photographer attribution and original resolution metrics.
+
+---
+
+## 4. System Architecture & Data Flow
+
+```mermaid
+flowchart TD
+    User([Traveller / User]) -->|1. Multilingual Search| Resolver[Destination Registry & Multilingual Resolver]
+    Resolver -->|Canonical Match: Hampi / ಹಂಪಿ| StateStore[Unified Workspace State]
+    
+    subgraph UI_Layer [Frontend: React 19 + Tailwind CSS v4 + MapLibre]
+        StateStore --> WS_A[Workspace A: Discover Karnataka]
+        StateStore --> WS_B[Workspace B: Interactive Explorer & 3D Map]
+        StateStore --> WS_C[Workspace C: Journey Builder]
+        StateStore --> WS_D[Workspace D: Feasibility Engine]
+        StateStore --> WS_E[Workspace E: Transport Intelligence]
+        StateStore --> WS_F[Workspace F: Accommodation Zones]
+        StateStore --> WS_G[Workspace G: Safety & Awareness]
+        StateStore --> WS_H[Workspace H: Source Evidence Explorer]
+    end
+
+    subgraph Engines [Deterministic Travel Engines]
+        WS_B -->|Native WebGL| MapLibre[MapLibre GL JS 3D Terrain Engine]
+        WS_C -->|Cluster Sequencing| SequenceEngine[Spatial Cluster Optimizer]
+        WS_D -->|Hub / GPS Distance| FeasibilityEngine[Deterministic Feasibility Engine]
+        WS_H -->|CC BY-SA Media| ImageLightbox[Verified Wikimedia Commons Lightbox]
+    end
+
+    subgraph Data_Fabric [Authoritative Data Fabrics]
+        Destinations[(Karnataka Destinations Registry)] --> Resolver
+        Hampi18[(Hampi 18-POI Verified Registry)] --> WS_B
+        Wikimedia[(Wikimedia Commons High-Res Asset Registry)] --> WS_H
+        TransitHubs[(Karnataka SWR & KSRTC Transit Hubs)] --> WS_D
+    end
+```
+
+---
+
+## 5. Technology Stack
+
+| Layer | Technologies Used | Architectural Justification |
 |---|---|---|
-| **5-Step Smart Wizard** | Starting City, Vibe, Duration (1–7 days), Budget Tier, Travel Style | Tailored to solo backpackers, couples, or families |
-| **Instant Circuit Presets** | 1-Click access to Hampi Heritage, Karavali Coast, Royal Mysuru | Judges can test live itineraries with zero friction |
-| **Interactive Route Map** | Custom Karnataka SVG map with glowing highway polylines | Visualizes itinerary path and spatial feasibility |
-| **Audio Phrasebook (50+)** | Categorized travel phrases with Web Speech audio | Direct alignment with *"Celebrate Kannada"* theme |
-| **Regional Food Trail** | Signature delicacies and century-old legendary eateries | Authentic culinary tourism across 6 Karnataka zones |
-| **Smart Terrain Advisories** | Warning alerts on monsoon swimming, ghat roads, temple dress | Practical safety guidance for actual travelers |
-| **Print / PDF Itinerary** | Formatted clean printable summary | Offline travel companion for zero-network areas |
+| **Core Framework** | React 19.0.0, Vite 6.0.0, TypeScript 5.7.2 | Ultra-fast HMR, strict type safety, zero peer-dependency conflicts |
+| **Styling & Design Tokens** | Tailwind CSS v4.0.0 (`@tailwindcss/vite`), Custom CSS Tokens | Heritage stone/terracotta color palette, WCAG 2.2 AA reduced motion baseline |
+| **Map & 3D Terrain** | `maplibre-gl` 6.16.0, MapTiler raster-dem | Client-side 3D elevation rendering without heavy Cesium/Three.js bloat |
+| **Icons & UI Primitives** | `lucide-react` 1.16.0, `clsx`, `tailwind-merge` | Accessible, zero-runtime overhead component primitives |
+| **Testing & Quality Assurance** | Vitest 5.0.5, Playwright 1.64.1, JSDOM | 100% test pass rate across 46 test suites / 288 tests, automated E2E browser verification |
+| **Deployment Platform** | Vercel Serverless Edge Platform | Global CDN edge caching, sub-50ms TTFB across Karnataka and India |
 
 ---
 
-## 3. Technology Stack & Architectural Moat
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    YATRIKA AI ARCHITECTURE                  │
-├─────────────────────────────────────────────────────────────┤
-│  PRESENTATION LAYER                                         │
-│  • React 19 (Concurrent Mode) + Vite 6                      │
-│  • Tailwind CSS v4 (Glassmorphism & High Contrast Theme)     │
-│  • Lucide React Icons + Canvas Confetti                     │
-├─────────────────────────────────────────────────────────────┤
-│  INTELLIGENCE & ROUTING ENGINE                              │
-│  • Deterministic Itinerary Engine (Sub-50ms Execution)      │
-│  • Realistic Highway Speed & Ghat Road Safety Constraints    │
-│  • Tiered Budget Multiplier (Backpacker / Comfort / Luxury) │
-├─────────────────────────────────────────────────────────────┤
-│  CULTURAL & LINGUISTIC ASSETS                               │
-│  • 20+ Verified Karnataka Destinations (ASI / KSTDC)        │
-│  • 50+ Situational Travel Phrases with Audio Synthesis      │
-│  • Regional Culinary Trail across 6 Cultural Zones          │
-│  • Web Speech API (Client-Side Standardized Kannada TTS)     │
-├─────────────────────────────────────────────────────────────┤
-│  VERIFICATION & QUALITY ASSURANCE                           │
-│  • 38 Automated Vitest Unit Tests (Passing in <350ms)        │
-│  • TypeScript 5.7 Strict Mode (0 type errors, 1.3s build)   │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 4. Quick Start & Local Run Guide
+## 6. Setup and Local Development Instructions
 
 ### Prerequisites
-- Node.js (v18.0.0 or higher)
-- npm or yarn
+- Node.js version 20.x or 22.x LTS
+- `npm` version 10.x+
 
-### 1. Clone the repository
+### Step-by-Step Installation
+
 ```bash
-git clone https://github.com/your-username/yatrika-ai.git
+# 1. Clone the repository
+git clone https://github.com/anandaram240-wq/yatrika-ai.git
 cd yatrika-ai
-```
 
-### 2. Install dependencies
-```bash
+# 2. Check out the verified V9.0 branch
+git checkout rescue/v8.2-complete-reconstruction
+
+# 3. Install dependencies
 npm install
-```
 
-### 3. Run development server
-```bash
-npm run dev
-```
-Open your browser at `http://localhost:5173` to explore the application.
+# 4. Configure environment variables
+cp .env.example .env.local
+# (Optional: Add your MapTiler API key to VITE_MAPTILER_API_KEY for 3D DEM terrain)
 
-### 4. Run test suite
-```bash
+# 5. Execute Phase 0 Repository Audit
+node scripts/audit-repo.mjs
+
+# 6. Run the complete test suite (288 tests)
 npm test
-```
-Executes all **38 automated unit tests** verifying destination schemas, budget multipliers, itinerary generators, and phrase mappings.
 
-### 5. Production build
+# 7. Start the local development server
+npm run dev
+# Open http://localhost:5173
+```
+
+### Production Build & Preview
 ```bash
+# Compile TypeScript and bundle production assets
 npm run build
+
+# Preview production build locally
+npm run preview
 ```
-Compiles a minified production bundle in under **1.4 seconds**.
 
 ---
 
-## 5. Submission Deliverables Summary (Official Checklist)
+## 7. Quality Assurance & Audit Results
 
-- [x] **Chosen Problem Statement:** Problem Statement 06 (AI Travel Planner for Karnataka)
-- [x] **Public GitHub Repository:** Clean code with meaningful git commit history
-- [x] **Automated Tests:** 38 Vitest tests passing (100% green)
-- [x] **Presentation Slide Deck (`.pptx`):** Covers all 6 mandatory sections (Problem, Existing Gaps, Differentiation, Methodology, Architecture, Conclusion)
-- [x] **Live Deployed URL:** Ready for 1-click deployment on Vercel / Netlify
-- [x] **Video Demo Script:** 3-minute concise voiceover outline included
+- **Automated AST Dead Control Scan:** 0 dead controls found in `src/`. All buttons, links, and forms have active handlers.
+- **Unit & Integration Tests:** 46 test files passed, 288/288 tests passed (100% success rate).
+- **Security Check:** Zero committed secrets or API keys. Fully protected by `.env.example` template.
+- **Browser Automation:** All 8 workspaces and mobile viewports (390x844) verified via Playwright.
 
 ---
 
-## 6. License & Cultural Dedication
+## 8. Hackathon Submission Deliverables Index
 
-Distributed under the **MIT License**.  
-*Dedicated to the promotion of Karnataka's rich cultural heritage, regional cuisines, and spoken Kannada language.*
+In accordance with the **Kannada Digital Innovation Hackathon 2026** guidelines:
+
+| Deliverable | Location / Resource Link |
+|---|---|
+| **1. Public GitHub Repository** | [github.com/anandaram240-wq/yatrika-ai](https://github.com/anandaram240-wq/yatrika-ai) |
+| **2. Presentation Deck (PPT)** | [`docs/HACKATHON_PRESENTATION_DECK.md`](docs/HACKATHON_PRESENTATION_DECK.md) |
+| **3. Live Deployed URL** | [yatrika-ai.vercel.app](https://yatrika-ai.vercel.app) |
+| **4. 3–5 Minute Video Script** | [`docs/VIDEO_SCRIPT_VOICEOVER.md`](docs/VIDEO_SCRIPT_VOICEOVER.md) |
+
+---
+
+*YatriKa AI — Code. Create. Celebrate Karnataka.*

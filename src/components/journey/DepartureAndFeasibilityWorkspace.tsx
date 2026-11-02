@@ -138,6 +138,10 @@ export const DepartureAndFeasibilityWorkspace: React.FC<{ destination: Destinati
             ))}
           </select>
 
+          <div className="p-2 rounded bg-[#0c0f14] border border-white/10 text-xs text-[#b0b8c5]">
+            Selected Departure: <strong className="text-emerald-400">{params.departureLabel}</strong>
+          </div>
+
           <input
             type="text"
             placeholder="Or enter custom city / locality..."

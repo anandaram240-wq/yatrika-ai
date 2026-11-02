@@ -14,7 +14,7 @@ async function capture() {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
 
-  const url = 'https://yatrika-ai.vercel.app';
+  const url = process.env.TEST_TARGET_URL || 'http://localhost:4174';
   console.log(`Navigating to ${url}...`);
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForTimeout(2500);

@@ -50,9 +50,35 @@ export const HampiDualModeMap: React.FC<Props> = ({
     if (!mapContainerRef.current || mapRef.current) return;
 
     const maptilerKey = import.meta.env.VITE_MAPTILER_API_KEY;
+    const cartoVoyagerStyle: maplibregl.StyleSpecification = {
+      version: 8,
+      sources: {
+        'carto-voyager': {
+          type: 'raster',
+          tiles: [
+            'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+            'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+            'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+            'https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+          ],
+          tileSize: 256,
+          attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        },
+      },
+      layers: [
+        {
+          id: 'carto-voyager-layer',
+          type: 'raster',
+          source: 'carto-voyager',
+          minzoom: 0,
+          maxzoom: 20,
+        },
+      ],
+    };
+
     const styleUrl = maptilerKey
       ? `https://api.maptiler.com/maps/outdoor-v2/style.json?key=${maptilerKey}`
-      : 'https://demotiles.maplibre.org/style.json';
+      : cartoVoyagerStyle;
 
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
@@ -88,7 +114,11 @@ export const HampiDualModeMap: React.FC<Props> = ({
       }
 
       if (is3DTerrain) {
-        map.setTerrain({ source: 'karnataka-dem', exaggeration: 1.45 });
+        try {
+          map.setTerrain({ source: 'karnataka-dem', exaggeration: 1.45 });
+        } catch (e) {
+          console.warn('3D Terrain mesh initialization notice:', e);
+        }
       }
 
       setPhotorealisticProbeStatus(

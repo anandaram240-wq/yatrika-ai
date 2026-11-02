@@ -48,13 +48,14 @@ import {
   Printer,
   PhoneCall,
   Search,
-  Sparkles,
   ChevronRight,
   Sliders,
   ExternalLink,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
-// Lazy-load heavy MapLibre 3D Terrain chunk for sub-300ms initial page load
+// Lazy-load MapLibre 3D Terrain chunk for sub-300ms initial page load
 const HampiDualModeMap = lazy(() =>
   import('./components/map/HampiDualModeMap').then((m) => ({ default: m.HampiDualModeMap }))
 );
@@ -97,6 +98,7 @@ export function App() {
   const [districtDivisionFilter, setDistrictDivisionFilter] = useState<string>('ALL');
   const [detourCandidates, setDetourCandidates] = useState<RouteCorridorDetourCandidate[]>([]);
   const [customBudgetSlider, setCustomBudgetSlider] = useState<number>(5000);
+  const [isFooterMinimized, setIsFooterMinimized] = useState<boolean>(false);
 
   // Group Configuration
   const [groupConfig, setGroupConfig] = useState<TravellerGroupConfig>({
@@ -120,7 +122,6 @@ export function App() {
     isBusinessLuxuryExperience: false,
   });
 
-  // Update budget configuration when slider moves
   const handleBudgetSliderChange = (newVal: number) => {
     setCustomBudgetSlider(newVal);
     setBudgetAndClass((prev) => ({
@@ -247,15 +248,6 @@ export function App() {
     }
   };
 
-  const handlePromptChipClick = (query: string) => {
-    setSearchInput(query);
-    const match = resolveDestinationQuery(query);
-    if (match) {
-      setDestination(match);
-      setActiveWorkspace('explorer');
-    }
-  };
-
   const handleWizardBuild = (req: CompleteJourneyRequest) => {
     setDestination(req.destination);
     setGroupConfig(req.travellers);
@@ -287,66 +279,63 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#090c10] text-[#f4f1ea] flex flex-col font-sans selection:bg-[#d97736] selection:text-black">
-      {/* ── TOP EXECUTIVE APP BAR (Apple / Linear Grade) ── */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090c10]/85 border-b border-white/10 px-4 py-2.5 transition-all">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-          {/* Brand & Subtitle */}
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-linear-to-br from-amber-500 via-[#d97736] to-red-600 flex items-center justify-center shadow-lg shadow-amber-500/20 text-black font-black text-sm">
+      {/* ── CLEAN, TWO-ROW APP BAR (Apple / Linear Grade) ── */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090c10]/90 border-b border-white/10 px-4 py-2 transition-all">
+        {/* Row 1: Brand Logo + Search Input + Quick Actions */}
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-linear-to-br from-amber-500 via-[#d97736] to-red-600 flex items-center justify-center shadow-md text-black font-black text-sm">
               ಯಾ
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-extrabold tracking-tight text-white">YatriKa AI</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-semibold border border-amber-500/30">
-                  ಯಾತ್ರಿಕ V9.5
+                <span className="text-base font-extrabold tracking-tight text-white">YatriKa AI</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-semibold border border-amber-500/30">
+                  ಯಾತ್ರಿಕ
                 </span>
                 <span className="hidden sm:inline-block text-[11px] text-emerald-400 font-medium">
                   ● PS 06 AI Travel Planner
                 </span>
               </div>
-              <p className="text-[11px] text-[#8b949e]">
-                Explore Karnataka. Verify the Journey. Travel with Confidence.
-              </p>
             </div>
           </div>
 
           {/* Quick Multilingual Search Capsule */}
-          <form onSubmit={handleSearchSubmit} className="flex items-center gap-1.5 w-full md:w-auto">
-            <div className="relative flex-1 md:w-80">
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-1.5 flex-1 max-w-md mx-2">
+            <div className="relative w-full">
               <Search className="w-3.5 h-3.5 text-[#8b949e] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="search"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search Hampi (ಹಂಪಿ), Mysuru, Badami..."
+                placeholder="Search Hampi (ಹಂಪಿ), Mysuru, Badami, Gokarna..."
                 className="w-full rounded-xl bg-[#12161f] border border-white/15 pl-8 pr-3 py-1.5 text-xs text-[#f4f1ea] placeholder:text-[#6e7681] focus:outline-none focus:border-[#d97736] focus:ring-1 focus:ring-[#d97736] transition"
               />
             </div>
             <button
               type="submit"
-              className="px-3.5 py-1.5 rounded-xl bg-[#d97736] hover:bg-[#e5894a] text-black text-xs font-bold transition shadow-sm active:scale-95"
+              className="px-3.5 py-1.5 rounded-xl bg-[#d97736] hover:bg-[#e5894a] text-black text-xs font-bold transition shadow-sm active:scale-95 shrink-0"
             >
               Explore
             </button>
           </form>
 
           {/* Top Quick Actions */}
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={handleShareWhatsApp}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#12161f] hover:bg-white/10 text-xs font-semibold text-emerald-400 border border-emerald-500/30 transition"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#12161f] hover:bg-white/10 text-xs font-semibold text-emerald-400 border border-emerald-500/30 transition"
               title="Share verified trip sheet on WhatsApp"
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span>Share WhatsApp</span>
+              <span>WhatsApp</span>
             </button>
 
             <button
               type="button"
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#12161f] hover:bg-white/10 text-xs font-semibold text-white border border-white/15 transition"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#12161f] hover:bg-white/10 text-xs font-semibold text-white border border-white/15 transition"
               title="Print clean travel itinerary"
             >
               <Printer className="w-3.5 h-3.5" />
@@ -355,135 +344,120 @@ export function App() {
 
             <a
               href="tel:112"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-500 text-white font-bold text-xs shadow-sm transition"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-sm transition"
               title="Direct call to Karnataka Police ERSS 112"
             >
               <PhoneCall className="w-3.5 h-3.5" />
-              <span>ERSS 112</span>
+              <span>112</span>
             </a>
           </div>
         </div>
 
-        {/* Multilingual Quick Query Chips (Perplexity Style) */}
-        <div className="max-w-7xl mx-auto mt-2 flex flex-wrap items-center gap-1.5 text-[11px]">
-          <span className="text-[#8b949e] font-medium mr-1 flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-amber-400" /> Quick Circuits:
-          </span>
-          {[
-            { label: 'ಹಂಪಿ 2 ದಿನದ ಪ್ರವಾಸ', query: 'Hampi' },
-            { label: 'ಮೈಸೂರು ರಾಜಮನೆತನ', query: 'Mysuru' },
-            { label: 'ಬಾದಾಮಿ ಗುಹಾಂತರ ದೇವಾಲಯ', query: 'Badami' },
-            { label: 'ಚಿಕ್ಕಮಗಳೂರು ಕಾಫಿ ಕಣಿವೆ', query: 'Chikkamagaluru' },
-            { label: 'ಗೋಕರ್ಣ ಕಡಲತೀರ', query: 'Gokarna' },
-          ].map((chip) => (
-            <button
-              key={chip.label}
-              type="button"
-              onClick={() => handlePromptChipClick(chip.query)}
-              className="px-2.5 py-0.5 rounded-lg bg-[#12161f] hover:bg-[#1c2230] text-[#c9d1d9] border border-white/10 transition"
-            >
-              {chip.label}
-            </button>
-          ))}
-        </div>
+        {/* Row 2: Destination Switcher Pills + Workspace Navigation Tabs */}
+        <div className="max-w-7xl mx-auto mt-2 flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-white/10">
+          {/* Destination Switcher Pills */}
+          <div className="flex items-center gap-1 overflow-x-auto py-0.5 scrollbar-none">
+            {Object.values(KARNATAKA_DESTINATIONS).map((d) => (
+              <button
+                key={d.id}
+                type="button"
+                onClick={() => {
+                  setDestination(d);
+                  setSearchInput(d.nameEn);
+                }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                  destination.id === d.id
+                    ? 'bg-amber-500 text-black shadow-sm'
+                    : 'bg-[#12161f] text-[#8b949e] hover:text-white border border-white/10'
+                }`}
+              >
+                {d.nameEn} · {d.nameKn}
+              </button>
+            ))}
+          </div>
 
-        {/* Destination Switcher Pills */}
-        <div className="max-w-7xl mx-auto mt-2 flex flex-wrap items-center gap-1.5">
-          {Object.values(KARNATAKA_DESTINATIONS).map((d) => (
-            <button
-              key={d.id}
-              type="button"
-              onClick={() => {
-                setDestination(d);
-                setSearchInput(d.nameEn);
-              }}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold transition ${
-                destination.id === d.id
-                  ? 'bg-amber-500 text-black shadow-md'
-                  : 'bg-[#12161f] text-[#8b949e] hover:text-white border border-white/10'
-              }`}
-            >
-              {d.nameEn} · {d.nameKn}
-            </button>
-          ))}
+          {/* Workspace Tabs */}
+          <nav className="flex items-center gap-1 overflow-x-auto py-0.5 scrollbar-none">
+            {WORKSPACES.map((ws) => (
+              <button
+                key={ws.key}
+                type="button"
+                onClick={() => setActiveWorkspace(ws.key)}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                  activeWorkspace === ws.key
+                    ? 'bg-white text-black shadow-sm'
+                    : 'bg-[#12161f]/80 text-[#8b949e] hover:text-white hover:bg-[#12161f]'
+                }`}
+              >
+                <span className={activeWorkspace === ws.key ? 'text-[#d97736]' : 'text-amber-400'}>
+                  {ws.icon}
+                </span>
+                <span>
+                  {ws.code}. {ws.label}
+                </span>
+              </button>
+            ))}
+          </nav>
         </div>
-
-        {/* ── WORKSPACE TABS (Clean Linear-grade navigation) ── */}
-        <nav className="max-w-7xl mx-auto mt-2.5 flex overflow-x-auto gap-1 pb-0.5 border-t border-white/10 pt-2 scrollbar-none">
-          {WORKSPACES.map((ws) => (
-            <button
-              key={ws.key}
-              type="button"
-              onClick={() => setActiveWorkspace(ws.key)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                activeWorkspace === ws.key
-                  ? 'bg-white text-black shadow-md'
-                  : 'bg-[#12161f]/70 text-[#8b949e] hover:text-white hover:bg-[#12161f]'
-              }`}
-            >
-              <span className={activeWorkspace === ws.key ? 'text-[#d97736]' : 'text-amber-400'}>
-                {ws.icon}
-              </span>
-              <span>
-                {ws.code}. {ws.label}
-              </span>
-            </button>
-          ))}
-        </nav>
       </header>
 
-      {/* ── MAIN CONSUMABLE WORKSPACE ── */}
-      <main className="max-w-7xl w-full mx-auto flex-1 p-4 space-y-6 pb-24">
-        {/* Destination Context Hero Header */}
-        <section className="rounded-2xl border border-white/10 bg-linear-to-b from-[#12161f] to-[#0c0f14] p-5 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center shadow-xl">
-          <div className="lg:col-span-7 space-y-2.5">
-            <div className="inline-flex flex-wrap items-center gap-2 text-xs text-emerald-400 font-semibold">
-              <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">
-                Canonical: {destination.id.toUpperCase()}
-              </span>
-              <span>·</span>
-              <span className="text-[#8b949e]">District: {destination.district}</span>
-              <span>·</span>
-              <span className="text-[#8b949e]">
-                WGS84: {destination.center[1].toFixed(4)}°N, {destination.center[0].toFixed(4)}°E
-              </span>
-            </div>
-
-            <div className="p-2 rounded-lg bg-[#0c0f14] border border-white/10 text-xs text-[#8b949e]">
-              Nearest Railhead:{' '}
-              <strong className="text-white">
-                {destination.nearestRailhead.name} ({destination.nearestRailhead.code})
-              </strong>{' '}
-              · {destination.nearestRailhead.distanceKm} km
-            </div>
-
-            <h1 className="text-2xl md:text-3xl font-extrabold text-[#f4f1ea] tracking-tight">
-              {destination.nameEn} <span className="text-amber-400 font-serif">({destination.nameKn})</span>
-            </h1>
-
-            <p className="text-xs font-semibold text-[#d97736]">{destination.editorialTagline}</p>
-            <p className="text-xs md:text-sm text-[#8b949e] leading-relaxed max-w-2xl">
-              {destination.editorialIntro}
-            </p>
-          </div>
-
-          <div className="lg:col-span-5">
-            <VerifiedCommonsImage asset={HAMPI_VERIFIED_MEDIA.virupaksha_hero} isHero />
-          </div>
-        </section>
-
+      {/* ── MAIN WORKSPACE CONTAINER ── */}
+      <main className="max-w-7xl w-full mx-auto flex-1 p-4 space-y-5 pb-36">
         {/* ── WORKSPACE A: BENTO OVERVIEW & 31 DISTRICTS ── */}
         {activeWorkspace === 'bento' && (
           <div className="space-y-6">
+            {/* Rich Hero Banner (Rendered exclusively in Bento Overview) */}
+            <section className="rounded-2xl border border-white/10 bg-linear-to-b from-[#12161f] to-[#0c0f14] p-5 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center shadow-xl">
+              <div className="lg:col-span-7 space-y-2.5">
+                <div className="inline-flex flex-wrap items-center gap-2 text-xs text-emerald-400 font-semibold">
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">
+                    District: {destination.district}
+                  </span>
+                  <span>·</span>
+                  <span className="text-[#8b949e]">
+                    Nearest Railhead: <strong className="text-white">{destination.nearestRailhead.name} ({destination.nearestRailhead.code})</strong> · {destination.nearestRailhead.distanceKm} km
+                  </span>
+                </div>
+
+                <h1 className="text-2xl md:text-3xl font-extrabold text-[#f4f1ea] tracking-tight">
+                  {destination.nameEn} <span className="text-amber-400 font-serif">({destination.nameKn})</span>
+                </h1>
+
+                <p className="text-xs font-semibold text-[#d97736]">{destination.editorialTagline}</p>
+                <p className="text-xs md:text-sm text-[#8b949e] leading-relaxed max-w-2xl">
+                  {destination.editorialIntro}
+                </p>
+
+                <div className="pt-2 flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setActiveWorkspace('explorer')}
+                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs transition shadow-sm"
+                  >
+                    Open 3D Interactive Explorer →
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveWorkspace('builder')}
+                    className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/15 transition"
+                  >
+                    Build Custom Itinerary →
+                  </button>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5">
+                <VerifiedCommonsImage asset={HAMPI_VERIFIED_MEDIA.virupaksha_hero} isHero />
+              </div>
+            </section>
+
             {/* Framer-style Bento Grid */}
             <section className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-lg font-bold text-white">Karnataka Crown Jewels — Bento Showcase</h2>
-                  <p className="text-xs text-[#8b949e]">
-                    Curated destinations with verified 3D terrain, authentic elevation profiles, and SWR rail connections.
-                  </p>
-                </div>
+              <div>
+                <h2 className="text-lg font-bold text-white">Karnataka Crown Jewels — Bento Showcase</h2>
+                <p className="text-xs text-[#8b949e]">
+                  Curated destinations with verified 3D terrain, authentic elevation profiles, and SWR rail connections.
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -720,138 +694,166 @@ export function App() {
 
         {/* ── WORKSPACE B: INTERACTIVE EXPLORER & 3D MAP ── */}
         {activeWorkspace === 'explorer' && (
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* Left Column: Cluster Filters & Monument Dossier */}
-            <div className="lg:col-span-5 space-y-4">
-              {destination.id === 'hampi' && (
-                <div className="flex flex-wrap items-center gap-1.5">
-                  {(
-                    [
-                      ['all', 'All 18 Monuments'],
-                      ['sacred_centre', 'Sacred Centre (7)'],
-                      ['royal_centre', 'Royal Centre (6)'],
-                      ['vittala_complex', 'Vittala Complex (3)'],
-                      ['natural_cultural', 'Natural & Cultural (4)'],
-                    ] as const
-                  ).map(([cid, label]) => (
-                    <button
-                      key={cid}
-                      type="button"
-                      onClick={() => setActiveCluster(cid)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
-                        activeCluster === cid
-                          ? 'bg-amber-500 text-black shadow-sm'
-                          : 'bg-[#12161f] text-[#8b949e] hover:text-white border border-white/10'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
+          <div className="space-y-4">
+            {/* Sleek Destination Context Strip (No giant image repeat) */}
+            <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#12161f] border border-white/10">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl md:text-2xl font-black text-white">
+                    {destination.nameEn} <span className="text-amber-400 font-serif">({destination.nameKn})</span>
+                  </h1>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 font-semibold border border-amber-500/30">
+                    {destination.district} District
+                  </span>
                 </div>
-              )}
+                <p className="text-xs text-[#8b949e]">{destination.editorialTagline}</p>
+              </div>
 
-              {/* Verified Monument Inspector Card */}
-              <aside className="rounded-2xl border border-white/10 bg-[#12161f] p-4 flex flex-col justify-between space-y-4 shadow-lg">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="px-2.5 py-0.5 rounded bg-[#d97736]/20 text-[#d97736] font-bold">
-                      {selectedPoi.clusterLabel}
-                    </span>
-                    <span className="text-[#8b949e]">
-                      {selectedPoi.coordinates[1].toFixed(4)}°N, {selectedPoi.coordinates[0].toFixed(4)}°E ·{' '}
-                      {selectedPoi.elevationMeters}m ASL
-                    </span>
-                  </div>
-
-                  <h2 className="text-xl font-bold text-[#f4f1ea]">
-                    {selectedPoi.nameEn} <span className="text-sm text-amber-400">({selectedPoi.nameKn})</span>
-                  </h2>
-
-                  {selectedPoi.mediaAssetId && HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId] && (
-                    <div className="space-y-1">
-                      <VerifiedCommonsImage asset={HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId]} />
-                      <div className="flex items-center justify-between text-[10px] text-[#8b949e] px-1">
-                        <span>Photographer: {HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId].photographer}</span>
-                        <a
-                          href={HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId].commonsPageUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-emerald-400 hover:underline flex items-center gap-1"
-                        >
-                          <span>Wikimedia Source</span>
-                          <ExternalLink className="w-2.5 h-2.5" />
-                        </a>
-                      </div>
-                    </div>
-                  )}
-
-                  <p className="text-xs text-[#8b949e] leading-relaxed">{selectedPoi.summary}</p>
-
-                  <div className="rounded-xl bg-[#0c0f14] p-3 border border-white/10 space-y-1.5 text-xs">
-                    <div>
-                      <strong>Verified Timings:</strong>{' '}
-                      <span className="text-emerald-300 font-mono">{selectedPoi.openingHours}</span>
-                    </div>
-                    <div>
-                      <strong>ASI / Temple Entry Fee:</strong> Indian ₹{selectedPoi.entryFee.indianInr} · SAARC ₹
-                      {selectedPoi.entryFee.saarcBimstecInr} · Foreign ₹{selectedPoi.entryFee.foreignInr}
-                    </div>
-                    <div className="text-[11px] text-[#8b949e]">{selectedPoi.entryFee.note}</div>
-                  </div>
-
-                  <div className="rounded-xl bg-amber-500/10 border border-amber-500/30 p-3 text-xs text-amber-200">
-                    <strong>Field Precaution:</strong> {selectedPoi.safetyAndAccessNote}
-                  </div>
+              <div className="flex items-center gap-2 text-xs">
+                <div className="px-3 py-1.5 rounded-xl bg-[#0c0f14] border border-white/10 text-[#8b949e]">
+                  Nearest Railhead:{' '}
+                  <strong className="text-white">
+                    {destination.nearestRailhead.name} ({destination.nearestRailhead.code})
+                  </strong>{' '}
+                  · {destination.nearestRailhead.distanceKm} km
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!itineraryStops.some((s) => s.id === selectedPoi.id)) {
-                      setItineraryStops((prev) => [...prev, selectedPoi]);
-                    }
-                    setActiveWorkspace('builder');
-                  }}
-                  className="w-full py-2.5 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 transition shadow-sm active:scale-95"
-                >
-                  + Add {selectedPoi.nameEn} to Journey Builder
-                </button>
-              </aside>
-
-              {/* Quick Feasibility Shortcut */}
-              <div className="rounded-xl bg-[#12161f] border border-white/10 p-3.5 flex items-center justify-between text-xs">
-                <div>
-                  <span className="font-bold text-white">Route Feasibility Verdict:</span>
-                  <span className="text-emerald-400 ml-1 font-mono">100% FEASIBLE</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveWorkspace('feasibility')}
-                  className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold"
-                >
-                  Inspect Feasibility →
-                </button>
               </div>
             </div>
 
-            {/* Right Column: 3D DEM Map Viewport */}
-            <div className="lg:col-span-7 space-y-3">
-              <Suspense
-                fallback={
-                  <div className="h-[520px] rounded-2xl bg-[#12161f] border border-white/10 flex items-center justify-center text-xs text-[#8b949e]">
-                    Loading 3D Terrain Cartography & Boulder Contours...
+            {/* Split-Screen Studio View */}
+            <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+              {/* Left Column: Cluster Filters & Monument Dossier */}
+              <div className="lg:col-span-5 space-y-3">
+                {destination.id === 'hampi' && (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(
+                      [
+                        ['all', 'All 18 Monuments'],
+                        ['sacred_centre', 'Sacred Centre (7)'],
+                        ['royal_centre', 'Royal Centre (6)'],
+                        ['vittala_complex', 'Vittala Complex (3)'],
+                        ['natural_cultural', 'Natural & Cultural (4)'],
+                      ] as const
+                    ).map(([cid, label]) => (
+                      <button
+                        key={cid}
+                        type="button"
+                        onClick={() => setActiveCluster(cid)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
+                          activeCluster === cid
+                            ? 'bg-amber-500 text-black shadow-sm'
+                            : 'bg-[#12161f] text-[#8b949e] hover:text-white border border-white/10'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
                   </div>
-                }
-              >
-                <HampiDualModeMap
-                  destination={destination}
-                  selectedPoiId={selectedPoi?.id ?? null}
-                  activeCluster={activeCluster}
-                  onSelectPoi={setSelectedPoi}
-                />
-              </Suspense>
-            </div>
-          </section>
+                )}
+
+                {/* Verified Monument Inspector Card */}
+                <aside className="rounded-2xl border border-white/10 bg-[#12161f] p-4 flex flex-col justify-between space-y-3 shadow-lg">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="px-2.5 py-0.5 rounded bg-[#d97736]/20 text-[#d97736] font-bold">
+                        {selectedPoi.clusterLabel}
+                      </span>
+                      <span className="text-[#8b949e]">
+                        {selectedPoi.coordinates[1].toFixed(4)}°N, {selectedPoi.coordinates[0].toFixed(4)}°E ·{' '}
+                        {selectedPoi.elevationMeters}m ASL
+                      </span>
+                    </div>
+
+                    <h2 className="text-xl font-bold text-[#f4f1ea]">
+                      {selectedPoi.nameEn} <span className="text-sm text-amber-400">({selectedPoi.nameKn})</span>
+                    </h2>
+
+                    {selectedPoi.mediaAssetId && HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId] && (
+                      <div className="space-y-1">
+                        <VerifiedCommonsImage asset={HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId]} />
+                        <div className="flex items-center justify-between text-[10px] text-[#8b949e] px-1">
+                          <span>Photographer: {HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId].photographer}</span>
+                          <a
+                            href={HAMPI_VERIFIED_MEDIA[selectedPoi.mediaAssetId].commonsPageUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-emerald-400 hover:underline flex items-center gap-1"
+                          >
+                            <span>Wikimedia Source</span>
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        </div>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-[#8b949e] leading-relaxed">{selectedPoi.summary}</p>
+
+                    <div className="rounded-xl bg-[#0c0f14] p-3 border border-white/10 space-y-1 text-xs">
+                      <div>
+                        <strong>Verified Timings:</strong>{' '}
+                        <span className="text-emerald-300 font-mono">{selectedPoi.openingHours}</span>
+                      </div>
+                      <div>
+                        <strong>ASI / Temple Entry Fee:</strong> Indian ₹{selectedPoi.entryFee.indianInr} · SAARC ₹
+                        {selectedPoi.entryFee.saarcBimstecInr} · Foreign ₹{selectedPoi.entryFee.foreignInr}
+                      </div>
+                      <div className="text-[11px] text-[#8b949e]">{selectedPoi.entryFee.note}</div>
+                    </div>
+
+                    <div className="rounded-xl bg-amber-500/10 border border-amber-500/30 p-2.5 text-xs text-amber-200">
+                      <strong>Field Precaution:</strong> {selectedPoi.safetyAndAccessNote}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!itineraryStops.some((s) => s.id === selectedPoi.id)) {
+                        setItineraryStops((prev) => [...prev, selectedPoi]);
+                      }
+                      setActiveWorkspace('builder');
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 transition shadow-sm active:scale-95"
+                  >
+                    + Add {selectedPoi.nameEn} to Journey Builder
+                  </button>
+                </aside>
+
+                {/* Quick Feasibility Navigation Card */}
+                <div className="rounded-xl bg-[#12161f] border border-white/10 p-3 flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-bold text-white">Route Feasibility Verdict:</span>
+                    <span className="text-emerald-400 ml-1 font-mono">100% FEASIBLE</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveWorkspace('feasibility')}
+                    className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold transition"
+                  >
+                    Inspect Feasibility →
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: 3D DEM Map Viewport (Full Height) */}
+              <div className="lg:col-span-7 h-[620px] rounded-2xl overflow-hidden border border-white/10 bg-[#12161f]">
+                <Suspense
+                  fallback={
+                    <div className="h-full flex items-center justify-center text-xs text-[#8b949e]">
+                      Loading 3D Terrain Cartography & Boulder Contours...
+                    </div>
+                  }
+                >
+                  <HampiDualModeMap
+                    destination={destination}
+                    selectedPoiId={selectedPoi?.id ?? null}
+                    activeCluster={activeCluster}
+                    onSelectPoi={setSelectedPoi}
+                  />
+                </Suspense>
+              </div>
+            </section>
+          </div>
         )}
 
         {/* ── WORKSPACE C: JOURNEY BUILDER & HONEST BUDGET SLIDER ── */}
@@ -1518,49 +1520,56 @@ export function App() {
         )}
       </main>
 
-      {/* ── STICKY DYNAMIC JOURNEY ISLAND (iOS Dynamic Island / Notion Grade) ── */}
-      <footer className="fixed bottom-3 inset-x-0 z-40 px-4 pointer-events-none">
-        <div className="max-w-4xl mx-auto rounded-2xl backdrop-blur-2xl bg-[#090c10]/95 border border-white/20 p-3.5 shadow-2xl flex flex-wrap items-center justify-between gap-3 pointer-events-auto">
+      {/* ── SLENDER, NON-OBSTRUCTING DYNAMIC JOURNEY DOCK (iOS Dynamic Island Grade) ── */}
+      <footer className="fixed bottom-2 inset-x-0 z-30 px-3 pointer-events-none">
+        <div className="max-w-3xl mx-auto rounded-xl backdrop-blur-2xl bg-[#090c10]/95 border border-white/20 px-3 py-2 shadow-2xl flex items-center justify-between gap-3 pointer-events-auto transition-all">
           {/* Trip Status Indicator */}
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
             <div className="text-xs">
-              <div className="font-extrabold text-white">
-                {destination.nameEn} ({destination.nameKn}) · <span className="text-emerald-400">100% FEASIBLE</span>
-              </div>
-              <div className="text-[11px] text-[#8b949e]">
-                {itineraryStops.length} Stops · Est: ₹{budgetSummary.confirmedAndPublishedPerPersonInr + budgetSummary.estimatedPerPersonInr} / person
-              </div>
+              <span className="font-bold text-white">
+                {destination.nameEn} ({destination.nameKn})
+              </span>
+              <span className="text-emerald-400 font-semibold ml-1.5">● 100% FEASIBLE</span>
+              <span className="hidden sm:inline text-[11px] text-[#8b949e] ml-2">
+                ({itineraryStops.length} Stops · Est: ₹{budgetSummary.confirmedAndPublishedPerPersonInr + budgetSummary.estimatedPerPersonInr})
+              </span>
             </div>
           </div>
 
-          {/* Direct Export & Emergency Actions */}
-          <div className="flex items-center gap-2">
+          {/* Direct Action Controls */}
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={handleShareWhatsApp}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow-sm active:scale-95"
+              className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow-sm active:scale-95"
             >
-              <Share2 className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">WhatsApp</span>
+              WhatsApp
             </button>
 
             <button
               type="button"
               onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/15 transition active:scale-95"
+              className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/15 transition active:scale-95"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Print / PDF</span>
+              Print PDF
             </button>
 
             <a
               href="tel:112"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition active:scale-95"
+              className="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition active:scale-95"
             >
-              <PhoneCall className="w-3.5 h-3.5" />
-              <span>112</span>
+              112
             </a>
+
+            <button
+              type="button"
+              onClick={() => setIsFooterMinimized(!isFooterMinimized)}
+              className="p-1 rounded text-[#8b949e] hover:text-white transition"
+              title={isFooterMinimized ? 'Expand' : 'Minimize'}
+            >
+              {isFooterMinimized ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
           </div>
         </div>
       </footer>
